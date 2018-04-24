@@ -10,6 +10,14 @@ public class Rectangle {
         rotated=false;
     }
     
+    public Rectangle(int _px, int _py, int _sx, int _sy, boolean _rotated){
+        px=_px;
+        py=_py;
+        sx=_sx;
+        sy=_sy;
+        rotated=_rotated;
+    }
+    
     public int getWidth(){
         return rotated?sy:sx;
     }

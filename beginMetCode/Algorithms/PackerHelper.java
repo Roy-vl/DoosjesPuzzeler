@@ -15,8 +15,8 @@ public class PackerHelper {
         this.strategy = strategy;
     }
     
-    public Rectangle[] pack(Boolean rotatable, Rectangle[] rectangles) {
-        return strategy.pack(rotatable, rectangles);
+    public Rectangle[] pack(Boolean rotatable, Rectangle[] rectangles, int containerHeight) {
+        return strategy.pack(rotatable, rectangles, containerHeight);
     }
 }
 

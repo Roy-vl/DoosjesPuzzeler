@@ -9,5 +9,5 @@
  * @author Roy
  */
 interface PackerStrategy {
-    Rectangle[] pack(Boolean rotatable, Rectangle[] rectangles);
+    Rectangle[] pack(Boolean rotatable, Rectangle[] rectangles, int containerHeight);
 }

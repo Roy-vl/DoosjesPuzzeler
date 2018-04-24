@@ -12,14 +12,11 @@ public class PackNextToEachother implements PackerStrategy{
     boolean     rotationAllowed;
     Rectangle[] rectangles;
     
-    public PackNextToEachother(Boolean rotationAllowed, 
-            Rectangle[] rectangles){
-        this.rotationAllowed = rotationAllowed;
-        this.rectangles = rectangles;
+    public PackNextToEachother(){
     }
 
     @Override
-    public Rectangle[] pack(Boolean rotatable, Rectangle[] rectangles) {
+    public Rectangle[] pack(Boolean rotatable, Rectangle[] rectangles, int containerHeight) {
         int x=0;
         for (Rectangle curRec : rectangles) {
             curRec.px=x;
