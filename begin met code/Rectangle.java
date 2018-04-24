@@ -10,11 +10,18 @@ public class Rectangle {
         rotated=false;
     }
     
+    public int getWidth(){
+        return rotated?sy:sx;
+    }
+    
+    public int getHeight(){
+        return rotated?sx:sy;
+    }
+    
     public boolean Collides(Rectangle B){
-        //TODO: IMPLEMENT ROTATION
-        return px < B.px + B.sx &&
-               px + sx > B.px &&
-               py < B.py + B.sy &&
-               sy + py > B.py;
+        return px < B.px + B.getWidth() &&
+               px + getWidth() > B.px &&
+               py < B.py + B.getHeight() &&
+               getHeight() + py > B.py;
     }
 }

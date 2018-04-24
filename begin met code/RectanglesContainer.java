@@ -48,10 +48,35 @@ public class RectanglesContainer {
         }
     }
     
+    public int getTotalWidth(){
+        int tx = 0;
+        for (Rectangle curRec : Rectangles) {
+            tx = max(tx,curRec.px+curRec.getWidth());
+        }
+        return tx;
+    }
+    
+    public int getTotalHeight(){
+        int ty = 0;
+        for (Rectangle curRec : Rectangles) {
+            ty = max(ty,curRec.py+curRec.getHeight());
+        }
+        return ty;
+    }
+    
     public void randomizePositions(){
         for (Rectangle curRec : Rectangles) {
             curRec.px = (int)(Math.random()*100);
             curRec.py = (int)(Math.random()*100);
+        }
+    }
+    
+    public void packNextToEachother(){
+        int x=0;
+        for (Rectangle curRec : Rectangles) {
+            curRec.px=x;
+            curRec.rotated = RotationAllowed?(curRec.sx>curRec.sy):false;
+            x += curRec.getWidth();
         }
     }
     
@@ -70,24 +95,33 @@ public class RectanglesContainer {
     
     public void visualize(){
         
-        int maxx = 0;
-        int maxy = 0;
-        for (Rectangle curRec : Rectangles) {
-            maxx = max(maxx,curRec.px+curRec.sx);
-            maxy = max(maxy,curRec.py+curRec.sy);
-        }
+        int maxx = getTotalWidth();
+        int maxy = getTotalHeight();
         
+        //create an image and its graphics 
         BufferedImage image = new BufferedImage(maxx,maxy,BufferedImage.TYPE_INT_ARGB);
         Graphics2D g = image.createGraphics();
+        
+        //black background
+        g.setColor(new Color(0,0,0));
+        g.fillRect(0,0,maxx,maxy);
 
+        //color rectangles
         for (Rectangle curRec : Rectangles) {
             g.setColor(new Color((int)(Math.random() * 0x1000000)));
-            g.fillRect(curRec.px,curRec.py,curRec.sx,curRec.sy);
+            g.fillRect(curRec.px,curRec.py,curRec.getWidth(),curRec.getHeight());
         }
-
+        
+        //create white outline
+        g.setColor(new Color(255,255,255));
+        for (Rectangle curRec : Rectangles) {
+            g.drawRect(curRec.px,curRec.py,curRec.getWidth(),curRec.getHeight());
+        }
+        
+        //create window
         JFrame frame = new JFrame();
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        frame.setSize(max(maxx,500),max(maxy,500));
+        frame.setSize(maxx,maxy+39);//+40 for windows' window bar
         frame.setVisible(true);
 
         frame.add(new JPanel(){
@@ -99,3 +133,4 @@ public class RectanglesContainer {
         });
     }
 }
+
