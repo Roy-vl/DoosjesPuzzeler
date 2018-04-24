@@ -71,6 +71,14 @@ public class RectanglesContainer {
         }
     }
     
+    
+    void pack() {
+        PackerStrategy s = new PackNextToEachother(rotationAllowed, rectangles);
+        PackerHelper helper = new PackerHelper(s);
+        helper.pack(rotationAllowed, rectangles);
+    }
+    
+    /*
     public void packNextToEachother(){
         int x=0;
         for (Rectangle curRec : rectangles) {
@@ -79,6 +87,8 @@ public class RectanglesContainer {
             x += curRec.getWidth();
         }
     }
+    */
+    
     
     public void printOutput(){
         System.out.println("container height: "+(containerHeight==0?"free":("fixed "+containerHeight)));
@@ -132,5 +142,6 @@ public class RectanglesContainer {
             }
         });
     }
+
 }
 

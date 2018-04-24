@@ -8,6 +8,6 @@
  *
  * @author Roy
  */
-public interface Algorithm {
-    
+interface PackerStrategy {
+    Rectangle[] pack(Boolean rotatable, Rectangle[] rectangles);
 }
