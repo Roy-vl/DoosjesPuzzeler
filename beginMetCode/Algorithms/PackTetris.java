@@ -1,29 +1,14 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
-/**
- *
- * @author Roy
- */
 public class PackTetris implements PackerStrategy{
-    Rectangle[] rectangles;
     
-    public PackTetris(){
-    }
-
     @Override
-    public Rectangle[] pack(Boolean rotatable, Rectangle[] rectangles, int containerHeight) {
-        
-        
+    public void pack(Rectangle[] rectangles, boolean rotationAllowed, int containerHeight) {
+      
         int[] widths = new int[containerHeight];    
         
         for(Rectangle curRec : rectangles){
 
             //rotate such that it is horizontal
-            curRec.rotated = rotatable&&curRec.sx<=containerHeight&&(curRec.sx<curRec.sy);
+            curRec.rotated = rotationAllowed && curRec.sx<=containerHeight && curRec.sx<curRec.sy;
             
             //find lowest point in the widths
             int ty = 0;
@@ -66,6 +51,5 @@ public class PackTetris implements PackerStrategy{
             }  
             
         }    
-        return rectangles;
     }
 }

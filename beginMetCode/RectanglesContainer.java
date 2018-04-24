@@ -4,8 +4,6 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import static java.lang.Math.max;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Scanner;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -73,75 +71,10 @@ public class RectanglesContainer {
         }
     }
     
-    
     void pack(PackerStrategy strategy) {
-        
-        PackerHelper helper = new PackerHelper(strategy);
-        helper.pack(rotationAllowed, rectangles, containerHeight);
-    }
-    
-    /*
-    public void packNextToEachother(){
-        int x=0;
-        for (Rectangle curRec : rectangles) {
-            curRec.px=x;
-            curRec.rotated = rotationAllowed?(curRec.sx>curRec.sy):false;
-            x += curRec.getWidth();
-        }
-    }
-    */
-    
-    
-    public void tetrisPack(){
-        
-        int[] widths = new int[containerHeight];    
-        
-        for(Rectangle curRec : rectangles){
 
-            //rotate such that it is horizontal
-            curRec.rotated = rotationAllowed&&curRec.sx<=containerHeight&&(curRec.sx<curRec.sy);
-            
-            //find lowest point in the widths
-            int ty = 0;
-            int tx = widths[0];
-            for(int w=0;w<widths.length-curRec.getHeight();w++){
-                if(widths[w]<tx){
-                    ty = w;
-                    tx = widths[w];
-                }
-            }
-            
-            boolean placed = false;
-            while(!placed){
-
-                //check if it can be placed at ty,tx
-                boolean canBePlaced = true;
-                for(int i=ty; i<ty+curRec.getHeight(); i++){
-                    canBePlaced = canBePlaced && widths[i]<=tx;
-                }
-                
-                //place it
-                if(canBePlaced){
-                    curRec.px = tx;
-                    curRec.py = ty;
-                    
-                    for(int i=ty; i<ty+curRec.getHeight(); i++){
-                        widths[i]=curRec.px+curRec.getWidth();
-                    }
-                    
-                    placed = true;
-                 
-                //continue search
-                }else{
-                    ty++;
-                    if(ty>=containerHeight-curRec.getHeight()){
-                        ty=0;
-                        tx++;
-                    }
-                }
-            }  
-            
-        }    
+        strategy.pack(rectangles, rotationAllowed, containerHeight);
+        
     }
     
     public void printOutput(){
