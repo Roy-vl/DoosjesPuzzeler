@@ -10,10 +10,10 @@ import javax.swing.JPanel;
 import javax.swing.WindowConstants;
 
 public class RectanglesContainer {
-    int         ContainerHeight;
-    boolean     RotationAllowed;
-    int         RectangleAmount;
-    Rectangle[] Rectangles;
+    int         containerHeight;
+    boolean     rotationAllowed;
+    int         rectangleAmount;
+    Rectangle[] rectangles;
     
     public void parseInput(){
         Scanner scanner = new Scanner(System.in);
@@ -22,35 +22,35 @@ public class RectanglesContainer {
         scanner.next();
         scanner.next();
         if(scanner.next().equals("fixed")){
-            ContainerHeight = scanner.nextInt();
+            containerHeight = scanner.nextInt();
         }else{
-            ContainerHeight = 0;
+            containerHeight = 0;
         }
         
         //parse rotation
         scanner.next();
         scanner.next();
-        RotationAllowed = scanner.next().equals("yes");
+        rotationAllowed = scanner.next().equals("yes");
         
         //parse rectangle amount
         scanner.next();
         scanner.next();
         scanner.next();
-        RectangleAmount = scanner.nextInt();
-        Rectangles = new Rectangle[RectangleAmount];
+        rectangleAmount = scanner.nextInt();
+        rectangles = new Rectangle[rectangleAmount];
         
         //parse rectangle
-        for(int i=0;i<RectangleAmount;i++){
+        for(int i=0;i<rectangleAmount;i++){
             Rectangle newRectangle = new Rectangle();
             newRectangle.sx = scanner.nextInt();
             newRectangle.sy = scanner.nextInt();
-            Rectangles[i] = newRectangle;
+            rectangles[i] = newRectangle;
         }
     }
     
     public int getTotalWidth(){
         int tx = 0;
-        for (Rectangle curRec : Rectangles) {
+        for (Rectangle curRec : rectangles) {
             tx = max(tx,curRec.px+curRec.getWidth());
         }
         return tx;
@@ -58,14 +58,14 @@ public class RectanglesContainer {
     
     public int getTotalHeight(){
         int ty = 0;
-        for (Rectangle curRec : Rectangles) {
+        for (Rectangle curRec : rectangles) {
             ty = max(ty,curRec.py+curRec.getHeight());
         }
         return ty;
     }
     
     public void randomizePositions(){
-        for (Rectangle curRec : Rectangles) {
+        for (Rectangle curRec : rectangles) {
             curRec.px = (int)(Math.random()*100);
             curRec.py = (int)(Math.random()*100);
         }
@@ -73,23 +73,23 @@ public class RectanglesContainer {
     
     public void packNextToEachother(){
         int x=0;
-        for (Rectangle curRec : Rectangles) {
+        for (Rectangle curRec : rectangles) {
             curRec.px=x;
-            curRec.rotated = RotationAllowed?(curRec.sx>curRec.sy):false;
+            curRec.rotated = rotationAllowed?(curRec.sx>curRec.sy):false;
             x += curRec.getWidth();
         }
     }
     
     public void printOutput(){
-        System.out.println("container height: "+(ContainerHeight==0?"free":("fixed "+ContainerHeight)));
-        System.out.println("rotations allowed: "+(RotationAllowed?"yes":"no"));
-        System.out.println("number of rectangles: "+RectangleAmount);
-        for (Rectangle curRec : Rectangles) {
+        System.out.println("container height: "+(containerHeight==0?"free":("fixed "+containerHeight)));
+        System.out.println("rotations allowed: "+(rotationAllowed?"yes":"no"));
+        System.out.println("number of rectangles: "+rectangleAmount);
+        for (Rectangle curRec : rectangles) {
             System.out.println(curRec.sx+" "+curRec.sy);
         }
         System.out.println("placement of rectangles");
-        for (Rectangle curRec : Rectangles) {
-            System.out.println((RotationAllowed?(curRec.rotated?"yes ":"no "):"")+curRec.px+" "+curRec.py);
+        for (Rectangle curRec : rectangles) {
+            System.out.println((rotationAllowed?(curRec.rotated?"yes ":"no "):"")+curRec.px+" "+curRec.py);
         }
     }
     
@@ -107,14 +107,14 @@ public class RectanglesContainer {
         g.fillRect(0,0,maxx,maxy);
 
         //color rectangles
-        for (Rectangle curRec : Rectangles) {
+        for (Rectangle curRec : rectangles) {
             g.setColor(new Color((int)(Math.random() * 0x1000000)));
             g.fillRect(curRec.px,curRec.py,curRec.getWidth(),curRec.getHeight());
         }
         
         //create white outline
         g.setColor(new Color(255,255,255));
-        for (Rectangle curRec : Rectangles) {
+        for (Rectangle curRec : rectangles) {
             g.drawRect(curRec.px,curRec.py,curRec.getWidth(),curRec.getHeight());
         }
         
