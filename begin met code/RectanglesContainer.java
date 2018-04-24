@@ -4,6 +4,8 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import static java.lang.Math.max;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -80,6 +82,58 @@ public class RectanglesContainer {
         }
     }
     
+    public void tetrisPack(){
+        
+        int[] widths = new int[ContainerHeight];    
+        
+        for(Rectangle curRec : Rectangles){
+
+            //rotate such that it is horizontal
+            curRec.rotated = RotationAllowed&&curRec.sx<=ContainerHeight&&(curRec.sx<curRec.sy);
+            
+            //find lowest point in the widths
+            int ty = 0;
+            int tx = widths[0];
+            for(int w=0;w<widths.length-curRec.getHeight();w++){
+                if(widths[w]<tx){
+                    ty = w;
+                    tx = widths[w];
+                }
+            }
+            
+            boolean placed = false;
+            while(!placed){
+
+                //check if it can be placed at ty,tx
+                boolean canBePlaced = true;
+                for(int i=ty; i<ty+curRec.getHeight(); i++){
+                    canBePlaced = canBePlaced && widths[i]<=tx;
+                }
+                
+                //place it
+                if(canBePlaced){
+                    curRec.px = tx;
+                    curRec.py = ty;
+                    
+                    for(int i=ty; i<ty+curRec.getHeight(); i++){
+                        widths[i]=curRec.px+curRec.getWidth();
+                    }
+                    
+                    placed = true;
+                 
+                //continue search
+                }else{
+                    ty++;
+                    if(ty>=ContainerHeight-curRec.getHeight()){
+                        ty=0;
+                        tx++;
+                    }
+                }
+            }  
+            
+        }    
+    }
+    
     public void printOutput(){
         System.out.println("container height: "+(ContainerHeight==0?"free":("fixed "+ContainerHeight)));
         System.out.println("rotations allowed: "+(RotationAllowed?"yes":"no"));
@@ -96,7 +150,7 @@ public class RectanglesContainer {
     public void visualize(){
         
         int maxx = getTotalWidth();
-        int maxy = getTotalHeight();
+        int maxy = getTotalHeight()+1;//1 extra for the containerborder
         
         //create an image and its graphics 
         BufferedImage image = new BufferedImage(maxx,maxy,BufferedImage.TYPE_INT_ARGB);
@@ -112,16 +166,22 @@ public class RectanglesContainer {
             g.fillRect(curRec.px,curRec.py,curRec.getWidth(),curRec.getHeight());
         }
         
-        //create white outline
-        g.setColor(new Color(255,255,255));
-        for (Rectangle curRec : Rectangles) {
-            g.drawRect(curRec.px,curRec.py,curRec.getWidth(),curRec.getHeight());
+        ////create white outline
+        //g.setColor(new Color(255,255,255));
+        //for (Rectangle curRec : Rectangles) {
+           // g.drawRect(curRec.px,curRec.py,curRec.getWidth(),curRec.getHeight());
+        //}
+        
+        //red containerborder
+        if(ContainerHeight>0){
+            g.setColor(new Color(255,0,0));
+            g.fillRect(0,ContainerHeight-1,maxx,1);
         }
         
         //create window
         JFrame frame = new JFrame();
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        frame.setSize(maxx,maxy+39);//+40 for windows' window bar
+        frame.setSize(maxx+16,maxy+39);//+16,+40 for windows bullshit
         frame.setVisible(true);
 
         frame.add(new JPanel(){
