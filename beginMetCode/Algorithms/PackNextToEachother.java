@@ -5,7 +5,13 @@ public class PackNextToEachother implements PackerStrategy{
         int x=0;
         for (Rectangle curRec : rectangles) {
             curRec.px=x;
-            curRec.rotated = rotationAllowed && curRec.sx>curRec.sy && curRec.sx<=containerHeight;
+
+            if(rotationAllowed){
+               
+                curRec.rotated = curRec.sy>containerHeight || (curRec.sx>curRec.sy && curRec.sx<=containerHeight);
+                
+            }
+            
             x += curRec.getWidth();
         }
     }
