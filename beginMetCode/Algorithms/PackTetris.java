@@ -7,10 +7,8 @@ public class PackTetris implements PackerStrategy{
         
         for(Rectangle curRec : rectangles){
 
-            if(rotationAllowed){  
-                curRec.rotated = curRec.sy>curRec.sx;             
-            }     
-             
+            curRec.rotated = rotationAllowed && curRec.sy>curRec.sx;             
+
             //find lowest point in the widths
             int ty = 0;
             int tx = widths[0];
