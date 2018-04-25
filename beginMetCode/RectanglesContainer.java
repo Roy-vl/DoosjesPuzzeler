@@ -128,13 +128,9 @@ public class RectanglesContainer {
         int colorSize = colors.size();
         for (Rectangle curRec : rectangles) {
             int distance = (curRec.px+curRec.py)/2;
-            
-            if(distance < colorSize){
-                g.setColor(colors.get(distance));
-            } else {
-                g.setColor(colors.get(colorSize-1));
-            }
-            
+
+            g.setColor(colors.get(distance%colorSize));
+         
             g.fillRect(curRec.px,curRec.py,curRec.getWidth(),curRec.getHeight());
         }
         
