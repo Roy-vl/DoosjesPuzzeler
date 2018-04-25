@@ -121,13 +121,14 @@ public class RectanglesContainer {
 
         //color rectangles
         ArrayList<Color> colors = getRainbow(min(maxx,1920));
+        int colorSize = colors.size();
         for (Rectangle curRec : rectangles) {
-            int centerRec = (curRec.px+curRec.py)/2;
+            int distance = (curRec.px+curRec.py)/2;
             
-            if(centerRec < colors.size()){
-                g.setColor(colors.get((curRec.px+curRec.py)/2));
+            if(distance < colorSize){
+                g.setColor(colors.get(distance));
             } else {
-                g.setColor(colors.get(colors.size()-1));
+                g.setColor(colors.get(colorSize-1));
             }
             
             g.fillRect(curRec.px,curRec.py,curRec.getWidth(),curRec.getHeight());
