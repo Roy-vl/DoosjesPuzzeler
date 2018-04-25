@@ -106,11 +106,16 @@ public class RectanglesContainer {
         return colors;
     }
     
-    public void visualize(){
+   public void visualize(){
+        
+        int windowSizeX = 1000;
+        int windowSizeY = 1000;
         
         int maxx = getTotalWidth();
-        int maxy = getTotalHeight()+1;//1 extra for the containerborder
+        int maxy = getTotalHeight();
         
+        float scale = maxx>=maxy ? (float)windowSizeX/maxx : (float)windowSizeY/maxy;
+             
         //create an image and its graphics 
         BufferedImage image = new BufferedImage(maxx,maxy,BufferedImage.TYPE_INT_ARGB);
         Graphics2D g = image.createGraphics();
@@ -134,30 +139,24 @@ public class RectanglesContainer {
             g.fillRect(curRec.px,curRec.py,curRec.getWidth(),curRec.getHeight());
         }
         
-
-        ////create white outline
+        
+        //create white outlines
         //g.setColor(new Color(255,255,255));
         //for (Rectangle curRec : Rectangles) {
            // g.drawRect(curRec.px,curRec.py,curRec.getWidth(),curRec.getHeight());
         //}
         
-        //red containerborder
-        if(containerHeight>0){
-            g.setColor(new Color(255,0,0));
-            g.fillRect(0,containerHeight-1,maxx,1);
-        }
-        
         //create window
         JFrame frame = new JFrame();
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        frame.setSize(maxx+16,maxy+39);//+16,+40 for windows bullshit
+        frame.setSize(windowSizeX+16,windowSizeY+39);//+16,+40 for windows bullshit
         frame.setVisible(true);
 
         frame.add(new JPanel(){
             @Override
             protected void paintComponent(Graphics g) {
                 super.paintComponent(g);
-                g.drawImage(image, 0, 0, null);
+                g.drawImage(image, 0, 0, (int)(maxx*scale), (int)(maxy*scale), 0, 0, maxx, maxy, null);
             }
         });
     }
