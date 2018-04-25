@@ -6,7 +6,6 @@ import java.awt.image.BufferedImage;
 import static java.lang.Math.max;
 import static java.lang.Math.min;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Scanner;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -106,7 +105,7 @@ public class RectanglesContainer {
         return colors;
     }
     
-   public void visualize(){
+    public void visualize(){
         
         int windowSizeX = 1000;
         int windowSizeY = 1000;
@@ -140,7 +139,7 @@ public class RectanglesContainer {
         }
         
         
-        //create white outlines
+        ////create white outlines
         //g.setColor(new Color(255,255,255));
         //for (Rectangle curRec : Rectangles) {
            // g.drawRect(curRec.px,curRec.py,curRec.getWidth(),curRec.getHeight());

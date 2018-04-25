@@ -12,7 +12,7 @@ public class PackTetris implements PackerStrategy{
             //find lowest point in the widths
             int ty = 0;
             int tx = widths[0];
-            for(int w=0;w<widths.length-curRec.getHeight();w++){
+            for(int w=0;w<=widths.length-curRec.getHeight();w++){
                 if(widths[w]<tx){
                     ty = w;
                     tx = widths[w];
@@ -42,13 +42,12 @@ public class PackTetris implements PackerStrategy{
                 //continue search
                 }else{
                     ty++;
-                    if(ty>=containerHeight-curRec.getHeight()){
+                    if(ty>containerHeight-curRec.getHeight()){
                         ty=0;
                         tx++;
                     }
                 }
             }  
-            
         }    
     }
 }
