@@ -4,6 +4,9 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import static java.lang.Math.max;
+import static java.lang.Math.min;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -90,6 +93,19 @@ public class RectanglesContainer {
         }
     }
     
+    public ArrayList<Color> getRainbow(int steps){
+        int fadeLength = (steps/6);
+        ArrayList<Color> colors = new ArrayList<>();
+        for (int r=0; r<fadeLength; r++) colors.add(new Color( r*255/fadeLength, 255, 0));
+        for (int g=fadeLength; g>0; g--) colors.add(new Color( 255, g*255/fadeLength, 0));
+        for (int b=0; b<fadeLength; b++) colors.add(new Color( 255, 0, b*255/fadeLength));
+        for (int r=fadeLength; r>0; r--) colors.add(new Color( r*255/fadeLength, 0, 255));
+        for (int g=0; g<fadeLength; g++) colors.add(new Color( 0, g*255/fadeLength, 255));
+        for (int b=fadeLength; b>0; b--) colors.add(new Color( 0, 255, b*255/fadeLength));
+        colors.add(new Color( 0, 255, 0));
+        return colors;
+    }
+    
     public void visualize(){
         
         int maxx = getTotalWidth();
@@ -104,8 +120,16 @@ public class RectanglesContainer {
         g.fillRect(0,0,maxx,maxy);
 
         //color rectangles
+        ArrayList<Color> colors = getRainbow(min(maxx,1920));
         for (Rectangle curRec : rectangles) {
-            g.setColor(new Color((int)(Math.random() * 0x1000000)));
+            int centerRec = (curRec.px+curRec.py)/2;
+            
+            if(centerRec < colors.size()){
+                g.setColor(colors.get((curRec.px+curRec.py)/2));
+            } else {
+                g.setColor(colors.get(colors.size()-1));
+            }
+            
             g.fillRect(curRec.px,curRec.py,curRec.getWidth(),curRec.getHeight());
         }
         
