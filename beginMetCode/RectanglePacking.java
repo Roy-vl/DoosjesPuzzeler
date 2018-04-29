@@ -4,14 +4,10 @@ public class RectanglePacking {
         RectanglesContainer RC = new RectanglesContainer();
         RC.parseInput();
         
-        PackerStrategy strategy;
-        if(RC.containerHeight>0){
-            strategy = new PackTetris();
-        }else{
-            strategy = new PackNextToEachother();
-        }
+        PackerStrategy strategy = RC.containerHeight>0 ? new PackTetris() : new PackNextToEachother();
         
-        RC.pack(strategy);
+        strategy.pack(RC);
+        
         RC.printOutput();
         RC.visualize();
     }

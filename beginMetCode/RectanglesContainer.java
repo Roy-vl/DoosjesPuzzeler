@@ -73,12 +73,6 @@ public class RectanglesContainer {
         }
     }
     
-    void pack(PackerStrategy strategy) {
-
-        strategy.pack(rectangles, rotationAllowed, containerHeight);
-        
-    }
-    
     public void printOutput(){
         System.out.println("container height: "+(containerHeight==0?"free":("fixed "+containerHeight)));
         System.out.println("rotations allowed: "+(rotationAllowed?"yes":"no"));

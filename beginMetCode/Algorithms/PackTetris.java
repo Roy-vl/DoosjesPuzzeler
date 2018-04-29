@@ -1,13 +1,13 @@
 public class PackTetris implements PackerStrategy{
     
     @Override
-    public void pack(Rectangle[] rectangles, boolean rotationAllowed, int containerHeight) {
+    public void pack(RectanglesContainer RC){
       
-        int[] widths = new int[containerHeight];    
+        int[] widths = new int[RC.containerHeight];    
         
-        for(Rectangle curRec : rectangles){
+        for(Rectangle curRec : RC.rectangles){
 
-            curRec.rotated = rotationAllowed && curRec.sy>curRec.sx;             
+            curRec.rotated = RC.rotationAllowed && curRec.sy>curRec.sx;             
 
             //find lowest point in the widths
             int ty = 0;
@@ -42,7 +42,7 @@ public class PackTetris implements PackerStrategy{
                 //continue search
                 }else{
                     ty++;
-                    if(ty>containerHeight-curRec.getHeight()){
+                    if(ty>RC.containerHeight-curRec.getHeight()){
                         ty=0;
                         tx++;
                     }
