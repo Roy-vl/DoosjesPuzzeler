@@ -73,6 +73,16 @@ public class RectanglesContainer {
         }
     }
     
+    public boolean checkCollision(Rectangle aRec){
+        boolean collision = false;
+        for(Rectangle curRec : rectangles){
+            if(curRec.placed){
+                collision = collision || curRec.Collides(aRec);
+            }
+        }
+        return collision;
+    }
+    
     public void printOutput(){
         System.out.println("container height: "+(containerHeight==0?"free":("fixed "+containerHeight)));
         System.out.println("rotations allowed: "+(rotationAllowed?"yes":"no"));
@@ -123,7 +133,7 @@ public class RectanglesContainer {
         for (Rectangle curRec : rectangles) {
             int distance = (curRec.px+curRec.py)/2;
 
-            g.setColor(colors.get(distance%colorSize));
+            g.setColor(new Color((int)(Math.random() * 0x1000000)));//colors.get(distance%colorSize));
          
             g.fillRect(curRec.px,curRec.py,curRec.getWidth(),curRec.getHeight());
         }

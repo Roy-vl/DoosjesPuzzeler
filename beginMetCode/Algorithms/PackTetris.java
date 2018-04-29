@@ -18,9 +18,8 @@ public class PackTetris implements PackerStrategy{
                     tx = widths[w];
                 }
             }
-            
-            boolean placed = false;
-            while(!placed){
+
+            while(!curRec.placed){
 
                 //check if it can be placed at ty,tx
                 boolean canBePlaced = true;
@@ -37,7 +36,7 @@ public class PackTetris implements PackerStrategy{
                         widths[i]=curRec.px+curRec.getWidth();
                     }
                     
-                    placed = true;
+                    curRec.placed = true;
                  
                 //continue search
                 }else{

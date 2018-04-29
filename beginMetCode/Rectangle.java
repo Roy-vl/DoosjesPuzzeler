@@ -1,6 +1,7 @@
 public class Rectangle {
     int px,py,sx,sy;
     boolean rotated;
+    boolean placed;
     
     public Rectangle(){
         px=0;
@@ -8,14 +9,16 @@ public class Rectangle {
         sx=0;
         sy=0;
         rotated=false;
+        placed = false;
     }
     
-    public Rectangle(int _px, int _py, int _sx, int _sy, boolean _rotated){
+    public Rectangle(int _px, int _py, int _sx, int _sy, boolean _rotated, boolean _placed){
         px=_px;
         py=_py;
         sx=_sx;
         sy=_sy;
         rotated=_rotated;
+        placed =_placed;
     }
     
     public int getWidth(){
