@@ -6,6 +6,8 @@ import java.awt.image.BufferedImage;
 import static java.lang.Math.max;
 import static java.lang.Math.min;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
 import java.util.Scanner;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -46,6 +48,7 @@ public class RectanglesContainer {
             Rectangle newRectangle = new Rectangle();
             newRectangle.sx = scanner.nextInt();
             newRectangle.sy = scanner.nextInt();
+            newRectangle.id = i;
             rectangles[i] = newRectangle;
         }
     }
@@ -83,7 +86,14 @@ public class RectanglesContainer {
         return collision;
     }
     
+    public void sortRectangles(Comparator<Rectangle> C){
+        Arrays.sort(rectangles, C);
+    }
+    
     public void printOutput(){
+        //first sort by id to get original listing
+        sortRectangles(new SortByID());
+        //print output
         System.out.println("container height: "+(containerHeight==0?"free":("fixed "+containerHeight)));
         System.out.println("rotations allowed: "+(rotationAllowed?"yes":"no"));
         System.out.println("number of rectangles: "+rectangleAmount);
@@ -94,19 +104,6 @@ public class RectanglesContainer {
         for (Rectangle curRec : rectangles) {
             System.out.println((rotationAllowed?(curRec.rotated?"yes ":"no "):"")+curRec.px+" "+curRec.py);
         }
-    }
-    
-    public ArrayList<Color> getRainbow(int steps){
-        int fadeLength = (steps/6);
-        ArrayList<Color> colors = new ArrayList<>();
-        for (int r=0; r<fadeLength; r++) colors.add(new Color( r*255/fadeLength, 255, 0));
-        for (int g=fadeLength; g>0; g--) colors.add(new Color( 255, g*255/fadeLength, 0));
-        for (int b=0; b<fadeLength; b++) colors.add(new Color( 255, 0, b*255/fadeLength));
-        for (int r=fadeLength; r>0; r--) colors.add(new Color( r*255/fadeLength, 0, 255));
-        for (int g=0; g<fadeLength; g++) colors.add(new Color( 0, g*255/fadeLength, 255));
-        for (int b=fadeLength; b>0; b--) colors.add(new Color( 0, 255, b*255/fadeLength));
-        colors.add(new Color( 0, 255, 0));
-        return colors;
     }
     
     public void visualize(){
@@ -128,13 +125,8 @@ public class RectanglesContainer {
         g.fillRect(0,0,maxx,maxy);
 
         //color rectangles
-        ArrayList<Color> colors = getRainbow(min(maxx,1920));
-        int colorSize = colors.size();
         for (Rectangle curRec : rectangles) {
-            int distance = (curRec.px+curRec.py)/2;
-
-            g.setColor(new Color((int)(Math.random() * 0x1000000)));//colors.get(distance%colorSize));
-         
+            g.setColor(new Color((int)(Math.random() * 0x1000000)));    
             g.fillRect(curRec.px,curRec.py,curRec.getWidth(),curRec.getHeight());
         }
         

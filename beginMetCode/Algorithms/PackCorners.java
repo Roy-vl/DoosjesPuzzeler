@@ -66,8 +66,7 @@ public class PackCorners implements PackerStrategy{
             if(!curRec.placed){
                 System.out.println("fuck");
             }
-            
-            System.out.println("placed one");
+
         }
     }
 }
