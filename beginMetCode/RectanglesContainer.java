@@ -19,6 +19,20 @@ public class RectanglesContainer {
     int         rectangleAmount;
     Rectangle[] rectangles;
     
+    
+    @Override
+    public RectanglesContainer clone(){
+        RectanglesContainer clone = new RectanglesContainer();
+        clone.containerHeight = this.containerHeight;
+        clone.rotationAllowed = this.rotationAllowed;
+        clone.rectangleAmount = this.rectangleAmount;
+        clone.rectangles = new Rectangle[rectangleAmount];
+        for(int i = 0; i < rectangleAmount; i++){
+            clone.rectangles[i] = this.rectangles[i].clone();
+        }
+        return clone;
+    }
+    
     public void parseInput(){
         Scanner scanner = new Scanner(System.in);
         

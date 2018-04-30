@@ -9,7 +9,15 @@ class Corner{
         x=_x;
         y=_y;
     }
+    
+    @Override
+    public Corner clone(){
+        Corner clone = new Corner(this.x, this.y);
+        return clone;
+    }
 }
+
+
 
 class SortByDistance implements Comparator<Corner>
 {

@@ -17,6 +17,12 @@ public class Rectangle {
         placed = false;
     }
     
+    @Override
+    public Rectangle clone(){
+        Rectangle clone = new Rectangle(id, px, py, sx, sy, rotated, placed);
+        return clone;
+    }
+    
     public Rectangle(int _id, int _px, int _py, int _sx, int _sy, boolean _rotated, boolean _placed){
         id=_id;
         px=_px;

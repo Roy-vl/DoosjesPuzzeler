@@ -6,7 +6,10 @@ public class RectanglePacking {
         
         RC.sortRectangles(new SortByArea());
         
-        PackerStrategy strategy = RC.containerHeight>0 ? new PackTetris() : (RC.rectangleAmount>25 ? new PackNextToEachother() : new PackCorners());
+        PackerStrategy strategy = RC.containerHeight>0 ? new PackTetris() : 
+                (RC.rectangleAmount>25 ? new PackNextToEachother() : 
+                RC.rectangleAmount<10 ? new PackCornersExhaustiveRecursive() : 
+                new PackCorners());
         
         strategy.pack(RC);
         
