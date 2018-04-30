@@ -5,9 +5,7 @@ public class RectanglePacking {
         RC.parseInput();
         
         RC.sortRectangles(new SortByArea());
-        
-        
-        
+     
         PackerStrategy strategy = 
                 
         //new PackTetris();
