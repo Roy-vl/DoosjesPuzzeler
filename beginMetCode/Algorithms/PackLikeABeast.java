@@ -1,15 +1,13 @@
 public class PackLikeABeast implements PackerStrategy{
     
     @Override
-    public void pack(Rectangle[] rectangles, boolean rotationAllowed, int containerHeight) {
-        
-        
+    public void pack(RectanglesContainer RC) {
         
         int minimumHeight;
         int maximumHeight = 0;
         int maximalWidth = 0;
         
-        for(Rectangle curRec : rectangles){
+        for(Rectangle curRec : RC.rectangles){
             maximumHeight += curRec.getHeight();
             if(maximalWidth < curRec.getWidth()){maximalWidth = curRec.getWidth();}
         }
@@ -19,7 +17,7 @@ public class PackLikeABeast implements PackerStrategy{
         
         for(int i = minimumHeight; i<= maximumHeight; i++){
             
-            for(Rectangle curRec : rectangles){      
+            for(Rectangle curRec : RC.rectangles){      
                 boolean placed = false;
                 for(int j = 0; j < i && !placed; j++){
                     for(int k = 0; k < 50; k++){

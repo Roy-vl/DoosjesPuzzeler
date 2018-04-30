@@ -41,6 +41,18 @@ public class Rectangle {
         return rotated?sx:sy;
     }
     
+    public int getArea(){
+        return sx*sy;
+    }
+    
+    public int getAntiSqauriness(){
+        return (int)(sx>sy ? (float)sx/sy: (float)sy/sx);
+    }
+    
+    public int getPackingScore(){
+        return getArea()+getAntiSqauriness();
+    }
+    
     public boolean Collides(Rectangle B){
         return px < B.px + B.getWidth() &&
                px + getWidth() > B.px &&
@@ -61,6 +73,14 @@ class SortByArea implements Comparator<Rectangle>
 {
     public int compare(Rectangle a, Rectangle b)
     {
-        return b.sx*b.sy-a.sx*a.sy;
+        return b.getArea()-a.getArea();
+    }
+}
+
+class SortByPackingScore implements Comparator<Rectangle>
+{
+    public int compare(Rectangle a, Rectangle b)
+    {
+        return b.getPackingScore()-a.getPackingScore();
     }
 }
