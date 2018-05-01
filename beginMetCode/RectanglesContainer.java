@@ -60,6 +60,7 @@ public class RectanglesContainer {
         //parse rectangle
         for(int i=0;i<rectangleAmount;i++){
             Rectangle newRectangle = new Rectangle();
+            while(!scanner.hasNext());//WAIT FOR INPUT
             newRectangle.sx = scanner.nextInt();
             newRectangle.sy = scanner.nextInt();
             newRectangle.id = i;

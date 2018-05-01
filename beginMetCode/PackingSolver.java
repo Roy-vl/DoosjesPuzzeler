@@ -17,7 +17,7 @@ public class PackingSolver{
         strategy.pack(RC);
         
         RC.printOutput();
-        RC.visualize();
+        //RC.visualize();
     }
     
 }
