@@ -17,10 +17,9 @@ public class PackLikeABeast implements PackerStrategy{
         boolean[][] filledSpots = new boolean[Width][minimumHeight];
         
         
-        System.out.println("maximumHeight : "+maximumHeight);
-        System.out.println("maximumWidth : "+maximalWidth);
-        System.out.println("minimumHeight: "+minimumHeight);
-        
+        //System.out.println("maximumHeight : "+maximumHeight);
+        //System.out.println("maximumWidth : "+maximalWidth);
+        //System.out.println("minimumHeight: "+minimumHeight); 
  
         for(Rectangle curRec : RC.rectangles){      
             boolean canPlace = false;
@@ -56,7 +55,7 @@ public class PackLikeABeast implements PackerStrategy{
             }
             }
 
-            if(!curRec.placed) System.out.println("Rectangle "+curRec.id+" is NOT PLACED!");
+            //if(!curRec.placed) System.out.println("Rectangle "+curRec.id+" is NOT PLACED!");
         }
 
     }
