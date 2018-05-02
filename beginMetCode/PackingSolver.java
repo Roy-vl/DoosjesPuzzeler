@@ -4,7 +4,7 @@ public class PackingSolver{
         RectanglesContainer RC = new RectanglesContainer();
         RC.parseInput();
         
-        RC.sortRectangles(new SortByArea());
+        RC.sortRectangles(new SortByPackingScore());
      
         PackerStrategy strategy = RC.containerHeight>0 ? new PackTetris() : new PackLikeABeast();
                 
@@ -17,7 +17,7 @@ public class PackingSolver{
         strategy.pack(RC);
         
         RC.printOutput();
-        //RC.visualize();
+        RC.visualize();
     }
     
 }

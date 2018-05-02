@@ -4,10 +4,9 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import static java.lang.Math.max;
-import static java.lang.Math.min;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
+import java.util.Random;
 import java.util.Scanner;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -95,6 +94,10 @@ public class RectanglesContainer {
         return a;
     }
     
+    public int getCost(){
+        return getBoundingArea()-getTotalArea();
+    }
+    
     public void randomizePositions(){
         for (Rectangle curRec : rectangles) {
             curRec.px = (int)(Math.random()*100);
@@ -152,11 +155,16 @@ public class RectanglesContainer {
 
         //color rectangles
         for (Rectangle curRec : rectangles) {
-            g.setColor(new Color((int)(Math.random() * 0x1000000)));    
+            //to get rainbow, pastel colors, that are never black
+            Random random = new Random();
+            final float hue = random.nextFloat();
+            final float saturation = 0.9f;//1.0 for brilliant, 0.0 for dull
+            final float luminance = 1.0f; //1.0 for brighter, 0.0 for black
+            final Color color = Color.getHSBColor(hue, saturation, luminance);
+            g.setColor(color);    
             g.fillRect(curRec.px,curRec.py,curRec.getWidth(),curRec.getHeight());
         }
-        
-        
+     
         ////create white outlines
         //g.setColor(new Color(255,255,255));
         //for (Rectangle curRec : Rectangles) {
