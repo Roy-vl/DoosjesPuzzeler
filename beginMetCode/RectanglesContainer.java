@@ -105,6 +105,14 @@ public class RectanglesContainer {
         }
     }
     
+    public void resetRectangles(){
+        for (Rectangle curRec : rectangles){
+            curRec.px = 0;
+            curRec.py = 0;
+            curRec.placed = false;
+        }
+    }
+    
     public boolean checkCollision(Rectangle aRec){
         boolean collision = false;
         for(Rectangle curRec : rectangles){
