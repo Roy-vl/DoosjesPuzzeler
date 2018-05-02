@@ -14,9 +14,14 @@ public class PackingSolver{
         PackerStrategy strategy = new PackCornersExhaustiveRecursive();
         //new PackCorners());
         
+        long startTime = System.currentTimeMillis();
         strategy.pack(RC);
+        long estimatedTime = System.currentTimeMillis() - startTime;
         
         RC.printOutput();
+        
+        System.out.println();
+        System.out.println("time passed = "+estimatedTime+"ms");
         RC.visualize();
     }
     

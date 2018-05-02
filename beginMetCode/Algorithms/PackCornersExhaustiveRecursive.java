@@ -14,18 +14,20 @@ public class PackCornersExhaustiveRecursive implements PackerStrategy{
     
     private void tryAll(RectanglesContainer RC, ArrayList<Corner> corners, ArrayList<Rectangle> set){
         if (set.isEmpty()){
-            RC.visualize();
+            /*RC.visualize();
             try {
-                TimeUnit.SECONDS.sleep(1);
+                TimeUnit.MILLISECONDS.sleep(1000);
             } catch (InterruptedException ex) {
                 Logger.getLogger(PackCornersExhaustiveRecursive.class.getName()).log(Level.SEVERE, null, ex);
-            }
-            int size = RC.getBoundingArea();
+            }*/
+            if(RC.getTotalHeight() < RC.containerHeight){
+                int size = RC.getBoundingArea();
             
-            //if the size of the box is smaller than current smallest
-            if(size < curMinSize){
-                curBest = RC;
-                curMinSize = size;
+                //if the size of the box is smaller than current smallest
+                if(size < curMinSize){
+                    curBest = RC;
+                    curMinSize = size;
+                }
             }
         } else {
             for(Corner curCor : corners){
