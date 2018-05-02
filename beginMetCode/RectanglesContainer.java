@@ -57,10 +57,9 @@ public class RectanglesContainer {
         rectangleAmount = scanner.nextInt();
         rectangles = new Rectangle[rectangleAmount];
         
-        //parse rectangle
+        //parse rectangles
         for(int i=0;i<rectangleAmount;i++){
             Rectangle newRectangle = new Rectangle();
-            while(!scanner.hasNext());//WAIT FOR INPUT
             newRectangle.sx = scanner.nextInt();
             newRectangle.sy = scanner.nextInt();
             newRectangle.id = i;
@@ -82,6 +81,18 @@ public class RectanglesContainer {
             ty = max(ty,curRec.py+curRec.getHeight());
         }
         return ty;
+    }
+    
+    public int getBoundingArea(){
+        return getTotalWidth()*getTotalHeight();
+    }
+    
+    public int getTotalArea(){
+        int a = 0;
+        for (Rectangle curRec : rectangles) {
+            a += curRec.getArea();
+        }
+        return a;
     }
     
     public void randomizePositions(){
