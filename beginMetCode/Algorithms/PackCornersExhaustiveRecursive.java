@@ -1,24 +1,60 @@
 
 import java.util.ArrayList;
+import java.util.concurrent.TimeUnit;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 
 public class PackCornersExhaustiveRecursive implements PackerStrategy{
     
     private ArrayList<RectanglesContainer> potentialSolves = new ArrayList<>();
+    private RectanglesContainer curBest;
+    private int curMinSize = Integer.MAX_VALUE;
+    
     
     private void tryAll(RectanglesContainer RC, ArrayList<Corner> corners, ArrayList<Rectangle> set){
         if (set.isEmpty()){
-            potentialSolves.add(RC);
+            RC.visualize();
+            try {
+                TimeUnit.SECONDS.sleep(1);
+            } catch (InterruptedException ex) {
+                Logger.getLogger(PackCornersExhaustiveRecursive.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            int size = RC.getBoundingArea();
             
+            //if the size of the box is smaller than current smallest
+            if(size < curMinSize){
+                curBest = RC;
+                curMinSize = size;
+            }
         } else {
             for(Corner curCor : corners){
                 for(Rectangle curRec : set){
+                    
                     placeRect(RC, corners, curCor, set, curRec);
+                    
                     if(RC.rotationAllowed){
                         Rectangle cCurRec = (Rectangle) curRec.clone();
                         cCurRec.rotated = true;
                         placeRect(RC, corners, curCor, set, cCurRec);
                     }
+                    
+                    /*
+                    Rectangle cCurRec = (Rectangle) curRec.clone();
+                    placeRect(RC, corners, curCor, set, cCurRec);
+                    
+                    Rectangle cCurRec2 = (Rectangle) curRec.clone();
+                    cCurRec2.rotated = true;
+                    placeRect(RC, corners, curCor, set, cCurRec2);
+                    */
+                    
+                    /*
+                    if(RC.rotationAllowed){
+                        Rectangle cCurRec = (Rectangle) curRec.clone();
+                        cCurRec.rotated = true;
+                        placeRect(RC, corners, curCor, set, cCurRec);
+                    }
+                    */
                 }
             }
         }
@@ -38,6 +74,7 @@ public class PackCornersExhaustiveRecursive implements PackerStrategy{
             for(Corner corner : cCorners){
                 if(corner.x == cCurCor.x && corner.y == cCurCor.y){
                     toRemove = corner;
+                    break;
                 }
             }
             cCorners.remove(toRemove);
@@ -49,6 +86,7 @@ public class PackCornersExhaustiveRecursive implements PackerStrategy{
             for(Rectangle rect : cSet){
                 if(rect.id == cCurRec.id){
                     toRemove2 = rect;
+                    break;
                 }
             }
             cSet.remove(toRemove2);
@@ -58,10 +96,12 @@ public class PackCornersExhaustiveRecursive implements PackerStrategy{
             for(Rectangle rect : cRC.rectangles){
                 if(rect.id == cCurRec.id){
                     toEdit = rect;
+                    break;
                 }
             }
             toEdit.px = cCurCor.x;
             toEdit.py = cCurCor.y;
+            toEdit.rotated = cCurRec.rotated;
             toEdit.placed = true;
             
             tryAll(cRC, cCorners, cSet);
@@ -78,63 +118,34 @@ public class PackCornersExhaustiveRecursive implements PackerStrategy{
         for(Rectangle rect : cRC.rectangles){
             if(rect.id == cCurRec.id){
                 toEdit = rect;
+                break;
             }
         }
         toEdit.px = cCurCor.x;
         toEdit.py = cCurCor.y;
-        toEdit.placed = true;
+        toEdit.rotated = cCurRec.rotated;
+        
         //check if it collides
-        return cRC.checkCollision(toEdit);
+        return !cRC.checkCollision(toEdit);
     }
     
     
     @Override
     public void pack(RectanglesContainer RC){
        
+        
         ArrayList<Corner> corners = new ArrayList<>();
         corners.add(new Corner(0,0));
         ArrayList<Rectangle> rectangles = new ArrayList<>();
         
+        //make a set of all rectangles
         for(Rectangle rec : RC.rectangles){
             rectangles.add(rec);
         }
         
-        //tryAll populates potentialSolves with all possible solutions
+        //tryAll tries every legal placing and sets curBest
         tryAll(RC, corners, rectangles);
         
-        //recPack populates potentialSolves with all possible solutions
-        //recPack(Corners, RC, rectangles);
-        
-        
-        //test which potential solution is the best
-        int curMinSize = Integer.MAX_VALUE;
-        RectanglesContainer curBest = null;
-        for(RectanglesContainer potSol : potentialSolves){
-            int curWidth = 0;
-            int curHeigth = 0;
-            
-            //awfull implementation to get extremes of the surrounding rect
-            for(Rectangle rect : potSol.rectangles){
-                int rightMostEdge = rect.px + rect.getWidth();
-                if (rightMostEdge > curWidth){
-                    curWidth = rightMostEdge;
-                }
-                int topMostEdge = rect.py + rect.getHeight();
-                if (topMostEdge > curHeigth){
-                    curHeigth = topMostEdge;
-                }
-            }
-            
-            //multiply the outer edges of the box
-            int size = curWidth * curHeigth;
-            
-            //if the size of the box is smaller than the rest
-            if(size < curMinSize){
-                //potSol.visualize();
-                curBest = potSol;
-                curMinSize = size;
-            }
-        }
         //move the original RC rechtangle to optimum location
         for(Rectangle rec : RC.rectangles){
             for(Rectangle rect : curBest.rectangles){

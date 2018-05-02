@@ -6,12 +6,12 @@ public class PackingSolver{
         
         RC.sortRectangles(new SortByPackingScore());
      
-        PackerStrategy strategy = RC.containerHeight>0 ? new PackTetris() : new PackLikeABeast();
+        //PackerStrategy strategy = RC.containerHeight>0 ? new PackTetris() : new PackLikeABeast();
                 
         //new PackTetris();
         //new PackNextToEachother();
         //new PackLikeABeast() ;
-        //new PackCornersExhaustiveRecursive();
+        PackerStrategy strategy = new PackCornersExhaustiveRecursive();
         //new PackCorners());
         
         strategy.pack(RC);
