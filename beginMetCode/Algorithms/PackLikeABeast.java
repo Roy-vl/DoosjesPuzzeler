@@ -24,9 +24,9 @@ public class PackLikeABeast implements PackerStrategy{
     public void pack(RectanglesContainer RC) {
         
         int Width = 10000;
-        
+
         filledSpots = new boolean[Width][RC.containerHeight];
- 
+  
         for(Rectangle curRec : RC.rectangles){      
             for(int tx = 0; tx <= Width              - curRec.getWidth()  && !curRec.placed; tx++){
             for(int ty = 0; ty <= RC.containerHeight - curRec.getHeight() && !curRec.placed; ty++){
