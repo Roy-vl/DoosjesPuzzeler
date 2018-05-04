@@ -13,9 +13,9 @@ public class PackingSolver{
         
         RC.printOutput();
         
-        System.out.println();
-        System.out.println("time passed = "+estimatedTime+"ms");
-        RC.visualize();
+        //System.out.println();
+        //System.out.println("time passed = "+estimatedTime+"ms");
+        //RC.visualize();
     }
     
 }

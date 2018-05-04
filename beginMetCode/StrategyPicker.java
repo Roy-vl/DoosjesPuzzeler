@@ -2,7 +2,13 @@ public class StrategyPicker {
     
     public PackerStrategy pick(RectanglesContainer RC){
         
-        if(RC.rectangleAmount<10) return new PackCornersExhaustiveRecursive();
+        if(RC.rectangleAmount<10){
+            if(RC.containerHeight>0){
+                return new PackCornersExhaustiveRecursive();
+            }else{
+                return new PackLikeMultipleBeasts();
+            }
+        }
         
         if(RC.rectangleAmount==25 || RC.rectangleAmount==10){
             if(RC.containerHeight>0){
