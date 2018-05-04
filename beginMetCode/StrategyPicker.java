@@ -25,6 +25,6 @@ public class StrategyPicker {
             }
         }
         
-        return new PackNextToEachOther();
+        return new PackNextToEachother();
     } 
 }
