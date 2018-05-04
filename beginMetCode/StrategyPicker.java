@@ -4,7 +4,7 @@ public class StrategyPicker {
         
         if(RC.rectangleAmount<10) return new PackCornersExhaustiveRecursive();
         
-        if(RC.rectangleAmount==25){
+        if(RC.rectangleAmount==25 || RC.rectangleAmount==10){
             if(RC.containerHeight>0){
                 return new PackLikeABeast();
             }else{
@@ -14,14 +14,15 @@ public class StrategyPicker {
         
         if(RC.rectangleAmount>25){
             if(RC.containerHeight>0){
-                return new PackLikeABeast();
+                return new PackTetris();
+                
             }else{
                
                 int minimumHeight = 0;
                 for(Rectangle curRec : RC.rectangles) if(minimumHeight < curRec.getHeight()) minimumHeight = curRec.getHeight();
                 RC.containerHeight = minimumHeight;
       
-                return new PackLikeABeast();
+                return new PackTetris();
             }
         }
         
