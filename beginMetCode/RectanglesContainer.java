@@ -226,6 +226,12 @@ public class RectanglesContainer {
         
         //create window
         JFrame frame = new JFrame();
+        if(containerHeight == 0){
+            frame.setTitle("Bounding area : "+Integer.toString(getBoundingArea())+"* With bounding width : "+Integer.toString(getBoundingWidth())+" With cost : "+getCost());
+        } else {
+            frame.setTitle("Bounding width : "+Integer.toString(getBoundingWidth())+"* With bounding area : "+Integer.toString(getBoundingArea())+" With cost : "+getCost());
+        }
+        
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         frame.setSize(windowSizeX+16,windowSizeY+39);//+16,+40 for windows bullshit
         frame.setVisible(true);
