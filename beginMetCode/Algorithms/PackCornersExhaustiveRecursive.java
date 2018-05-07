@@ -9,26 +9,36 @@ public class PackCornersExhaustiveRecursive implements PackerStrategy{
     
     private ArrayList<RectanglesContainer> potentialSolves = new ArrayList<>();
     private RectanglesContainer curBest;
-    private int curMinSize = Integer.MAX_VALUE;
+    private int curMinCost = Integer.MAX_VALUE;
     
+    int RCIndex = 0;
+    int previousBest = 0;
+    ArrayList<Integer> BestIndexes = new ArrayList<>();
     
     private void tryAll(RectanglesContainer RC, ArrayList<Corner> corners, ArrayList<Rectangle> set){
         if (set.isEmpty()){
+            RCIndex++;
+            
             /*RC.visualize();
             try {
                 TimeUnit.MILLISECONDS.sleep(1000);
             } catch (InterruptedException ex) {
                 Logger.getLogger(PackCornersExhaustiveRecursive.class.getName()).log(Level.SEVERE, null, ex);
             }*/
-            if(RC.getTotalHeight() < RC.containerHeight){
-                int size = RC.getBoundingArea();
             
+            if(RC.getTotalHeight() <= RC.containerHeight || RC.containerHeight == 0){
+                int cost = RC.getCost();
                 //if the size of the box is smaller than current smallest
-                if(size < curMinSize){
+                if(cost < curMinCost){
                     curBest = RC;
-                    curMinSize = size;
+                    curMinCost = cost;
+                    BestIndexes.clear();
+                    BestIndexes.add(RCIndex);
+                } else if ( cost == curMinCost){
+                    BestIndexes.add(RCIndex);
                 }
             }
+            
         } else {
             for(Corner curCor : corners){
                 for(Rectangle curRec : set){
@@ -147,6 +157,8 @@ public class PackCornersExhaustiveRecursive implements PackerStrategy{
         
         //tryAll tries every legal placing and sets curBest
         tryAll(RC, corners, rectangles);
+        
+        //System.out.println("indexes of best solution are: "+BestIndexes+"our of: "+RCIndex);
         
         //move the original RC rechtangle to optimum location
         for(Rectangle rec : RC.rectangles){

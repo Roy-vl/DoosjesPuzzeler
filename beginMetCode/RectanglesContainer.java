@@ -3,11 +3,15 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.FileNotFoundException;
 import static java.lang.Math.max;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Random;
 import java.util.Scanner;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.WindowConstants;
@@ -66,6 +70,47 @@ public class RectanglesContainer {
         }
     }
     
+    public void parseCustomInput(String file){
+        Scanner scanner = null;
+        try {
+            File readFile = new File(file);
+            scanner = new Scanner(readFile);
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(RectanglesContainer.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        //parse containerheight
+        scanner.next();
+        scanner.next();
+        if(scanner.next().equals("fixed")){
+            containerHeight = scanner.nextInt();
+        }else{
+            containerHeight = 0;
+        }
+        
+        //parse rotation
+        scanner.next();
+        scanner.next();
+        rotationAllowed = scanner.next().equals("yes");
+        
+        //parse rectangle amount
+        scanner.next();
+        scanner.next();
+        scanner.next();
+        rectangleAmount = scanner.nextInt();
+        rectangles = new Rectangle[rectangleAmount];
+        
+        //parse rectangles
+        for(int i=0;i<rectangleAmount;i++){
+            Rectangle newRectangle = new Rectangle();
+            newRectangle.sx = scanner.nextInt();
+            newRectangle.sy = scanner.nextInt();
+            newRectangle.id = i;
+            rectangles[i] = newRectangle;
+        }
+    }
+    
+    
     public int getTotalWidth(){
         int tx = 0;
         for (Rectangle curRec : rectangles) {
@@ -77,9 +122,9 @@ public class RectanglesContainer {
     public int getTotalHeight(){
         int ty = 0;
         for (Rectangle curRec : rectangles) {
-            ty = max(ty,curRec.py+curRec.getHeight());
+            ty = max(ty, curRec.py + curRec.getHeight());
         }
-        return ty;
+        return max(ty, containerHeight);
     }
     
     public int getBoundingArea(){
