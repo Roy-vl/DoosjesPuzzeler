@@ -80,7 +80,7 @@ public class RectanglesContainer {
         for (Rectangle curRec : rectangles) {
             ty = max(ty, curRec.py + curRec.getHeight());
         }
-        return ty;
+        return max(ty,containerHeight);
     }
     
     public int getBoundingArea(){

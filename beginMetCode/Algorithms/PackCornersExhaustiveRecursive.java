@@ -40,13 +40,13 @@ public class PackCornersExhaustiveRecursive implements PackerStrategy{
                     bestRC = RC;
                     bestCost = cost;
 
-                    RC.visualize();
+                    /*RC.visualize();
 
                     try {
                         TimeUnit.MILLISECONDS.sleep(100);
                     } catch (InterruptedException ex) {
                         Logger.getLogger(PackCornersExhaustiveRecursive.class.getName()).log(Level.SEVERE, null, ex);
-                    }
+                    }*/
 
                 }
             }
@@ -159,6 +159,7 @@ public class PackCornersExhaustiveRecursive implements PackerStrategy{
     
     @Override
     public void pack(RectanglesContainer RC){ 
+        bestRC = RC;
         
         ArrayList<Corner> corners = new ArrayList<>();
         corners.add(new Corner(0,0));
