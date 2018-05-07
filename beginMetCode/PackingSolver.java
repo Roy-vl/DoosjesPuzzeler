@@ -14,8 +14,13 @@ public class PackingSolver{
         RC.printOutput();
         
         //System.out.println();
-        //System.out.println("time passed = "+estimatedTime+"ms");
-        //RC.visualize();
+        System.out.println("time passed = "+estimatedTime+"ms");
+        if (RC.containerHeight == 0 ){
+            System.out.println("size is "+RC.getBoundingArea());
+        } else {
+            System.out.println("width is "+RC.getBoundingWidth());
+        }
+        RC.visualize();
     }
     
 }
