@@ -36,9 +36,7 @@ public class RectanglesContainer {
         return clone;
     }
     
-    public void parseInput(){
-        Scanner scanner = new Scanner(System.in);
-        
+    public void parseInput(Scanner scanner){
         //parse containerheight
         scanner.next();
         scanner.next();
