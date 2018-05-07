@@ -1,3 +1,3 @@
 interface PackerStrategy {
-    void pack(RectanglesContainer RC);
+    RectanglesContainer  pack(ProblemStatement PS);
 }

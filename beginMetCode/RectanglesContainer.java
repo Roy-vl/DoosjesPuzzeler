@@ -4,7 +4,9 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import static java.lang.Math.max;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.Random;
 import java.util.Scanner;
@@ -12,128 +14,56 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.WindowConstants;
 
-public class RectanglesContainer {
-    int         containerHeight;
-    boolean     rotationAllowed;
-    int         rectangleAmount;
-    Rectangle[] rectangles;
+public class RectanglesContainer{
+    public ArrayList<Rectangle> rectangles;
+    private int boundingWidth;
+    private int boundingHeight;
     
-    @Override
-    public RectanglesContainer clone(){
-        RectanglesContainer clone = new RectanglesContainer();
-        clone.containerHeight = this.containerHeight;
-        clone.rotationAllowed = this.rotationAllowed;
-        clone.rectangleAmount = this.rectangleAmount;
-        clone.rectangles = new Rectangle[rectangleAmount];
-        for(int i = 0; i < rectangleAmount; i++){
-            clone.rectangles[i] = this.rectangles[i].clone();
-        }
-        return clone;
+    public RectanglesContainer(){
+        rectangles = new ArrayList<>();
+        boundingWidth = 0;
+        boundingHeight = 0;
     }
     
-    public void parseInput(Scanner scanner){
-        //parse containerheight
-        scanner.next();
-        scanner.next();
-        if(scanner.next().equals("fixed")){
-            containerHeight = scanner.nextInt();
-        }else{
-            containerHeight = 0;
-        }
-        
-        //parse rotation
-        scanner.next();
-        scanner.next();
-        rotationAllowed = scanner.next().equals("yes");
-        
-        //parse rectangle amount
-        scanner.next();
-        scanner.next();
-        scanner.next();
-        rectangleAmount = scanner.nextInt();
-        rectangles = new Rectangle[rectangleAmount];
-        
-        //parse rectangles
-        for(int i=0;i<rectangleAmount;i++){
-            Rectangle newRectangle = new Rectangle();
-            newRectangle.sx = scanner.nextInt();
-            newRectangle.sy = scanner.nextInt();
-            newRectangle.id = i;
-            rectangles[i] = newRectangle;
-        }
-    }  
-    
     public int getBoundingWidth(){
-        int tx = 0;
-        for (Rectangle curRec : rectangles) {
-            tx = max(tx,curRec.px + curRec.getWidth());
-        }
-        return tx;
+        return boundingWidth;
     }
     
     public int getBoundingHeight(){
-        int ty = 0;
-        for (Rectangle curRec : rectangles) {
-            ty = max(ty, curRec.py + curRec.getHeight());
-        }
-        return max(ty,containerHeight);
+        return boundingHeight;
     }
     
     public int getBoundingArea(){
-        return getBoundingWidth()*getBoundingHeight();
+        return boundingWidth*boundingHeight;
     }
     
-    public int getAccumulatedRectanglesArea(){
+    public int getRectanglesArea(){
         int a = 0;
-        for (Rectangle curRec : rectangles) {
-            a += curRec.getArea();
-        }
+        for (Rectangle curRec : rectangles) a += curRec.getArea();
         return a;
     }
     
     public int getCost(){
-        return getBoundingArea()-getAccumulatedRectanglesArea();
+        return getBoundingArea()-getRectanglesArea();
     }
-    
-    public void randomizePositions(){
-        for (Rectangle curRec : rectangles) {
-            curRec.px = (int)(Math.random()*100);
-            curRec.py = (int)(Math.random()*100);
-        }
-    }
-    
-    public void resetRectangles(){
-        for (Rectangle curRec : rectangles){
-            curRec.px = 0;
-            curRec.py = 0;
-            curRec.placed = false;
-        }
-    }
-    
+      
     public boolean checkCollision(Rectangle aRec){
         boolean collision = false;
-        for(Rectangle curRec : rectangles){
-            if(curRec.placed){
-                collision = collision || curRec.Collides(aRec);
-            }
-        }
+        for(Rectangle curRec : rectangles) collision = collision || curRec.Collides(aRec);
         return collision;
     }
     
     public void sortRectangles(Comparator<Rectangle> C){
-        Arrays.sort(rectangles, C);
+        Collections.sort(rectangles, C);
     }
     
-    public void printOutput(){
-        //first sort by id to get original listing
-        sortRectangles(new SortByID());
-        //print output
-        System.out.println("container height: "+(containerHeight==0?"free":("fixed "+containerHeight)));
-        System.out.println("rotations allowed: "+(rotationAllowed?"yes":"no"));
-        System.out.println("number of rectangles: "+rectangleAmount);
-        for (Rectangle curRec : rectangles) {
-            System.out.println(curRec.sx+" "+curRec.sy);
-        }
+    public void addRectangle(Rectangle aRec){
+        rectangles.add(aRec);
+        boundingWidth  = max(boundingWidth, aRec.px+aRec.getWidth());
+        boundingHeight = max(boundingHeight,aRec.px+aRec.getHeight());
+    }
+    
+    public void printOutput(boolean rotationAllowed){
         System.out.println("placement of rectangles");
         for (Rectangle curRec : rectangles) {
             System.out.println((rotationAllowed?(curRec.rotated?"yes ":"no "):"")+curRec.px+" "+curRec.py);

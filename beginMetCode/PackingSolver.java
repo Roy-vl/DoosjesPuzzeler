@@ -23,20 +23,23 @@ public class PackingSolver {
                     System.out.println(file + " chosen.");
                     Scanner scanner = new Scanner(file);
                     
-                    RC.parseInput(scanner);
+                    ProblemStatement PS = new ProblemStatement();
                     
-                    RC.sortRectangles(new SortByPackingScore());
+                    PS.parseInput(scanner);
 
-                    
-                    PackerStrategy strategy = (new StrategyPicker()).pick(RC);
+                    PackerStrategy strategy = (new StrategyPicker()).pick(PS);
                     System.out.println("Applying "+strategy.getClass().getSimpleName());
                     
                     long startTime = System.currentTimeMillis();
-                    strategy.pack(RC);
+                    RectanglesContainer packedRC = strategy.pack(PS);
                     long estimatedTime = System.currentTimeMillis() - startTime;
+                    
+                    PS.printOutput();
+                    packedRC.printOutput(PS.getRotationAllowed());
+                    
+                    packedRC.visualize();
 
                     System.out.println("time passed = "+estimatedTime+"ms");
-                    RC.visualize();
                     
                 } catch (FileNotFoundException ex) {
                     Logger.getLogger(PackingSolver.class.getName()).log(Level.SEVERE, null, ex);
@@ -44,7 +47,8 @@ public class PackingSolver {
             }
         } else {
             System.out.println("No file selected");
-        } 
+        }
+
     }
     
 }
