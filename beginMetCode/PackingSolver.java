@@ -12,7 +12,7 @@ public class PackingSolver{
         long estimatedTime = System.currentTimeMillis() - startTime;
         
         RC.printOutput();
-        
+        System.out.println("total area: "+RC.getBoundingArea());
         //System.out.println();
         //System.out.println("time passed = "+estimatedTime+"ms");
         //RC.visualize();
