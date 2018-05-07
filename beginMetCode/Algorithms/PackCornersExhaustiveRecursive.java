@@ -4,6 +4,20 @@ import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+class Corner{
+    int x,y;
+    public Corner(int _x,int _y){
+        x=_x;
+        y=_y;
+    }
+    
+    @Override
+    public Corner clone(){
+        Corner clone = new Corner(this.x, this.y);
+        return clone;
+    }
+}
+
 
 public class PackCornersExhaustiveRecursive implements PackerStrategy{
     

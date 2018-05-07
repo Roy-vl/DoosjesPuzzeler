@@ -35,6 +35,7 @@ public class PackLikeMultipleBeasts implements PackerStrategy{
         RC.containerHeight = bestHeight;
         RC.resetRectangles();
         PLAB.pack(RC);
+        RC.containerHeight = 0;
     }
 }
 
