@@ -21,41 +21,46 @@ class Corner{
 
 public class PackCornersExhaustiveRecursive implements PackerStrategy{
     
-    private ArrayList<RectanglesContainer> potentialSolves = new ArrayList<>();
     private RectanglesContainer curBest;
     private int curMinCost = Integer.MAX_VALUE;
-    
-    int RCIndex = 0;
-    int previousBest = 0;
-    ArrayList<Integer> BestIndexes = new ArrayList<>();
+    private int counter = 0;
     
     private void tryAll(RectanglesContainer RC, ArrayList<Corner> corners, ArrayList<Rectangle> set){
+        if((RC.getBoundingHeight() > RC.containerHeight && RC.containerHeight != 0) || RC.getCost() >= curMinCost){
+            //System.out.println("PRUNED");
+            return;
+        }
+        
         if (set.isEmpty()){
-            RCIndex++;
-            
-            /*RC.visualize();
-            try {
-                TimeUnit.MILLISECONDS.sleep(1000);
-            } catch (InterruptedException ex) {
-                Logger.getLogger(PackCornersExhaustiveRecursive.class.getName()).log(Level.SEVERE, null, ex);
-            }*/
-            
+               
             if(RC.getBoundingHeight() <= RC.containerHeight || RC.containerHeight == 0){
                 int cost = RC.getCost();
                 //if the size of the box is smaller than current smallest
                 if(cost < curMinCost){
                     curBest = RC;
                     curMinCost = cost;
-                    BestIndexes.clear();
-                    BestIndexes.add(RCIndex);
-                } else if ( cost == curMinCost){
-                    BestIndexes.add(RCIndex);
+                    
+
+                    RC.visualize();
+
+                    try {
+                        TimeUnit.MILLISECONDS.sleep(100);
+                    } catch (InterruptedException ex) {
+                        Logger.getLogger(PackCornersExhaustiveRecursive.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+
                 }
             }
             
+            
+            
         } else {
+            
+                  
             for(Corner curCor : corners){
                 for(Rectangle curRec : set){
+                    
+                    
                     
                     placeRect(RC, corners, curCor, set, curRec);
                     
@@ -87,6 +92,10 @@ public class PackCornersExhaustiveRecursive implements PackerStrategy{
     }
     
     private void placeRect(RectanglesContainer RC, ArrayList<Corner> corners, Corner curCor, ArrayList<Rectangle> set, Rectangle curRec) {
+        if(RC.getCost() >= curMinCost){
+            //System.out.println("PRUNED");
+            return;
+        }
         RectanglesContainer cRC = (RectanglesContainer) RC.clone();
         ArrayList<Corner> cCorners = (ArrayList<Corner>) corners.clone();
         Corner cCurCor = (Corner) curCor.clone();
