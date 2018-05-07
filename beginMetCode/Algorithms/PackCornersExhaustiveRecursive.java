@@ -26,9 +26,11 @@ public class PackCornersExhaustiveRecursive implements PackerStrategy{
 
     
     private void tryAll(RectanglesContainer RC, ArrayList<Corner> corners, ArrayList<Rectangle> set){
-        if((RC.getBoundingHeight() > RC.containerHeight && RC.containerHeight != 0) || RC.getCost() >= bestCost){
-            //System.out.println("PRUNED");
-            return;
+        if(bestRC != null){
+            if((RC.getBoundingHeight() > RC.containerHeight && RC.containerHeight != 0) || RC.getCost() >= bestCost){
+                //System.out.println("PRUNED");
+                return;
+            }
         }
         
         if (set.isEmpty()){
@@ -159,8 +161,7 @@ public class PackCornersExhaustiveRecursive implements PackerStrategy{
     
     @Override
     public void pack(RectanglesContainer RC){ 
-        bestRC = RC;
-        
+
         ArrayList<Corner> corners = new ArrayList<>();
         corners.add(new Corner(0,0));
         ArrayList<Rectangle> rectangles = new ArrayList<>();
