@@ -40,7 +40,7 @@ public class PackCornersExhaustiveRecursive implements PackerStrategy{
                 Logger.getLogger(PackCornersExhaustiveRecursive.class.getName()).log(Level.SEVERE, null, ex);
             }*/
             
-            if(RC.getTotalHeight() <= RC.containerHeight || RC.containerHeight == 0){
+            if(RC.getBoundingHeight() <= RC.containerHeight || RC.containerHeight == 0){
                 int cost = RC.getCost();
                 //if the size of the box is smaller than current smallest
                 if(cost < curMinCost){

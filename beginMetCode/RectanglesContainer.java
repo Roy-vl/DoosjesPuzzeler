@@ -111,7 +111,7 @@ public class RectanglesContainer {
     }
     
     
-    public int getTotalWidth(){
+    public int getBoundingWidth(){
         int tx = 0;
         for (Rectangle curRec : rectangles) {
             tx = max(tx,curRec.px+curRec.getWidth());
@@ -119,7 +119,7 @@ public class RectanglesContainer {
         return tx;
     }
     
-    public int getTotalHeight(){
+    public int getBoundingHeight(){
         int ty = 0;
         for (Rectangle curRec : rectangles) {
             ty = max(ty, curRec.py + curRec.getHeight());
@@ -128,10 +128,10 @@ public class RectanglesContainer {
     }
     
     public int getBoundingArea(){
-        return getTotalWidth()*getTotalHeight();
+        return getBoundingWidth()*getBoundingHeight();
     }
     
-    public int getTotalArea(){
+    public int getAccumulatedRectanglesArea(){
         int a = 0;
         for (Rectangle curRec : rectangles) {
             a += curRec.getArea();
@@ -140,7 +140,7 @@ public class RectanglesContainer {
     }
     
     public int getCost(){
-        return getBoundingArea()-getTotalArea();
+        return getBoundingArea()-getAccumulatedRectanglesArea();
     }
     
     public void randomizePositions(){
@@ -193,8 +193,8 @@ public class RectanglesContainer {
         int windowSizeX = 1000;
         int windowSizeY = 1000;
         
-        int maxx = getTotalWidth();
-        int maxy = getTotalHeight();
+        int maxx = getBoundingWidth();
+        int maxy = getBoundingHeight();
         
         float scale = maxx>=maxy ? (float)windowSizeX/maxx : (float)windowSizeY/maxy;
              
