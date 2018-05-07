@@ -22,7 +22,6 @@ public class RectanglesContainer {
     int         rectangleAmount;
     Rectangle[] rectangles;
     
-    
     @Override
     public RectanglesContainer clone(){
         RectanglesContainer clone = new RectanglesContainer();
@@ -66,53 +65,12 @@ public class RectanglesContainer {
             newRectangle.id = i;
             rectangles[i] = newRectangle;
         }
-    }
-    
-    public void parseCustomInput(String file){
-        Scanner scanner = null;
-        try {
-            File readFile = new File(file);
-            scanner = new Scanner(readFile);
-        } catch (FileNotFoundException ex) {
-            Logger.getLogger(RectanglesContainer.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        
-        //parse containerheight
-        scanner.next();
-        scanner.next();
-        if(scanner.next().equals("fixed")){
-            containerHeight = scanner.nextInt();
-        }else{
-            containerHeight = 0;
-        }
-        
-        //parse rotation
-        scanner.next();
-        scanner.next();
-        rotationAllowed = scanner.next().equals("yes");
-        
-        //parse rectangle amount
-        scanner.next();
-        scanner.next();
-        scanner.next();
-        rectangleAmount = scanner.nextInt();
-        rectangles = new Rectangle[rectangleAmount];
-        
-        //parse rectangles
-        for(int i=0;i<rectangleAmount;i++){
-            Rectangle newRectangle = new Rectangle();
-            newRectangle.sx = scanner.nextInt();
-            newRectangle.sy = scanner.nextInt();
-            newRectangle.id = i;
-            rectangles[i] = newRectangle;
-        }
-    }
-    
+    }  
     
     public int getBoundingWidth(){
         int tx = 0;
         for (Rectangle curRec : rectangles) {
-            tx = max(tx,curRec.px+curRec.getWidth());
+            tx = max(tx,curRec.px + curRec.getWidth());
         }
         return tx;
     }
@@ -122,7 +80,7 @@ public class RectanglesContainer {
         for (Rectangle curRec : rectangles) {
             ty = max(ty, curRec.py + curRec.getHeight());
         }
-        return max(ty, containerHeight);
+        return ty;
     }
     
     public int getBoundingArea(){
@@ -215,20 +173,10 @@ public class RectanglesContainer {
             g.setColor(color);    
             g.fillRect(curRec.px,curRec.py,curRec.getWidth(),curRec.getHeight());
         }
-     
-        ////create white outlines
-        //g.setColor(new Color(255,255,255));
-        //for (Rectangle curRec : Rectangles) {
-           // g.drawRect(curRec.px,curRec.py,curRec.getWidth(),curRec.getHeight());
-        //}
         
         //create window
         JFrame frame = new JFrame();
-        if(containerHeight == 0){
-            frame.setTitle("Bounding area : "+Integer.toString(getBoundingArea())+"* With bounding width : "+Integer.toString(getBoundingWidth())+" With cost : "+getCost());
-        } else {
-            frame.setTitle("Bounding width : "+Integer.toString(getBoundingWidth())+"* With bounding area : "+Integer.toString(getBoundingArea())+" With cost : "+getCost());
-        }
+        frame.setTitle("Bounding Size : "+getBoundingWidth()+","+getBoundingHeight()+" with area : "+getBoundingArea()+" and cost of : "+getCost());
         
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         frame.setSize(windowSizeX+16,windowSizeY+39);//+16,+40 for windows bullshit
