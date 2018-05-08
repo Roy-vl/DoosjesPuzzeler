@@ -1,7 +1,11 @@
+/*
+StrategyPicker is a class that will pick and return appropriate PackerStrategy for any ProblemStatement
+*/
+
 public class StrategyPicker {
     
     public PackerStrategy pick(ProblemStatement PS){
-  
+        
         if(PS.getRectangleAmount()<=10){
             return new PackCornersExhaustiveRecursive();
         }

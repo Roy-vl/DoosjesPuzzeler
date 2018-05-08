@@ -17,38 +17,31 @@ public class PackingSolver {
         dialog.setMode(FileDialog.LOAD);
         dialog.setVisible(true);
         File[] files = dialog.getFiles();
-        if (files.length != 0 && files != null) {
-            for (File file : files) {
-                try {
-                    System.out.println(file + " chosen.");
-                    Scanner scanner = new Scanner(file);
-                    
-                    ProblemStatement PS = new ProblemStatement();
-                    
-                    PS.parseInput(scanner);
+        for (File file : files) {
+            try {
+                System.out.println(file + " chosen.");
+                Scanner scanner = new Scanner(file);
 
-                    PackerStrategy strategy = (new StrategyPicker()).pick(PS);
-                    System.out.println("Applying "+strategy.getClass().getSimpleName());
-                    
-                    long startTime = System.currentTimeMillis();
-                    RectanglesContainer packedRC = strategy.pack(PS);
-                    long estimatedTime = System.currentTimeMillis() - startTime;
-                    
-                    PS.printOutput();
-                    packedRC.printOutput(PS.getRotationAllowed());
-                    
-                    packedRC.visualize();
+                ProblemStatement PS = new ProblemStatement();
+                PS.parseInput(scanner);
 
-                    System.out.println("time passed = "+estimatedTime+"ms");
-                    
-                } catch (FileNotFoundException ex) {
-                    Logger.getLogger(PackingSolver.class.getName()).log(Level.SEVERE, null, ex);
-                }     
-            }
-        } else {
-            System.out.println("No file selected");
+                PackerStrategy strategy = (new StrategyPicker()).pick(PS);
+                System.out.println("Applying "+strategy.getClass().getSimpleName()); 
+                
+                long startTime = System.currentTimeMillis();
+                RectanglesContainer packedRC = strategy.pack(PS);
+                long estimatedTime = System.currentTimeMillis() - startTime;
+                System.out.println("Packing time : "+estimatedTime+"ms");
+                
+                PS.print();
+                packedRC.printPlacement(PS.getRotationAllowed());
+
+                packedRC.visualize();
+
+            } catch (FileNotFoundException ex) {
+                Logger.getLogger(PackingSolver.class.getName()).log(Level.SEVERE, null, ex);
+            }     
         }
-
     }
     
 }

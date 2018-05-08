@@ -1,3 +1,6 @@
+
+import java.util.Arrays;
+
 public class PackLikeABeast implements PackerStrategy{
     
     boolean[][] filledSpots;
@@ -21,24 +24,35 @@ public class PackLikeABeast implements PackerStrategy{
     }
     
     @Override
-    public void pack(RectanglesContainer RC) {
+    public RectanglesContainer pack(ProblemStatement PS){
+        
+        RectanglesContainer RC = new RectanglesContainer();
         
         int Width = 10000;
 
-        filledSpots = new boolean[Width][RC.containerHeight];
+        filledSpots = new boolean[Width][PS.getContainerHeight()];
+        
+        //create a clone of the PS rectangles
+        Rectangle[] rectangles = PS.getRectangles();
+        Arrays.sort(rectangles,new SortByArea());
   
-        for(Rectangle curRec : RC.rectangles){      
-            for(int tx = 0; tx <= Width              - curRec.getWidth()  && !curRec.placed; tx++){
-            for(int ty = 0; ty <= RC.containerHeight - curRec.getHeight() && !curRec.placed; ty++){
+        for(Rectangle curRec : rectangles){
+            boolean placed = false;
+            for(int tx = 0; tx <= Width                   - curRec.getWidth()  && !placed ; tx++){
+            for(int ty = 0; ty <= PS.getContainerHeight() - curRec.getHeight() && !placed; ty++){
                 if(canBePlacedAt(tx,ty,curRec)){
-                    curRec.placed = true;
                     curRec.px = tx;
                     curRec.py = ty;
-                    fillSpots(curRec);                          
+                    fillSpots(curRec);
+                    RC.addRectangle(curRec);
+                    placed = true;
+                    break;
                 }
             }
             }
-            if(!curRec.placed) System.out.println("Rectangle "+curRec.id+" is NOT PLACED!");
+            if(!placed) System.out.println("RECTANGLE "+curRec.id+" COULD NOT BE PLACED");
         }
+        
+        return RC;
     }
 }

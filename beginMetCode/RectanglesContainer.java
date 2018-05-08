@@ -5,11 +5,9 @@ import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import static java.lang.Math.max;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Random;
-import java.util.Scanner;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.WindowConstants;
@@ -23,6 +21,15 @@ public class RectanglesContainer{
         rectangles = new ArrayList<>();
         boundingWidth = 0;
         boundingHeight = 0;
+    }
+    
+    @Override
+    public RectanglesContainer clone(){
+        RectanglesContainer clone = new RectanglesContainer();
+        for(Rectangle curRec : rectangles){
+            clone.addRectangle(curRec.clone());
+        }
+        return clone;
     }
     
     public int getBoundingWidth(){
@@ -60,10 +67,11 @@ public class RectanglesContainer{
     public void addRectangle(Rectangle aRec){
         rectangles.add(aRec);
         boundingWidth  = max(boundingWidth, aRec.px+aRec.getWidth());
-        boundingHeight = max(boundingHeight,aRec.px+aRec.getHeight());
+        boundingHeight = max(boundingHeight,aRec.py+aRec.getHeight());
     }
     
-    public void printOutput(boolean rotationAllowed){
+    public void printPlacement(boolean rotationAllowed){
+        sortRectangles(new SortByID());
         System.out.println("placement of rectangles");
         for (Rectangle curRec : rectangles) {
             System.out.println((rotationAllowed?(curRec.rotated?"yes ":"no "):"")+curRec.px+" "+curRec.py);

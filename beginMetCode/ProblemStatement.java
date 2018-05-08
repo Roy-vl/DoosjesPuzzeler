@@ -5,11 +5,26 @@ import java.util.Scanner;
 ProblemStatement is purely used for parsing the input and storing that data.
 NO changing is allowed.
 */
+
 public class ProblemStatement{
     private int         containerHeight;
     private boolean     rotationAllowed;
     private int         rectangleAmount;
     private Rectangle[] rectangles;
+    
+    public ProblemStatement(){
+        containerHeight = 0;
+        rotationAllowed = false;
+        rectangleAmount = 0;
+        rectangles = new Rectangle[rectangleAmount];
+    }
+    
+    public ProblemStatement(int _containerHeight, boolean _rotationAllowed, int _rectangleAmount, Rectangle[] _rectangles){
+        containerHeight = _containerHeight;
+        rotationAllowed = _rotationAllowed;
+        rectangleAmount = _rectangleAmount;
+        rectangles = _rectangles;
+    }
     
     public int getContainerHeight(){
         return containerHeight;
@@ -24,7 +39,7 @@ public class ProblemStatement{
     }
     
     public Rectangle[] getRectangles(){
-        return rectangles;
+        return rectangles.clone();
     }
     
     public void parseInput(Scanner scanner){
@@ -59,7 +74,7 @@ public class ProblemStatement{
         }
     }
     
-    public void printOutput(){
+    public void print(){
         //print output
         System.out.println("container height: "+(containerHeight==0?"free":("fixed "+containerHeight)));
         System.out.println("rotations allowed: "+(rotationAllowed?"yes":"no"));
