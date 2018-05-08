@@ -10,8 +10,6 @@ import java.util.logging.Logger;
 public class PackingSolver {
 
     public static void main(String[] args) {
-        RectanglesContainer RC = new RectanglesContainer();
-        
         FileDialog dialog = new FileDialog((Frame) null, "Select File to Open");
         dialog.setMultipleMode(true);
         dialog.setMode(FileDialog.LOAD);
