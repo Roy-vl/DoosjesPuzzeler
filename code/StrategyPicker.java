@@ -7,7 +7,7 @@ public class StrategyPicker {
     public PackerStrategy pick(ProblemStatement PS){
         
 
-        if(PS.getRectangleAmount()<=25){
+        if(PS.getRectangleAmount()<10){
             return new PackCorners();
         }
         

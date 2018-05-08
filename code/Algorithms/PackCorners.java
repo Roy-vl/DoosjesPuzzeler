@@ -54,7 +54,7 @@ public class PackCorners implements PackerStrategy{
                 curRec.px,
                 curRec.py+curRec.getHeight()
         );
-
+ 
         RC.addRectangle(curRec);
         toPlace.remove(curRec);
         corners.remove(curCor);
@@ -68,6 +68,7 @@ public class PackCorners implements PackerStrategy{
         corners.add(curCor);
         corners.remove(newCor1);
         corners.remove(newCor2);
+        
     }
     
     public void tryToPlaceAndRecurse(Corner curCor, Rectangle curRec){
@@ -115,7 +116,7 @@ public class PackCorners implements PackerStrategy{
         
         if(PS.getContainerHeight()>0) RC.setForcedBoundingHeight(PS.getContainerHeight());
         
-        corners = new PriorityQueue<>(1,new SortByDistance());
+        corners = new PriorityQueue<>(1, new SortByDistance());
         corners.add(new Corner(0,0));
         
         Rectangle[] rectangles = PS.getRectangles();
