@@ -34,8 +34,8 @@ public class PackCorners implements PackerStrategy{
     
     ProblemStatement PS; 
     RectanglesContainer RC; 
-    PriorityQueue<Corner> corners; 
-    PriorityQueue<Rectangle> toPlace;
+    ArrayList<Corner> corners; 
+    ArrayList<Rectangle> toPlace;
     int bestArea;
     int bestCost;
     RectanglesContainer bestRC;
@@ -87,6 +87,8 @@ public class PackCorners implements PackerStrategy{
     }
    
     public void Backtrack(){
+        //RC.visualize();
+        
         if(bestCost == 0) return;
         
         if(toPlace.isEmpty()){
@@ -100,9 +102,12 @@ public class PackCorners implements PackerStrategy{
             }
         }else{
             if(RC.getBoundingArea()>=bestArea) return;//Pruning
+            
+            Collections.sort(toPlace, new SortByArea());
+            Collections.sort(corners, new SortByDistance());
         
-            for(Rectangle curRec : new PriorityQueue<>(toPlace)){
-                for(Corner curCor : new PriorityQueue<>(corners)){
+            for(Rectangle curRec : new ArrayList<>(toPlace)){
+                for(Corner curCor : new ArrayList<>(corners)){
                     tryToPlaceAndRecurse(curCor, curRec);
                 }
             }
@@ -116,11 +121,11 @@ public class PackCorners implements PackerStrategy{
         
         if(PS.getContainerHeight()>0) RC.setForcedBoundingHeight(PS.getContainerHeight());
         
-        corners = new PriorityQueue<>(1, new SortByDistance());
+        corners = new ArrayList<>();
         corners.add(new Corner(0,0));
         
         Rectangle[] rectangles = PS.getRectangles();
-        toPlace = new PriorityQueue<>(rectangles.length, new SortByArea());
+        toPlace = new ArrayList<>();
         for(Rectangle curRec : rectangles) toPlace.add(curRec);
         
         bestArea = 1000000000;
