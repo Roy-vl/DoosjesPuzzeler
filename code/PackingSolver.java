@@ -11,14 +11,15 @@ public class PackingSolver {
 
     public static void main(String[] args) {
 
-        ProblemStatement PS = new ProblemStatement();
-
         //Comment this line out for Momotor Submission
-        getFile(PS);
-        handleSystemIn(PS);
+        getFile();
+        
+        //handleSystemIn();
     }
 
-    public static void getFile(ProblemStatement PS) {
+    public static void getFile() {
+        ProblemStatement PS = new ProblemStatement();
+        
         FileDialog dialog = new FileDialog((Frame) null, "Select File to Open");
         dialog.setMultipleMode(true);
         dialog.setMode(FileDialog.LOAD);
@@ -27,6 +28,7 @@ public class PackingSolver {
         if (files != null && files.length > 0) {
             for (File file : files) {
                 try {
+                    
                     System.out.println(file + " chosen.");
                     Scanner scanner = new Scanner(file);
                     PS.parseInput(scanner);
@@ -39,7 +41,7 @@ public class PackingSolver {
         } else {
             System.out.println("No file chosen");
         }
-        handleSystemIn(PS);
+        
     }
 
     public static void getSolution(ProblemStatement PS) {
@@ -57,7 +59,9 @@ public class PackingSolver {
         packedRC.visualize();
     }
 
-    public static void handleSystemIn(ProblemStatement PS) {
+    public static void handleSystemIn() {
+        ProblemStatement PS = new ProblemStatement();
+        
         //Handle System.In input
         Scanner scanner = new Scanner(System.in);
         PS.parseInput(scanner);
