@@ -1,13 +1,19 @@
+
+import java.util.Arrays;
+
 public class PackTetris implements PackerStrategy{
     
     @Override
-    public void pack(RectanglesContainer RC){
+    public RectanglesContainer pack(ProblemStatement PS){
+        RectanglesContainer RC = new RectanglesContainer();
       
-        int[] widths = new int[RC.containerHeight];    
+        int[] widths = new int[PS.getContainerHeight()];    
+        Rectangle[] rectangles = PS.getRectangles();
+        Arrays.sort(rectangles,new SortByArea());
         
-        for(Rectangle curRec : RC.rectangles){
+        for(Rectangle curRec : rectangles){
 
-            curRec.rotated = RC.rotationAllowed && curRec.sy>curRec.sx;             
+            curRec.rotated = PS.getRotationAllowed() && curRec.sy>curRec.sx;             
 
             //find lowest point in the widths
             int ty = 0;
@@ -19,7 +25,8 @@ public class PackTetris implements PackerStrategy{
                 }
             }
 
-            while(!curRec.placed){
+            boolean placed = false;
+            while(!placed){
 
                 //check if it can be placed at ty,tx
                 boolean canBePlaced = true;
@@ -36,17 +43,21 @@ public class PackTetris implements PackerStrategy{
                         widths[i]=curRec.px+curRec.getWidth();
                     }
                     
-                    curRec.placed = true;
+                    RC.addRectangle(curRec);
+                    
+                    placed = true;
                  
                 //continue search
                 }else{
                     ty++;
-                    if(ty>RC.containerHeight-curRec.getHeight()){
+                    if(ty>PS.getContainerHeight()-curRec.getHeight()){
                         ty=0;
                         tx++;
                     }
                 }
             }  
         }    
+        
+        return RC;
     }
 }

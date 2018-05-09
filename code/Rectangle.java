@@ -5,7 +5,6 @@ public class Rectangle {
     int id;
     int px,py,sx,sy;
     boolean rotated;
-    boolean placed;
     
     public Rectangle(){
         id=0;
@@ -14,23 +13,21 @@ public class Rectangle {
         sx=0;
         sy=0;
         rotated=false;
-        placed = false;
     }
     
     @Override
     public Rectangle clone(){
-        Rectangle clone = new Rectangle(id, px, py, sx, sy, rotated, placed);
+        Rectangle clone = new Rectangle(id, px, py, sx, sy, rotated);
         return clone;
     }
     
-    public Rectangle(int _id, int _px, int _py, int _sx, int _sy, boolean _rotated, boolean _placed){
+    public Rectangle(int _id, int _px, int _py, int _sx, int _sy, boolean _rotated){
         id=_id;
         px=_px;
         py=_py;
         sx=_sx;
         sy=_sy;
         rotated=_rotated;
-        placed =_placed;
     }
     
     public int getWidth(){
