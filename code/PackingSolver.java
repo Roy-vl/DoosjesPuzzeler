@@ -10,36 +10,57 @@ import java.util.logging.Logger;
 public class PackingSolver {
 
     public static void main(String[] args) {
+
+        ProblemStatement PS = new ProblemStatement();
+
+        //Comment this line out for Momotor Submission
+        getFile(PS);
+        handleSystemIn(PS);
+    }
+
+    public static void getFile(ProblemStatement PS) {
         FileDialog dialog = new FileDialog((Frame) null, "Select File to Open");
         dialog.setMultipleMode(true);
         dialog.setMode(FileDialog.LOAD);
         dialog.setVisible(true);
         File[] files = dialog.getFiles();
-        for (File file : files) {
-            try {
-                System.out.println(file + " chosen.");
-                Scanner scanner = new Scanner(file);
+        if (files != null && files.length > 0) {
+            for (File file : files) {
+                try {
+                    System.out.println(file + " chosen.");
+                    Scanner scanner = new Scanner(file);
+                    PS.parseInput(scanner);
+                    getSolution(PS);
 
-                ProblemStatement PS = new ProblemStatement();
-                PS.parseInput(scanner);
-
-                PackerStrategy strategy = (new StrategyPicker()).pick(PS);
-                System.out.println("Applying "+strategy.getClass().getSimpleName()); 
-                
-                long startTime = System.currentTimeMillis();
-                RectanglesContainer packedRC = strategy.pack(PS);
-                long estimatedTime = System.currentTimeMillis() - startTime;
-                System.out.println("Packing time : "+estimatedTime+"ms");
-                
-                PS.print();
-                packedRC.printPlacement(PS.getRotationAllowed());
-
-                packedRC.visualize();
-
-            } catch (FileNotFoundException ex) {
-                Logger.getLogger(PackingSolver.class.getName()).log(Level.SEVERE, null, ex);
-            }     
+                } catch (FileNotFoundException ex) {
+                    Logger.getLogger(PackingSolver.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        } else {
+            System.out.println("No file chosen");
         }
+        handleSystemIn(PS);
     }
-    
+
+    public static void getSolution(ProblemStatement PS) {
+        PackerStrategy strategy = (new StrategyPicker()).pick(PS);
+        System.out.println("Applying " + strategy.getClass().getSimpleName());
+
+        long startTime = System.currentTimeMillis();
+        RectanglesContainer packedRC = strategy.pack(PS);
+        long estimatedTime = System.currentTimeMillis() - startTime;
+        System.out.println("Packing time : " + estimatedTime + "ms");
+
+        PS.print();
+        packedRC.printPlacement(PS.getRotationAllowed());
+
+        packedRC.visualize();
+    }
+
+    public static void handleSystemIn(ProblemStatement PS) {
+        //Handle System.In input
+        Scanner scanner = new Scanner(System.in);
+        PS.parseInput(scanner);
+        getSolution(PS);
+    }
 }
