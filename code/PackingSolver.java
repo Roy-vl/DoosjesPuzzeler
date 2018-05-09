@@ -12,12 +12,12 @@ public class PackingSolver {
     public static void main(String[] args) {
 
         //Comment this line out for Momotor Submission
-        getFile();
+        fromFile();
         
-        //handleSystemIn();
+        //fromSystemIn();
     }
 
-    public static void getFile() {
+    public static void fromFile() {
         ProblemStatement PS = new ProblemStatement();
         
         FileDialog dialog = new FileDialog((Frame) null, "Select File to Open");
@@ -59,7 +59,7 @@ public class PackingSolver {
         packedRC.visualize();
     }
 
-    public static void handleSystemIn() {
+    public static void fromSystemIn() {
         ProblemStatement PS = new ProblemStatement();
         
         //Handle System.In input
