@@ -11,7 +11,16 @@ public class PackingSolver {
 
     public static void main(String[] args) {
         RectanglesContainer RC = new RectanglesContainer();
-        
+
+        //Commend this line out for Momotor Submission
+        //getFile(RC);
+
+        Scanner scanner = new Scanner(System.in);
+        RC.parseInput(scanner);
+        getSolution(RC);
+    }
+
+    public static void getFile(RectanglesContainer RC) {
         FileDialog dialog = new FileDialog((Frame) null, "Select File to Open");
         dialog.setMultipleMode(true);
         dialog.setMode(FileDialog.LOAD);
@@ -22,29 +31,33 @@ public class PackingSolver {
                 try {
                     System.out.println(file + " chosen.");
                     Scanner scanner = new Scanner(file);
-                    
                     RC.parseInput(scanner);
-                    
-                    RC.sortRectangles(new SortByPackingScore());
-
-                    
-                    PackerStrategy strategy = (new StrategyPicker()).pick(RC);
-                    System.out.println("Applying "+strategy.getClass().getSimpleName());
-                    
-                    long startTime = System.currentTimeMillis();
-                    strategy.pack(RC);
-                    long estimatedTime = System.currentTimeMillis() - startTime;
-
-                    System.out.println("time passed = "+estimatedTime+"ms");
-                    RC.visualize();
-                    
+                    getSolution(RC);
                 } catch (FileNotFoundException ex) {
                     Logger.getLogger(PackingSolver.class.getName()).log(Level.SEVERE, null, ex);
-                }     
+                }
             }
         } else {
-            System.out.println("No file selected");
-        } 
+            Scanner scanner = new Scanner(System.in);
+            RC.parseInput(scanner);
+            getSolution(RC);
+        }
     }
-    
+
+
+public static void getSolution(RectanglesContainer RC) {
+         RC.sortRectangles(new SortByPackingScore());
+
+        long startTime = System.currentTimeMillis();
+        (new StrategyPicker()).pick(RC).pack(RC);
+        long estimatedTime = System.currentTimeMillis() - startTime;
+
+        RC.printOutput();
+        System.out.println("----------------------------------------------------");
+
+        //System.out.println();
+        //System.out.println("time passed = "+estimatedTime+"ms");
+        RC.visualize();
+        System.out.println(RC.getBoundingWidth());
+    }
 }
