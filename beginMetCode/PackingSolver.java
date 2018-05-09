@@ -22,36 +22,29 @@ public class PackingSolver {
                 try {
                     System.out.println(file + " chosen.");
                     Scanner scanner = new Scanner(file);
+                    
                     RC.parseInput(scanner);
-                    getSolution(RC);
+                    
+                    RC.sortRectangles(new SortByPackingScore());
+
+                    
+                    PackerStrategy strategy = (new StrategyPicker()).pick(RC);
+                    System.out.println("Applying "+strategy.getClass().getSimpleName());
+                    
+                    long startTime = System.currentTimeMillis();
+                    strategy.pack(RC);
+                    long estimatedTime = System.currentTimeMillis() - startTime;
+
+                    System.out.println("time passed = "+estimatedTime+"ms");
+                    RC.visualize();
+                    
                 } catch (FileNotFoundException ex) {
                     Logger.getLogger(PackingSolver.class.getName()).log(Level.SEVERE, null, ex);
                 }     
             }
         } else {
-            Scanner scanner = new Scanner(System.in);
-            RC.parseInput(scanner);
-            getSolution(RC);
+            System.out.println("No file selected");
         } 
     }
     
-    public static void getSolution(RectanglesContainer RC) {
-         RC.sortRectangles(new SortByPackingScore());
-
-        long startTime = System.currentTimeMillis();
-        (new StrategyPicker()).pick(RC).pack(RC);
-        long estimatedTime = System.currentTimeMillis() - startTime;
-
-        RC.printOutput();
-        System.out.println("----------------------------------------------------");
-
-        //System.out.println();
-        System.out.println("time passed = "+estimatedTime+"ms");
-        if (RC.containerHeight == 0 ){
-            System.out.println("size is "+RC.getBoundingArea());
-        } else {
-            System.out.println("width is "+RC.getBoundingWidth());
-        }
-        RC.visualize();
-    }
 }
