@@ -13,7 +13,7 @@ public class PackingSolver {
         RectanglesContainer RC = new RectanglesContainer();
 
         //Commend this line out for Momotor Submission
-        //getFile(RC);
+        getFile(RC);
 
         Scanner scanner = new Scanner(System.in);
         RC.parseInput(scanner);
