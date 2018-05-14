@@ -31,7 +31,7 @@ class SortByDistance implements Comparator<Corner>
 }
 
 public class PackCorners implements PackerStrategy{
-    
+    long startTime;
     ProblemStatement PS; 
     RectanglesContainer RC; 
     ArrayList<Corner> corners; 
@@ -87,25 +87,24 @@ public class PackCorners implements PackerStrategy{
     }
    
     public void Backtrack(){
-        //RC.visualize();
+        //if((System.currentTimeMillis()-startTime) > 300000) return; //define time limit
         
         if(bestCost == 0) return;
         
         if(toPlace.isEmpty()){
             int newArea = RC.getBoundingArea();
-            int newCost = RC.getCost();
             if(newArea<bestArea){
                 RC.visualize();
                 bestArea = newArea;
-                bestCost = newCost;
-                bestRC   = RC.clone();
-            }
+                bestCost = RC.getCost();
+                bestRC   = RC.clone();        
+        }
         }else{
             if(RC.getBoundingArea()>=bestArea) return;//Pruning
             
             Collections.sort(toPlace, new SortByArea());
             Collections.sort(corners, new SortByDistance());
-        
+                
             for(Rectangle curRec : new ArrayList<>(toPlace)){
                 for(Corner curCor : new ArrayList<>(corners)){
                     tryToPlaceAndRecurse(curCor, curRec);
@@ -115,8 +114,9 @@ public class PackCorners implements PackerStrategy{
     }
     
     @Override
-    public RectanglesContainer pack(ProblemStatement cPS){
-        PS = cPS;
+    public RectanglesContainer pack(ProblemStatement PS){
+        startTime = System.currentTimeMillis();
+        this.PS = PS;
         RC = new RectanglesContainer();
         
         if(PS.getContainerHeight()>0) RC.setForcedBoundingHeight(PS.getContainerHeight());
