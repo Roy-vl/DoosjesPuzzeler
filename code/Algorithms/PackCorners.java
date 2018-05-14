@@ -123,10 +123,8 @@ public class PackCorners implements PackerStrategy{
         
         corners = new ArrayList<>();
         corners.add(new Corner(0,0));
-        
-        Rectangle[] rectangles = PS.getRectangles();
-        toPlace = new ArrayList<>();
-        for(Rectangle curRec : rectangles) toPlace.add(curRec);
+      
+        toPlace = new ArrayList<>(Arrays.asList(PS.getRectangles()));
         
         bestArea = 1000000000;
         bestCost = 1000000000;

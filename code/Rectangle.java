@@ -42,12 +42,14 @@ public class Rectangle {
         return sx*sy;
     }
     
-    public int getAntiSqauriness(){
+    public int getAntiSquariness(){
         return (int)(sx>sy ? (float)sx/sy: (float)sy/sx);
     }
     
     public int getPackingScore(){
-        return getArea()+getAntiSqauriness();
+        int score;
+        score = 1000*getArea()+10*getHeight()+getWidth();
+        return score;
     }
     
     public boolean Collides(Rectangle B){
