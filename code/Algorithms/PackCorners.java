@@ -3,16 +3,12 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.PriorityQueue;
-import java.util.concurrent.TimeUnit;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 class Corner{
-    int x,y;
-    public Corner(int _x,int _y){
-        x=_x;
-        y=_y;
+    int x, y;
+    public Corner(int x, int y){
+        this.x = x;
+        this.y = y;
     }
     
     @Override
@@ -41,18 +37,19 @@ public class PackCorners implements PackerStrategy{
     RectanglesContainer bestRC;
     
     public boolean canBePlaced(Rectangle aRec){
-        return !RC.checkCollision(aRec) && (PS.getContainerHeight()==0 || aRec.py+aRec.getHeight()<=PS.getContainerHeight());
+        return !RC.checkCollision(aRec) && (PS.getContainerHeight() == 0 
+                || aRec.py+aRec.getHeight() <= PS.getContainerHeight());
     }
     
     public void placeAndRecurse(Corner curCor, Rectangle curRec){
         Corner newCor1 = new Corner(
-            curRec.px+curRec.getWidth(),
+            curRec.px + curRec.getWidth(),
             curRec.py
         );
-                        
+        
         Corner newCor2 = new Corner(
                 curRec.px,
-                curRec.py+curRec.getHeight()
+                curRec.py + curRec.getHeight()
         );
  
         RC.addRectangle(curRec);
@@ -64,10 +61,10 @@ public class PackCorners implements PackerStrategy{
         Backtrack();
 
         RC.removeRectangle(curRec);
-        toPlace.add(curRec);
-        corners.add(curCor);
         corners.remove(newCor1);
         corners.remove(newCor2);
+        toPlace.add(curRec);
+        corners.add(curCor);
         
     }
     
@@ -87,20 +84,21 @@ public class PackCorners implements PackerStrategy{
     }
    
     public void Backtrack(){
-        //if((System.currentTimeMillis()-startTime) > 300000) return; //define time limit
-        
-        if(bestCost == 0) return;
+        //defines time limit
+        if((System.currentTimeMillis() - startTime) > 300000) return; 
         
         if(toPlace.isEmpty()){
             int newArea = RC.getBoundingArea();
-            if(newArea<bestArea){
-                RC.visualize();
+            if(newArea < bestArea){
+                // TODO: remove the visualize for each solution
+                RC.visualize(); 
                 bestArea = newArea;
                 bestCost = RC.getCost();
-                bestRC   = RC.clone();        
+                if(bestCost == 0) return;
+                bestRC = RC.clone();    
         }
         }else{
-            if(RC.getBoundingArea()>=bestArea) return;//Pruning
+            if(RC.getBoundingArea() >= bestArea) return;//Pruning
             
             Collections.sort(toPlace, new SortByArea());
             Collections.sort(corners, new SortByDistance());
@@ -119,7 +117,8 @@ public class PackCorners implements PackerStrategy{
         this.PS = PS;
         RC = new RectanglesContainer();
         
-        if(PS.getContainerHeight()>0) RC.setForcedBoundingHeight(PS.getContainerHeight());
+        if(PS.getContainerHeight()>0) 
+            RC.setForcedBoundingHeight(PS.getContainerHeight());
         
         corners = new ArrayList<>();
         corners.add(new Corner(0,0));
