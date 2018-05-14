@@ -80,10 +80,12 @@ public class PackCorners implements PackerStrategy{
     }
    
     public void Backtrack(){
-        //limit runtime to ~290 sec.
+        //limit runtime to ~290 sec.     
         if((System.currentTimeMillis() - startTime) > 290000) return; 
         
         if(bestCost == 0) return;
+        
+        if(RC.getBoundingArea() >= bestArea) return;//Pruning
         
         if(toPlace.isEmpty()){
             int newArea = RC.getBoundingArea();
@@ -95,8 +97,7 @@ public class PackCorners implements PackerStrategy{
                 bestRC = RC.clone();    
             }
         }else{
-            if(RC.getBoundingArea() >= bestArea) return;//Pruning
-            
+    
             Collections.sort(toPlace, new SortByArea());
             Collections.sort(corners, new SortByDistance());
                 
