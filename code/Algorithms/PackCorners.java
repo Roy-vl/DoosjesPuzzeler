@@ -53,8 +53,6 @@ public class PackCorners implements PackerStrategy{
         );
  
         RC.addRectangle(curRec);
-        toPlace.remove(curRec);
-        corners.remove(curCor);
         corners.add(newCor1);
         corners.add(newCor2);
 
@@ -63,8 +61,8 @@ public class PackCorners implements PackerStrategy{
         RC.removeRectangle(curRec);
         corners.remove(newCor1);
         corners.remove(newCor2);
-        toPlace.add(curRec);
-        corners.add(curCor);
+        
+        
     }
     
     public void tryToPlaceAndRecurse(Corner curCor, Rectangle curRec){
@@ -102,9 +100,17 @@ public class PackCorners implements PackerStrategy{
             Collections.sort(corners, new SortByDistance());
                 
             for(Rectangle curRec : new ArrayList<>(toPlace)){
+                toPlace.remove(curRec);
+                
                 for(Corner curCor : new ArrayList<>(corners)){
+                    corners.remove(curCor);
+                    
                     tryToPlaceAndRecurse(curCor, curRec);
+                    
+                    corners.add(curCor);
                 }
+                
+                toPlace.add(curRec);
             }
         }
     }
