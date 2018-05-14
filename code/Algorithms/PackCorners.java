@@ -83,16 +83,17 @@ public class PackCorners implements PackerStrategy{
         //limit runtime to ~290 sec.
         if((System.currentTimeMillis() - startTime) > 290000) return; 
         
+        if(bestCost == 0) return;
+        
         if(toPlace.isEmpty()){
             int newArea = RC.getBoundingArea();
             if(newArea < bestArea){
                 // TODO: remove the visualize for each solution
-                //RC.visualize(); 
+                RC.visualize(); 
                 bestArea = newArea;
                 bestCost = RC.getCost();
-                if(bestCost == 0) return;
                 bestRC = RC.clone();    
-        }
+            }
         }else{
             if(RC.getBoundingArea() >= bestArea) return;//Pruning
             
