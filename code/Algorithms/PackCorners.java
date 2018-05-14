@@ -48,8 +48,8 @@ public class PackCorners implements PackerStrategy{
         );
         
         Corner newCor2 = new Corner(
-                curRec.px,
-                curRec.py + curRec.getHeight()
+            curRec.px,
+            curRec.py + curRec.getHeight()
         );
  
         RC.addRectangle(curRec);
@@ -65,33 +65,29 @@ public class PackCorners implements PackerStrategy{
         corners.remove(newCor2);
         toPlace.add(curRec);
         corners.add(curCor);
-        
     }
     
     public void tryToPlaceAndRecurse(Corner curCor, Rectangle curRec){
         curRec.px = curCor.x;
         curRec.py = curCor.y;
-
         curRec.rotated = false;
         if(canBePlaced(curRec)) placeAndRecurse(curCor, curRec);
 
         if(PS.getRotationAllowed()){
-            
             curRec.rotated = true;
             if(canBePlaced(curRec)) placeAndRecurse(curCor, curRec);
-            
         }
     }
    
     public void Backtrack(){
-        //defines time limit
-        if((System.currentTimeMillis() - startTime) > 300000) return; 
+        //limit runtime to ~290 sec.
+        if((System.currentTimeMillis() - startTime) > 290000) return; 
         
         if(toPlace.isEmpty()){
             int newArea = RC.getBoundingArea();
             if(newArea < bestArea){
                 // TODO: remove the visualize for each solution
-                RC.visualize(); 
+                //RC.visualize(); 
                 bestArea = newArea;
                 bestCost = RC.getCost();
                 if(bestCost == 0) return;
@@ -125,8 +121,8 @@ public class PackCorners implements PackerStrategy{
       
         toPlace = new ArrayList<>(Arrays.asList(PS.getRectangles()));
         
-        bestArea = 1000000000;
-        bestCost = 1000000000;
+        bestArea = Integer.MAX_VALUE;
+        bestCost = Integer.MAX_VALUE;
         bestRC   = null;
         
         Backtrack();
