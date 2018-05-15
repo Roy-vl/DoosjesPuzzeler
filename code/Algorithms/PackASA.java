@@ -12,8 +12,9 @@ public class PackASA implements PackerStrategy{
     double[] fr = new double[wMax-wMin];
     double[] iter = new double[wMax-wMin];
     boolean first = true;
-    ArrayList R = new ArrayList(); // sequence of rectangles
     ArrayList newR = new ArrayList(); // new sequence of rectangles
+    PackerStrategy heuristicPacking = new PackTetris();
+    RectanglesContainer container;
 
     //Calculate the set of candidate widths W
     public void candidateWidths(){ 
@@ -21,9 +22,9 @@ public class PackASA implements PackerStrategy{
             widths[i] = wMin+i;
         }
     }
-    public void makeArrays(){
+    public void makeArrays(ProblemStatement PS){
         for (int i=0;i<=widths.length; i++){
-            heights[i] = randomLS(R,widths[i],1);
+            heights[i] = randomLS(PS,widths[i],1);
             fr[i] = totalArea/(widths[i]*heights[i]);
             iter[i] = 1;
         }
@@ -33,57 +34,52 @@ public class PackASA implements PackerStrategy{
     public void sortByFillingRatio(){
 
     }
+    
     //RandomLS procedure
-    public int randomLS(ArrayList R, double Wk, int iter){
-        int minimumHeight; //minimum found height
-        int currentHeight; //current found height
-        ArrayList sr; // ArrayList of sorting rules on Wk
+    public int randomLS(ProblemStatement PS, int iter){
+        int minimumWidth; // minimum found width
+        int currentWidth; // current found width
+        Rectangle[] rectangles = PS.getRectangles(); // Array of rectangles
+        Rectangle[] newOrder; // new order in rectangles
+        Rule[] sortingRules; // ArrayList of sorting rules on Wk
 
         if (first) {
             first = false;
-            for (/** for each sorting rule */) {
-                // Sort R
-                minimumHeight = heuristicPacking(R, Wk);
-                // add sorting rule to sr
+            for (Rule r: sortingRules) {
+                // Sort rectangles
+                minimumWidth = getContainerWidth(PS, rectangles);
+                r.width = minimumWidth;
             }
-            //Sort sr in decreasing order of the heigth returned by heuristicPacking
-        }
-        // Select the ith sorting rule from sr randomly
-        // Sort R using this rule
-        minimumHeight = heuristicPacking(R, Wk);
-        for (int i = 1; i <= iter; i++) {
-            // Generate sequence newR from R by randomly swapping two rectangles
-            currentHeight = heuristicPacking(newR, Wk);
-            if (currentHeight <= minimumHeight) {
-                minimumHeight = currentHeight;
-                R = newR;
-            }
-        }
-        // Update sr to make sure it is sorted in decreasing order of height
-        return minimumHeight;  
-    }
-
-    //HeuristicPacking procedure
-    public int heuristicPacking(ArrayList R, double Wc) {
-        // initialize skyline
-        while (/** R is not empty */) {
-            // s = bottom-left segment of skyline
-            // Select rectangle curRec from R using sorting rule
-            if (/** curRec is not found */) {
-                // remove s from the skyline and update the skyline
-            } else {
-                curRec.px = sx;
-                curRec.py = sy;
-                R.remove(curRec);
-            }
+            //Sort sortingRules in decreasing order of the width returned by heuristicPacking
         }
         
-        // return the used height of the packing
+        
+        // Select the ith sorting rule from sortingRules randomly
+        // Sort rectangles using this rule
+        minimumWidth = getContainerWidth(PS, rectangles);
+        for (int i = 1; i <= iter; i++) {
+            // Generate sequence newOrder from rectangels by randomly swapping two rectangles
+            currentWidth = getContainerWidth(PS, rectangles);
+            if (currentWidth <= minimumWidth) {
+                minimumWidth = currentWidth;
+                rectangles = newOrder;
+            }
+        }
+        // Update sortingRules to make sure it is sorted in decreasing order of height
+        return minimumWidth;  
+    }
+    
+    /** Solves problem statement with new array and returns width. */
+    public int getContainerWidth(ProblemStatement PS, Rectangle[] rectangles) {
+        ProblemStatement newPS = new ProblemStatement(PS.getContainerHeight(), PS.getRotationAllowed(), PS.getRectangleAmount(), rectangles);
+        container = heuristicPacking.pack(newPS);
+        return container.getBoundingWidth();
     }
 
     @Override
     public RectanglesContainer pack(ProblemStatement PS){
         RectanglesContainer RC = new RectanglesContainer();
+        ProblemStatement newPS = new ProblemStatement();
         totalArea = 0;
         
         candidateWidths();
@@ -92,7 +88,7 @@ public class PackASA implements PackerStrategy{
         }
         
         for (int i = 0; i < widths.length; i++) {
-            heights[i] = randomLS(R, widths[i], 1);
+            heights[i] = randomLS(newPS, 1);
             fr[i] = totalArea/(widths[i]*heights[i]);
             iter[i] = 1;
         }
