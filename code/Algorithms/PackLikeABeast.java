@@ -37,14 +37,35 @@ public class PackLikeABeast implements PackerStrategy{
         Rectangle[] rectangles = PS.getRectangles();
         Arrays.sort(rectangles,new SortByArea());
   
+        int mx = 0;
+        int my = 0;
+        
         for(Rectangle curRec : rectangles){
+            
             if(curRec.sy > PS.getContainerHeight() && PS.getRotationAllowed()){
                 curRec.rotated = true;
             }
+            
+            while(filledSpots[mx][my]){
+                my++;
+                if(my >= PS.getContainerHeight()){
+                    my = 0;
+                    mx++;
+                }
+            }
+            
             boolean placed = false;
-            for(int tx = 0; tx <= Width                   - curRec.getWidth()  && !placed ; tx++){
-            for(int ty = 0; ty <= PS.getContainerHeight() - curRec.getHeight() && !placed; ty++){
-                
+            
+            int tx = mx;
+            int ty = my;
+            
+            while(!placed){
+                if(ty > PS.getContainerHeight()-curRec.getHeight()){
+                    tx++;
+                    ty = 0;
+                }
+                if(tx>=Width) break;
+       
                 if(canBePlacedAt(tx,ty,curRec)){
                     curRec.px = tx;
                     curRec.py = ty;
@@ -53,8 +74,10 @@ public class PackLikeABeast implements PackerStrategy{
                     placed = true;
                     break;
                 }
+                
+                ty++;
             }
-            }
+            
             if(!placed) System.out.println("RECTANGLE "+curRec.id+" COULD NOT BE PLACED");
         }
         
