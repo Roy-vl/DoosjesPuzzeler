@@ -35,10 +35,16 @@ public class PackLikeABeast implements PackerStrategy{
         
         //create a clone of the PS rectangles
         Rectangle[] rectangles = PS.getRectangles();
-        Arrays.sort(rectangles,new SortByArea());
   
         int mx = 0;
         int my = 0;
+        for(Rectangle curRec : rectangles){            
+            if(curRec.sy > curRec.sx){
+                curRec.rotated = true;
+            }
+        }  
+        
+        Arrays.sort(rectangles,new SortByDecreasingWidth());
         
         for(Rectangle curRec : rectangles){
             
