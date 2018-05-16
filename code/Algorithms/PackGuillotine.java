@@ -20,6 +20,10 @@ class Node{
         node2 = null;
     }
     
+    public int getDistance(){
+        return (px+sx)*(px+sx)+(py+sy)*(py+sy);
+    }
+    
     Rectangle rec;
     
     Node node1;
@@ -28,7 +32,8 @@ class Node{
 
 public class PackGuillotine implements PackerStrategy{
     
-    Node mainNode;
+    Node                mainNode;
+    RectanglesContainer curRC;
     
     public boolean placeRec(Node aNode, Rectangle aRec){
         if(aRec.getWidth()<aNode.sx && aRec.getHeight()<aNode.sy){
@@ -49,9 +54,16 @@ public class PackGuillotine implements PackerStrategy{
                         aRec.getWidth(),
                         aNode.sy-aRec.getHeight()
                 );
+                
+                curRC.addRectangle(aRec);
+                
                 return true;
             }else{
-                return placeRec(aNode.node1,aRec) ? true : placeRec(aNode.node2,aRec) ; 
+                if(aNode.node1.getDistance() < aNode.node2.getDistance()){
+                    return  placeRec(aNode.node1,aRec) ? true : placeRec(aNode.node2,aRec); 
+                }else{
+                    return  placeRec(aNode.node2,aRec) ? true : placeRec(aNode.node1,aRec); 
+                }
             }
         }
         return false;
@@ -65,21 +77,34 @@ public class PackGuillotine implements PackerStrategy{
     
     @Override
     public RectanglesContainer pack(ProblemStatement PS){
-        RectanglesContainer RC = new RectanglesContainer();
+        RectanglesContainer bestRC = new RectanglesContainer();
+        int                 bestArea = Integer.MAX_VALUE;;
         
-        mainNode = new Node(0,0,100000,PS.getContainerHeight()>0 ? PS.getContainerHeight() : 1000000);
-        
-        Rectangle[] rectangles = PS.getRectangles();
-        PriorityQueue<Rectangle> toPlace = new PriorityQueue<>(rectangles.length,new SortByArea());
-        for(Rectangle curRec : rectangles) toPlace.add(curRec);
-        
-        while(toPlace.peek()!=null){
-            placeRec(mainNode,toPlace.poll());
+        for(int i=0;i<1000;i++){
+            curRC    = new RectanglesContainer();
+            if(PS.getContainerHeight()>0) curRC.setForcedBoundingHeight(PS.getContainerHeight());
+            
+            mainNode = new Node(0,0,100+i,PS.getContainerHeight()>0 ? PS.getContainerHeight() : 100);
+
+            Rectangle[] rectangles = PS.getRectangles();
+            PriorityQueue<Rectangle> toPlace = new PriorityQueue<>(rectangles.length,new SortByArea());
+            for(Rectangle curRec : rectangles) toPlace.add(curRec);
+
+            while(toPlace.peek()!=null){
+                if(curRC.getBoundingArea()>bestArea) break;
+                if(!placeRec(mainNode,toPlace.poll())) break;
+            }
+
+            if(toPlace.isEmpty()){
+                int newArea = curRC.getBoundingArea();
+                if(newArea<bestArea){
+                    bestArea = newArea;
+                    bestRC = curRC.clone();
+                }
+            }
         }
         
-        fromNodesToRC(mainNode, RC);
-        
-        return RC;
+        return bestRC;
     }
 }
 

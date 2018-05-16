@@ -23,6 +23,7 @@ class SortByDistance implements Comparator<Corner>
     public int compare(Corner a, Corner b)
     {
         return a.x*a.x+a.y*a.y - (b.x*b.x+b.y*b.y);
+        //return (int) (Math.pow(a.x,4)+Math.pow(a.y,4) - (Math.pow(b.x,4)+Math.pow(b.y,4)));
     }
 }
 
@@ -61,8 +62,7 @@ public class PackCorners implements PackerStrategy{
         RC.removeRectangle(curRec);
         corners.remove(newCor1);
         corners.remove(newCor2);
-        
-        
+             
     }
     
     public void tryToPlaceAndRecurse(Corner curCor, Rectangle curRec){
