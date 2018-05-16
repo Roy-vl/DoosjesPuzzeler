@@ -27,6 +27,7 @@ public class PackLikeABeast implements PackerStrategy{
     public RectanglesContainer pack(ProblemStatement PS){
         
         RectanglesContainer RC = new RectanglesContainer();
+        RC.setForcedBoundingHeight(PS.getContainerHeight());
         
         int Width = 10000;
 

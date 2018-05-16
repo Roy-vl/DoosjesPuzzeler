@@ -15,7 +15,7 @@ public class PackLikeMultipleBeasts implements PackerStrategy{
         PackerStrategy PLAB = new PackLikeABeast();
         
         RectanglesContainer bestRC = null;
-        int bestCost = 10000000;
+        int bestCost = Integer.MAX_VALUE;
 
         for(int h=minimumHeight;h<=maximumHeight;h++){
             ProblemStatement curPS = new ProblemStatement(

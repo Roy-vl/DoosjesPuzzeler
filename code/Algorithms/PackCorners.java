@@ -129,10 +129,15 @@ public class PackCorners implements PackerStrategy{
       
         toPlace = new ArrayList<>(Arrays.asList(PS.getRectangles()));
         
-        bestArea = Integer.MAX_VALUE;
-        bestCost = Integer.MAX_VALUE;
-        bestRC   = null;
-        
+        if(PS.getContainerHeight()>0){
+            bestRC = (new PackLikeABeast()).pack(PS);
+        }else{
+            bestRC = (new PackLikeMultipleBeasts()).pack(PS);
+        }
+        bestArea = bestRC.getBoundingArea();//Integer.MAX_VALUE;
+        bestCost = bestRC.getCost();//Integer.MAX_VALUE;
+        bestRC.visualize();
+            
         Backtrack();
         
         return bestRC;
