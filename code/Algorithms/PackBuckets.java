@@ -18,7 +18,6 @@ public class PackBuckets implements PackerStrategy{
             int x=0;
             for (Rectangle curRec : bucket){
                 curRec.px = x;
-                curRec.rotated = PS.getRotationAllowed() && ( curRec.sy>PS.getContainerHeight() || (curRec.sx>curRec.sy && curRec.sx<=PS.getContainerHeight()) );       
                 x += curRec.getWidth();
                 RC.addRectangle(curRec);
             }
