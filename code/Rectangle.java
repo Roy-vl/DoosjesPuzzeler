@@ -83,3 +83,21 @@ class SortByPackingScore implements Comparator<Rectangle>
         return b.getPackingScore()-a.getPackingScore();
     }
 }
+
+//decreasing height widht and random
+
+class SortByDecreasingHeight implements Comparator<Rectangle>
+{
+    public int compare(Rectangle a, Rectangle b)
+    {
+        return b.getHeight()-a.getHeight();
+    }
+}
+
+class SortByDecreasingWidth implements Comparator<Rectangle>
+{
+    public int compare(Rectangle a, Rectangle b)
+    {
+        return b.getWidth()-a.getWidth();
+    }
+}
