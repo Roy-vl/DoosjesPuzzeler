@@ -52,8 +52,8 @@ public class PackingSolver {
         long estimatedTime = System.currentTimeMillis() - startTime;
         System.out.println("Packing time : " + estimatedTime + "ms");
 
-        PS.print();
-        packedRC.printPlacement(PS.getRotationAllowed());
+        //PS.print();
+        //packedRC.printPlacement(PS.getRotationAllowed());
 
         packedRC.visualize();
     }
