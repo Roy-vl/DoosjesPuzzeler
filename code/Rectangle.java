@@ -1,5 +1,7 @@
 
+import java.awt.Color;
 import java.util.Comparator;
+import java.util.Random;
 
 public class Rectangle {
     int id;
@@ -57,6 +59,14 @@ public class Rectangle {
                px + getWidth() > B.px &&
                py < B.py + B.getHeight() &&
                getHeight() + py > B.py;
+    }
+    
+    public Color getColor(){
+        Random random = new Random();
+        final float hue = (float) (id*0.1);
+        final float saturation = 0.9f;//1.0 for brilliant, 0.0 for dull
+        final float luminance = 1.0f; //1.0 for brighter, 0.0 for black
+        return Color.getHSBColor(hue, saturation, luminance);
     }
 }
 
