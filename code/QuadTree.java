@@ -14,6 +14,13 @@ class AABB{
         y2 = _y2;
     }
     
+    public boolean collides(Rectangle aRec){
+        return x1 < aRec.px + aRec.getWidth() &&
+               x2 > aRec.px &&
+               y1 < aRec.py + aRec.getHeight() &&
+               y2 > aRec.py;
+    }
+    
     public boolean canContain(Rectangle aRec){
         return aRec.px>=x1 && aRec.py>=y1 && aRec.px+aRec.getWidth() <= x2 && aRec.py+aRec.getHeight() <= y2;
     }
@@ -51,6 +58,14 @@ public class QuadTree {
         bl = null;
     }
     
+    public boolean collides(Rectangle aRec){
+        if(rectangles_bound!=null && rectangles_bound.collides(aRec)){
+            for(Rectangle curRec : rectangles) if(curRec.Collides(aRec)) return true;
+            if(tr!=null) return tr.collides(aRec) || tl.collides(aRec) || br.collides(aRec) || bl.collides(aRec);
+        }
+        return false;
+    }
+    
     public void addRectangle(Rectangle aRec){
         if(container_bound.canContain(aRec)){
             if(tl != null && tl.container_bound.canContain(aRec)){
@@ -68,14 +83,16 @@ public class QuadTree {
             }else{ 
                 rectangles.add(aRec);
                 if(rectangles_bound==null){
-                    rectangles_bound = new AABB(aRec.px,aRec.px,aRec.px+aRec.getWidth(),aRec.py+aRec.getHeight());
+                    rectangles_bound = new AABB(aRec.px,aRec.py,aRec.px+aRec.getWidth(),aRec.py+aRec.getHeight());
                 }else{
                     rectangles_bound.extend(aRec);
-                }
+                }      
                 if(rectangles.size()>=capacity && tl==null) split();
             }
         }else{
-            System.out.println("RECTANGLE DOES NOT FIT");
+            System.out.println("RECTANGLE DOES NOT FIT :");
+            System.out.println("rectangle : "+aRec.px+","+aRec.py+" "+aRec.sx+","+aRec.sy);
+            System.out.println("QuadTree : "+container_bound.x1+","+container_bound.y1+" "+container_bound.x2+","+container_bound.y2);
         }
     }
     
@@ -85,7 +102,7 @@ public class QuadTree {
             return;
         }
         float mx = (container_bound.x1+container_bound.x2)/2;
-        float my = (container_bound.y2+container_bound.y2)/2;
+        float my = (container_bound.y1+container_bound.y2)/2;
         
         tl = new QuadTree(container_bound.x1,container_bound.y1,mx                ,my                );
         tr = new QuadTree(mx                ,container_bound.y1,container_bound.x2,my                );
@@ -101,7 +118,8 @@ public class QuadTree {
     }
     
     public void visualize(Graphics2D g){
-         for (Rectangle curRec : rectangles) {
+      
+        for (Rectangle curRec : rectangles) {
             //System.out.println("Drawing rectangle : "+curRec.id);
             //to get rainbow, pastel colors, that are never black
             Random random = new Random();
@@ -112,10 +130,15 @@ public class QuadTree {
             g.setColor(color);    
             g.fillRect(curRec.px,curRec.py,curRec.getWidth(),curRec.getHeight());
         }
+        g.setColor(new Color(255,255,255));
+        if(container_bound!=null) g.drawRect((int) container_bound.x1, (int) container_bound.y1, (int)(container_bound.x2-container_bound.x1) , (int)(container_bound.y2-container_bound.y1));
+        g.setColor(new Color(255,0,0));
+        if(rectangles_bound!=null) g.drawRect((int) rectangles_bound.x1, (int) rectangles_bound.y1, (int)(rectangles_bound.x2-rectangles_bound.x1) , (int)(rectangles_bound.y2-rectangles_bound.y1));
+        
         if(tl != null) tl.visualize(g);
         if(tr != null) tr.visualize(g);
         if(bl != null) bl.visualize(g);
         if(br != null) br.visualize(g);
     }
   
-}
+}   
