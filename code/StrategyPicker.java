@@ -1,5 +1,5 @@
 /*
-StrategyPicker is a class that will pick and return appropriate PackerStrategy for any ProblemStatement
+StrategyPicker is a class that will pick and return an appropriate PackerStrategy for any ProblemStatement
 */
 
 public class StrategyPicker {

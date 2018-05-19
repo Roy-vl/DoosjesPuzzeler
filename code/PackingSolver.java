@@ -27,8 +27,7 @@ public class PackingSolver {
         File[] files = dialog.getFiles();
         if (files != null && files.length > 0) {
             for (File file : files) {
-                try {
-                    
+                try {       
                     System.out.println(file + " chosen.");
                     Scanner scanner = new Scanner(file);
                     PS.parseInput(scanner);

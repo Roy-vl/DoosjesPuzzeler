@@ -6,13 +6,12 @@ public class PackLikeABeast implements PackerStrategy{
     boolean[][] filledSpots;
     
     public boolean canBePlacedAt(int tx, int ty, Rectangle R){
-        boolean canBePlaced = true;
-        for(int x = tx; x < tx+R.getWidth() && canBePlaced; x++){
-        for(int y = ty; y < ty+R.getHeight() && canBePlaced; y++){
-            canBePlaced = canBePlaced && !filledSpots[x][y];
+        for(int x = tx; x < tx+R.getWidth(); x++){
+        for(int y = ty; y < ty+R.getHeight(); y++){
+            if(filledSpots[x][y]) return false;
         }
         }
-        return canBePlaced;
+        return true;
     }
     
     public void fillSpots(Rectangle R){
@@ -48,10 +47,9 @@ public class PackLikeABeast implements PackerStrategy{
         
         for(Rectangle curRec : rectangles){
             
-            if(curRec.sy > PS.getContainerHeight() && PS.getRotationAllowed()){
-                curRec.rotated = true;
-            }
-            
+            curRec.rotated = curRec.sy > PS.getContainerHeight() && PS.getRotationAllowed();
+
+            //find the earliest open spot
             while(filledSpots[mx][my]){
                 my++;
                 if(my >= PS.getContainerHeight()){
@@ -61,7 +59,6 @@ public class PackLikeABeast implements PackerStrategy{
             }
             
             boolean placed = false;
-            
             int tx = mx;
             int ty = my;
             
@@ -78,7 +75,6 @@ public class PackLikeABeast implements PackerStrategy{
                     fillSpots(curRec);
                     RC.addRectangle(curRec);
                     placed = true;
-                    break;
                 }
                 
                 ty++;
