@@ -34,9 +34,6 @@ public class PackLikeABeast implements PackerStrategy{
         
         //create a clone of the PS rectangles
         Rectangle[] rectangles = PS.getRectangles();
-  
-        int mx = 0;
-        int my = 0;
         for(Rectangle curRec : rectangles){            
             if(curRec.sy > curRec.sx){
                 curRec.rotated = true;
@@ -45,10 +42,11 @@ public class PackLikeABeast implements PackerStrategy{
         
         Arrays.sort(rectangles,new SortByDecreasingWidth());
         
+        int mx = 0;
+        int my = 0;
+              
         for(Rectangle curRec : rectangles){
-            
-            curRec.rotated = curRec.sy > PS.getContainerHeight() && PS.getRotationAllowed();
-
+  
             //find the earliest open spot
             while(filledSpots[mx][my]){
                 my++;
