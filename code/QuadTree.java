@@ -59,6 +59,18 @@ public class QuadTree {
     private boolean  split;
     private QuadTree tr, tl, br, bl;//top right, top left, bottom right, bottom left
     
+    public QuadTree(){
+        rectangles = null;
+        capacity = 0;
+        rectangles_bound = null;
+        container_bound = null;
+        split = false;
+        tr = null;
+        tl = null;
+        br = null;
+        bl = null;
+    }
+    
     public QuadTree(float _x1, float _y1, float _x2, float _y2){
         rectangles = new ArrayList<>();
         capacity = 4;
@@ -71,6 +83,26 @@ public class QuadTree {
         bl = null;
     }
     
+    @Override
+    public QuadTree clone(){
+        QuadTree clone = new QuadTree();
+        
+        clone.rectangles = new ArrayList<>();
+        for(Rectangle curRec : rectangles) clone.rectangles.add(curRec.clone());
+        clone.capacity = capacity;
+        clone.rectangles_bound = rectangles_bound.clone();
+        clone.container_bound = container_bound.clone();
+        clone.split = split;
+        if(split){
+            clone.tr = tr.clone();
+            clone.tl = tl.clone();
+            clone.br = br.clone();
+            clone.bl = bl.clone();
+        }
+        
+        return clone;
+    }
+    
     public float getContainerWidth(){
         return container_bound.x2-container_bound.x1;
     }
@@ -79,16 +111,18 @@ public class QuadTree {
         return container_bound.y2-container_bound.y1;
     }
     
-    public float getRectanglesBoundingWidth(){
+    public float getRectanglesBoundWidth(){
+        if(rectangles_bound.x1==Integer.MAX_VALUE) return 0;
         return rectangles_bound.x2-rectangles_bound.x1;
     }
     
-    public float getRectanglesBoundingHeight(){
+    public float getRectanglesBoundHeight(){
+        if(rectangles_bound.y1==Integer.MAX_VALUE) return 0;
         return rectangles_bound.y2-rectangles_bound.y1;
     }
     
-    public float getRectanglesBoundingArea(){
-        return getRectanglesBoundingWidth()*getRectanglesBoundingHeight();
+    public float getRectanglesBoundArea(){
+        return getRectanglesBoundWidth()*getRectanglesBoundHeight();
     }
     
     public float getTotalRectanglesArea(){
@@ -96,26 +130,38 @@ public class QuadTree {
     }
     
     public float getCost(){
-        return getRectanglesBoundingArea()-getTotalRectanglesArea();
+        return getRectanglesBoundArea()-getTotalRectanglesArea();
     }
   
     public boolean collides(Rectangle aRec){
         if(rectangles_bound.collides(aRec)){
             for(Rectangle curRec : rectangles) if(curRec.Collides(aRec)) return true;
-            if(split) return tr.collides(aRec) || tl.collides(aRec) || br.collides(aRec) || bl.collides(aRec);
+            if(split){
+                if(tl.collides(aRec)) return true;
+                if(tr.collides(aRec)) return true;
+                if(bl.collides(aRec)) return true;
+                if(br.collides(aRec)) return true;
+            }
         }
         return false;
+    }
+    
+    public boolean collides(int px, int py){
+        Rectangle pointRec = new Rectangle(-1, px, py, 1, 1, false);
+        return collides(pointRec);
     }
     
     public void recalculateRectanglesBound(){
         rectangles_bound = new AABB(Integer.MAX_VALUE,Integer.MAX_VALUE,-Integer.MAX_VALUE,-Integer.MAX_VALUE);
         
-        rectangles_bound.extend(tl.rectangles_bound);
-        rectangles_bound.extend(tr.rectangles_bound);
-        rectangles_bound.extend(bl.rectangles_bound);
-        rectangles_bound.extend(br.rectangles_bound);
         for(Rectangle curRec : rectangles) rectangles_bound.extend(curRec);
-        
+        if(split){
+            rectangles_bound.extend(tl.rectangles_bound);
+            rectangles_bound.extend(tr.rectangles_bound);
+            rectangles_bound.extend(bl.rectangles_bound);
+            rectangles_bound.extend(br.rectangles_bound);
+        }
+
     }
     
     public void addRectangle(Rectangle aRec){
@@ -156,6 +202,21 @@ public class QuadTree {
             System.out.println("RECTANGLE DOES NOT FIT :");
             System.out.println("rectangle : "+aRec.px+","+aRec.py+" "+aRec.sx+","+aRec.sy);
             System.out.println("QuadTree : "+container_bound.x1+","+container_bound.y1+" "+container_bound.x2+","+container_bound.y2);
+        }
+    }
+    
+    public void removeRectangle(Rectangle aRec){
+        if(rectangles_bound.encapsulates(aRec)){
+            if(!rectangles.remove(aRec)){
+                if(split){
+                    tl.removeRectangle(aRec);
+                    tr.removeRectangle(aRec);
+                    bl.removeRectangle(aRec);
+                    br.removeRectangle(aRec);
+                }
+            }
+            totalRectanglesArea -= aRec.getArea();
+            recalculateRectanglesBound();
         }
     }
     
@@ -212,9 +273,9 @@ public class QuadTree {
             g.fillRect(curRec.px,curRec.py,curRec.getWidth(),curRec.getHeight());
         }
         g.setColor(new Color(255,255,255));
-        g.drawRect((int) container_bound.x1, (int) container_bound.y1, (int)(getContainerWidth()) , (int)(getContainerHeight()));
+        //g.drawRect((int) container_bound.x1, (int) container_bound.y1, (int)(getContainerWidth()) , (int)(getContainerHeight()));
         g.setColor(new Color(255,0,0));
-        if(rectangles_bound!=null) g.drawRect((int) rectangles_bound.x1, (int) rectangles_bound.y1, (int)(getRectanglesBoundingWidth()) , (int)(getRectanglesBoundingHeight()));
+        //g.drawRect((int) rectangles_bound.x1, (int) rectangles_bound.y1, (int)(getRectanglesBoundWidth()) , (int)(getRectanglesBoundHeight()));
         
         if(split){
             tl.drawTo(g);
@@ -225,8 +286,8 @@ public class QuadTree {
     }
     
     public void visualize(){
-        int maxx = (int) (getContainerWidth());
-        int maxy = (int) (getContainerHeight());
+        int maxx = (int) (getRectanglesBoundWidth());
+        int maxy = (int) (getRectanglesBoundHeight());
         
         if(maxx==0 || maxy == 0){
             System.out.println("Can not visualize a bounding of 0x0");
@@ -251,7 +312,7 @@ public class QuadTree {
         
         //create window
         JFrame frame = new JFrame();
-        frame.setTitle("Bounding Size : "+maxx+","+maxy+" cost : "+getCost());
+        frame.setTitle("Bounding Size : "+maxx+","+maxy+" total rectangles are : "+getTotalRectanglesArea());
         
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         frame.setSize(windowSizeX+16,windowSizeY+39);//+16,+40 for windows bullshit

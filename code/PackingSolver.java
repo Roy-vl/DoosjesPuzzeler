@@ -48,14 +48,14 @@ public class PackingSolver {
         System.out.println("Applying " + strategy.getClass().getSimpleName());
 
         long startTime = System.currentTimeMillis();
-        RectanglesContainer packedRC = strategy.pack(PS);
+        QuadTree packedQT = strategy.pack(PS);
         long estimatedTime = System.currentTimeMillis() - startTime;
         System.out.println("Packing time : " + estimatedTime + "ms");
 
         //PS.print();
         //packedRC.printPlacement(PS.getRotationAllowed());
 
-        packedRC.visualize();
+        packedQT.visualize();
     }
 
     public static void fromSystemIn() {

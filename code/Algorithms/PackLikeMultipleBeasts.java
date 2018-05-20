@@ -1,7 +1,7 @@
 public class PackLikeMultipleBeasts implements PackerStrategy{
     
     @Override
-    public RectanglesContainer pack(ProblemStatement PS){
+    public QuadTree pack(ProblemStatement PS){
         int maximumHeight = 0;
         int maximalWidth = 0;
         int minimumHeight = 0;
@@ -14,8 +14,8 @@ public class PackLikeMultipleBeasts implements PackerStrategy{
         
         PackerStrategy PLAB = new PackLikeABeast();
         
-        RectanglesContainer bestRC = null;
-        int bestCost = Integer.MAX_VALUE;
+        QuadTree bestQT = null;
+        float bestCost = Integer.MAX_VALUE;
 
         for(int h=minimumHeight;h<=maximumHeight;h++){
             ProblemStatement curPS = new ProblemStatement(
@@ -25,17 +25,17 @@ public class PackLikeMultipleBeasts implements PackerStrategy{
                 PS.getRectangles()
             );
 
-            RectanglesContainer curRC = PLAB.pack(curPS);
+            QuadTree curQT = PLAB.pack(curPS);
    
-            int curCost = curRC.getCost();
+            float curCost = curQT.getCost();
             if(curCost<bestCost){
                 bestCost = curCost;
-                bestRC = curRC.clone();
+                bestQT = curQT.clone();
             } 
 
         }
 
-        return bestRC;
+        return bestQT;
     }
 }
 

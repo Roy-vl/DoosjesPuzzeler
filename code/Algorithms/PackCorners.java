@@ -30,16 +30,15 @@ class SortByDistance implements Comparator<Corner>
 public class PackCorners implements PackerStrategy{
     long startTime;
     ProblemStatement PS; 
-    RectanglesContainer RC; 
+    QuadTree QT; 
     ArrayList<Corner> corners; 
     ArrayList<Rectangle> toPlace;
-    int bestArea;
-    int bestCost;
-    RectanglesContainer bestRC;
+    float bestArea;
+    float bestCost;
+    QuadTree bestQT;
     
     public boolean canBePlaced(Rectangle aRec){
-        return !RC.checkCollision(aRec) && (PS.getContainerHeight() == 0 
-                || aRec.py+aRec.getHeight() <= PS.getContainerHeight());
+        return !QT.collides(aRec);
     }
     
     public void placeAndRecurse(Corner curCor, Rectangle curRec){
@@ -53,13 +52,13 @@ public class PackCorners implements PackerStrategy{
             curRec.py + curRec.getHeight()
         );
  
-        RC.addRectangle(curRec);
+        QT.addRectangle(curRec);
         corners.add(newCor1);
         corners.add(newCor2);
 
         Backtrack();
 
-        RC.removeRectangle(curRec);
+        QT.removeRectangle(curRec);
         corners.remove(newCor1);
         corners.remove(newCor2);
              
@@ -83,16 +82,16 @@ public class PackCorners implements PackerStrategy{
         
         if(bestCost == 0) return;
         
-        if(RC.getBoundingArea() >= bestArea) return;//Pruning
+        if(QT.getRectanglesBoundArea() >= bestArea) return;//Pruning
         
         if(toPlace.isEmpty()){
-            int newArea = RC.getBoundingArea();
+            float newArea = QT.getRectanglesBoundArea();
             if(newArea < bestArea){
                 // TODO: remove the visualize for each solution
-                RC.visualize(); 
                 bestArea = newArea;
-                bestCost = RC.getCost();
-                bestRC = RC.clone();    
+                bestCost = QT.getCost();
+                bestQT = QT.clone();    
+                bestQT.visualize();
             }
         }else{
     
@@ -116,30 +115,28 @@ public class PackCorners implements PackerStrategy{
     }
     
     @Override
-    public RectanglesContainer pack(ProblemStatement PS){
+    public QuadTree pack(ProblemStatement PS){
+        QT = new QuadTree(0,0,10000,10000);
+        
         startTime = System.currentTimeMillis();
         this.PS = PS;
-        RC = new RectanglesContainer();
-        
-        if(PS.getContainerHeight()>0) 
-            RC.setForcedBoundingHeight(PS.getContainerHeight());
         
         corners = new ArrayList<>();
         corners.add(new Corner(0,0));
       
         toPlace = new ArrayList<>(Arrays.asList(PS.getRectangles()));
-        
+
         if(PS.getContainerHeight()>0){
-            bestRC = (new PackLikeABeast()).pack(PS).clone();
+            bestQT = (new PackLikeABeast()).pack(PS).clone();
         }else{
-            bestRC = (new PackLikeMultipleBeasts()).pack(PS).clone();
+            bestQT = (new PackLikeMultipleBeasts()).pack(PS).clone();
         }
-        bestArea = bestRC.getBoundingArea();//Integer.MAX_VALUE;
-        bestCost = bestRC.getCost();//Integer.MAX_VALUE;
-        bestRC.visualize();
-            
+        bestArea = bestQT.getRectanglesBoundArea();//Integer.MAX_VALUE;
+        bestCost = bestQT.getCost();//Integer.MAX_VALUE;
+        bestQT.visualize();
+        
         Backtrack();
         
-        return bestRC;
+        return bestQT;
     }
 }
