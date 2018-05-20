@@ -171,7 +171,6 @@ public class PackCorners implements PackerStrategy{
         }
         bestArea = bestRC.getBoundingArea();//Integer.MAX_VALUE;
         bestCost = bestRC.getCost();//Integer.MAX_VALUE;
-        bestRC.visualize();
             
         Backtrack();
         

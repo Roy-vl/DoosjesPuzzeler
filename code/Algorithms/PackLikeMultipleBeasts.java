@@ -34,12 +34,14 @@ public class PackLikeMultipleBeasts implements PackerStrategy{
             );
 
             RectanglesContainer curRC = PLAB.pack(curPS);
-   
+
             int curCost = curRC.getCost();
             if(curCost<bestCost){
                 curRC.visualize(); 
                 bestCost = curCost;
                 bestRC = curRC.clone();
+                
+                if(bestCost==0) break;
             } 
 
         }
