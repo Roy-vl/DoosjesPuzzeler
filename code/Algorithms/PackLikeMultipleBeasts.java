@@ -2,6 +2,9 @@ public class PackLikeMultipleBeasts implements PackerStrategy{
     
     @Override
     public RectanglesContainer pack(ProblemStatement PS){
+        
+        long startTime = System.currentTimeMillis();
+        
         int maximumHeight = 0;
         int minimumHeight = 0;
         
@@ -21,6 +24,8 @@ public class PackLikeMultipleBeasts implements PackerStrategy{
         int bestCost = Integer.MAX_VALUE;
 
         for(int h=minimumHeight;h<=maximumHeight; h++){
+            if((System.currentTimeMillis() - startTime) > 290000) break; 
+            
             ProblemStatement curPS = new ProblemStatement(
                 h,
                 PS.getRotationAllowed(),
@@ -32,6 +37,7 @@ public class PackLikeMultipleBeasts implements PackerStrategy{
    
             int curCost = curRC.getCost();
             if(curCost<bestCost){
+                curRC.visualize(); 
                 bestCost = curCost;
                 bestRC = curRC.clone();
             } 
