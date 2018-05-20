@@ -37,7 +37,7 @@ public class PackLikeABeast implements PackerStrategy{
         if(PS.getRotationAllowed()){
             for(Rectangle curRec : rectangles) if(curRec.sy > curRec.sx) curRec.rotated = true;
         }
-        Arrays.sort(rectangles,new SortByArea());
+        Arrays.sort(rectangles,new SortByDecreasingWidth());
         
         int mx = 0;
         int my = 0;
