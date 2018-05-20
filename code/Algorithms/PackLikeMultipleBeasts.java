@@ -2,26 +2,25 @@ public class PackLikeMultipleBeasts implements PackerStrategy{
     
     @Override
     public RectanglesContainer pack(ProblemStatement PS){
-        int maximumHeight;
-        int maximalWidth = 0;
+        int maximumHeight = 0;
         int minimumHeight = 0;
         
         for(Rectangle curRec : PS.getRectangles()){
-            
-            if(maximalWidth < curRec.getWidth()){maximalWidth = curRec.getWidth();}
-            if(minimumHeight < curRec.getHeight()){minimumHeight = curRec.getHeight();}
+            if(PS.getRotationAllowed()){
+                maximumHeight += Math.max(curRec.sx,curRec.sy);
+                minimumHeight = Math.max(minimumHeight,Math.min(curRec.sx,curRec.sy));
+            }else{
+                maximumHeight += curRec.getHeight();
+                minimumHeight = Math.max(minimumHeight,curRec.getHeight());
+            }
         }
         
         PackerStrategy PLAB = new PackLikeABeast();
         
         RectanglesContainer bestRC = null;
-        maximumHeight = minimumHeight * 2;
         int bestCost = Integer.MAX_VALUE;
-        int stepSize = maximumHeight - minimumHeight;
-        int stepAmount = 10;
 
-        for(int h=minimumHeight;h<=maximumHeight; h=h+30){
-            System.out.println("New test: "+h);
+        for(int h=minimumHeight;h<=maximumHeight; h++){
             ProblemStatement curPS = new ProblemStatement(
                 h,
                 PS.getRotationAllowed(),

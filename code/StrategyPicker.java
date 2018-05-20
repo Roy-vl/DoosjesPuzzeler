@@ -8,7 +8,7 @@ public class StrategyPicker {
         
         //return new PackGuillotine();
         //return new PackBuckets();
-
+        
         if(PS.getRectangleAmount()<=25){
             return new PackCorners();
         }     
