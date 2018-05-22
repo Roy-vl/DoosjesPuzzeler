@@ -7,12 +7,12 @@ import java.util.Comparator;
 public class PackASA implements PackerStrategy{
 
     double totalArea; //total area of rectangles R
-    double wMin = 15; //minimal width = maximum of smaller dimensions of all rectangles
-    double wMax = 1.05*Math.pow(totalArea,0.5); //Maximal width
-    double[] widths = new double[wMax-wMin];
-    double[] heights = new double[wMax-wMin];
-    double[] fr = new double[wMax-wMin];
-    double[] iter = new double[wMax-wMin];
+    double hMin = 15; //minimal height = maximum of smaller dimensions of all rectangles
+    double hMax = 1.05*Math.pow(totalArea,0.5); //Maximal height
+    double[] widths = new double[hMax-hMin];
+    ArrayList<Height> heights = new ArrayList();
+    double[] fr = new double[hMax-hMin];
+    double[] iter = new double[hMax-hMin];
     boolean first = true;
     ArrayList newR = new ArrayList(); // new sequence of rectangles
     PackerStrategy heuristicPacking = new PackTetris();
@@ -20,9 +20,9 @@ public class PackASA implements PackerStrategy{
     Random random = new Random();
     
     class SortingRule {
-        Comparator<Rectangle> rule;
-        int corWidth;
-        double probability;
+        Comparator<Rectangle> rule; // the sorting rule itself
+        int corWidth; // corresponding width
+        double probability; // probability of being chosen
         
         SortingRule(Comparator<Rectangle> rule, int corWidth, double probability) {
             this.rule = rule;
@@ -38,17 +38,35 @@ public class PackASA implements PackerStrategy{
             this.probability = probability;
         }
     }
+    
+    class Height {
+        int height; // the height itself
+        double probability; // probability of being chosen
+        
+        Height(int height, double probability) {
+            this.height = height;
+            this.probability = probability;
+        }
+        
+        void updateHeight(int height) {
+            this.height = height;
+        }
+        
+        void updateProbability(double probability) {
+            this.probability = probability;
+        }
+    }
 
     //Calculate the set of candidate widths W
-    public void candidateWidths(){ 
-        for (int i = 0; i<=widths.length; i++){
-            widths[i] = wMin+i;
+    public void candidateHeights(){ 
+        for (int i = 0; i <= hMax-hMin; i++){
+            heights.set(i, new Height(hMin+i, 0));
         }
     }
     public void makeArrays(ProblemStatement PS){
-        for (int i=0;i<=widths.length; i++){
-            heights[i] = randomLS(PS,1);
-            fr[i] = totalArea/(widths[i]*heights[i]);
+        for (int i=0;i <= hMax-hMin; i++){
+            widths[i] = randomLS(PS,1);
+            fr[i] = totalArea/(widths[i]*heights.get(i).height);
             iter[i] = 1;
         }
     }
@@ -59,7 +77,7 @@ public class PackASA implements PackerStrategy{
     }
     
     //RandomLS procedure
-    public int randomLS(ProblemStatement PS, int iter){
+    public int randomLS(ProblemStatement PS, double iter){
         int minimumWidth; // minimum found width
         int currentWidth; // current found width
         Rectangle[] rectangles = PS.getRectangles(); // Array of rectangles
@@ -155,22 +173,49 @@ public class PackASA implements PackerStrategy{
         RectanglesContainer RC = new RectanglesContainer();
         ProblemStatement newPS = new ProblemStatement();
         totalArea = 0;
+        int currentWidth;
         
-        candidateWidths();
+        candidateHeights();
         for (Rectangle r : PS.getRectangles()) {
             totalArea += r.getArea();
         }
         
-        for (int i = 0; i < widths.length; i++) {
-            heights[i] = randomLS(newPS, 1);
-            fr[i] = totalArea/(widths[i]*heights[i]);
-            iter[i] = 1;
-        }
+        makeArrays(PS);
         
         sortByFillingRatio();
+        
         while (/** time limit is not exceeded */) {
-            // select the kth width from W randomly
+            // select the kth height from H randomly
+            for (int i = 0; i <= hMax-hMin; i++) {
+                heights.get(i).updateProbability((2*i)/(widths.length*(widths.length+1)));
+            }
             
+            double totalSum = 0;
+            // Calculate totalSum
+            for (Height h : heights) {
+                totalSum += h.probability;
+            }
+
+            // Select SortingRule
+            double index = totalSum * random.nextDouble();
+            double sum = 0;
+            int i = 0;
+            while (sum < index) {
+                sum += heights.get(i++).probability;
+            }
+
+            Height chosen = heights.get(--i);
+            
+            iter[i] = Math.min(2*iter[i], PS.getRectangleAmount());
+            newPS = new ProblemStatement(chosen.height, PS.getRotationAllowed(), PS.getRectangleAmount(), PS.getRectangles());
+            currentWidth =  randomLS(newPS, iter[i]);
+            
+            if (currentWidth < widths[i]) {
+                widths[i] = currentWidth;
+                // update fr[i]
+            }
+            
+            sortByFillingRatio();
         }
         
         return RC;
