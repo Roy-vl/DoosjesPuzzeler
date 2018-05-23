@@ -166,6 +166,7 @@ public class PackCorners implements PackerStrategy{
         
         if(PS.getContainerHeight()>0){
             bestRC = (new PackLikeABeast()).pack(PS).clone();
+            bestRC.visualize();
         }else{
             bestRC = (new PackLikeMultipleBeasts()).pack(PS).clone();
         }
