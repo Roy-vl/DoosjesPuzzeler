@@ -1,13 +1,21 @@
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 
 public class PackLikeABeast implements PackerStrategy{
-
+    RectanglesContainer RC;
+    
+    int width;
+    int height;
     boolean[][] filledSpots;
+    
+    ArrayList<Point> corners; 
 
-    public boolean canBePlacedAt(int tx, int ty, Rectangle R){
-        for(int x = tx; x < tx+R.getWidth(); x++){
-        for(int y = ty; y < ty+R.getHeight(); y++){
+    public boolean canBePlacedAt(Point P, Rectangle R){
+        if(P.x+R.getWidth()>width || P.y+R.getHeight()>height) return false;//out of bounds
+        for(int x = P.x; x < P.x+R.getWidth(); x++){
+        for(int y = P.y; y < P.y+R.getHeight(); y++){
             if(filledSpots[x][y]) return false;
         }
         }
@@ -22,13 +30,44 @@ public class PackLikeABeast implements PackerStrategy{
         }   
     }
     
+    public void addCorner(Point C){
+        if(C.x>=width || C.y>=height) return;//within bounds
+        if(filledSpots[C.x][C.y]) return;//not already filled
+        corners.add(C);
+    }
+    
+    public void place(Point C, Rectangle R){
+        R.px = C.x;
+        R.py = C.y;
+        
+        Point newCor1 = new Point(
+            R.px + R.getWidth(),
+            R.py
+        );
+
+        Point newCor2 = new Point(
+            R.px,
+            R.py + R.getHeight()
+        );
+
+        RC.addRectangle(R);
+        fillSpots(R);
+        addCorner(newCor1);
+        addCorner(newCor2);
+        corners.remove(C);
+    }
+    
     @Override
     public RectanglesContainer pack(ProblemStatement PS){
-        RectanglesContainer RC = new RectanglesContainer();
+        RC = new RectanglesContainer();
         RC.setForcedBoundingHeight(PS.getContainerHeight());
         
-        int width = 10000;
-        filledSpots = new boolean[width][PS.getContainerHeight()];
+        width = 100000;
+        height = PS.getContainerHeight();
+        filledSpots = new boolean[width][height];
+        
+        corners = new ArrayList<>();
+        corners.add(new Point(0,0));
 
         Rectangle[] rectangles = PS.getRectangles();
         if(PS.getRotationAllowed()){
@@ -36,43 +75,40 @@ public class PackLikeABeast implements PackerStrategy{
         }
         Arrays.sort(rectangles,new SortByDecreasingWidth());
  
-        int mx = 0;
-        int my = 0;
-              
         for(Rectangle curRec : rectangles){
   
-            //find the earliest open spot
-            while(filledSpots[mx][my]){
-                my++;
-                if(my >= PS.getContainerHeight()){
-                    my = 0;
-                    mx++;
+            boolean placed = false;
+            
+            Collections.sort(corners, new SortByLeftness());
+     
+            for(Point curCor : new ArrayList<>(corners)){
+                curRec.px = curCor.x;
+                curRec.py = curCor.y;
+                
+                if(canBePlacedAt(curCor,curRec)){
+                    place(curCor,curRec);
+                    placed = true;
+                    break;       
                 }
             }
             
-            boolean placed = false;
-            int tx = mx;
-            int ty = my;
-            
-            while(!placed){
-                if(ty > PS.getContainerHeight()-curRec.getHeight()){
-                    tx++;
-                    ty = 0;
-                }
-                if(tx>=width) break;
-       
-                if(canBePlacedAt(tx,ty,curRec)){
-                    curRec.px = tx;
-                    curRec.py = ty;
-                    fillSpots(curRec);
-                    RC.addRectangle(curRec);
-                    placed = true;
+            if(!placed){
+                System.out.println("RECTANGLE "+curRec.id+" COULD NOT BE PLACED BY PLACING IT IN A CORNER REVERTING TO OTHER (SLOW) METHODS");
+                System.out.println("Rectangle dimensions :"+curRec.sx+","+curRec.sy);
+                System.out.println("Container dimensions :"+width+","+height);
+                //basically just tries to find the first free spot
+                Point P = new Point(corners.get(0).x,0);
+                while(!placed){
+                    System.out.println("Trying to place at :"+P.x+","+P.y);
+                    if(canBePlacedAt(P,curRec)){
+                        place(P,curRec);
+                        placed = true;
+                    }
+                    P.x++;
                 }
                 
-                ty++;
+                System.out.println("RECTANGLE "+curRec.id+" COULD BE PLACED BY REVERTING TO OTHER (SLOW) METHODS");
             }
-            
-            if(!placed) System.out.println("RECTANGLE "+curRec.id+" COULD NOT BE PLACED");
         }
         
         return RC;

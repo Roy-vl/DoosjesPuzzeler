@@ -54,7 +54,7 @@ public class PackingSolver {
 
         PS.print();
         packedRC.printPlacement(PS.getRotationAllowed());
-
+        
         packedRC.visualize();
     }
 

@@ -2,30 +2,6 @@
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.Comparator;
-
-class Corner{
-    int x, y;
-    public Corner(int x, int y){
-        this.x = x;
-        this.y = y;
-    }
-    
-    @Override
-    public Corner clone(){
-        Corner clone = new Corner(x, y);
-        return clone;
-    }
-}
-
-class SortByDistance implements Comparator<Corner>
-{
-    public int compare(Corner a, Corner b)
-    {
-        return a.x*a.x+a.y*a.y - (b.x*b.x+b.y*b.y);
-        //return (int) (Math.pow(a.x,4)+Math.pow(a.y,4) - (Math.pow(b.x,4)+Math.pow(b.y,4)));
-    }
-}
 
 public class PackCorners implements PackerStrategy{
     long startTime;
@@ -36,17 +12,17 @@ public class PackCorners implements PackerStrategy{
     int height;
     RectanglesContainer RC; 
     
-    ArrayList<Corner> corners; 
+    ArrayList<Point> corners; 
     ArrayList<Rectangle> toPlace;
     
     int bestArea;
     int bestCost;
     RectanglesContainer bestRC;
     
-    public boolean canBePlaced(Rectangle aRec){
-        if(aRec.px+aRec.getWidth()>width || aRec.py+aRec.getHeight()>height) return false;
-        for(int x = aRec.px; x < aRec.px+aRec.getWidth(); x++){
-        for(int y = aRec.py; y < aRec.py+aRec.getHeight(); y++){
+    public boolean canBePlacedAt(Point P, Rectangle R){
+        if(P.x+R.getWidth()>width || P.y+R.getHeight()>height) return false;//out of bounds
+        for(int x = P.x; x < P.x+R.getWidth(); x++){
+        for(int y = P.y; y < P.y+R.getHeight(); y++){
             if(filledSpots[x][y]) return false;
         }
         }
@@ -68,23 +44,32 @@ public class PackCorners implements PackerStrategy{
         }
         }   
     }
+     
+    public void addCorner(Point C){
+        if(C.x>=width || C.y>=height) return;//within bounds
+        if(filledSpots[C.x][C.y]) return;//not already filled
+        corners.add(C);
+    }
     
     
-    public void placeAndRecurse(Corner curCor, Rectangle curRec){
-        Corner newCor1 = new Corner(
+    public void placeAndRecurse(Point curCor, Rectangle curRec){
+        curRec.px = curCor.x;
+        curRec.py = curCor.y;
+        
+        Point newCor1 = new Point(
             curRec.px + curRec.getWidth(),
             curRec.py
         );
         
-        Corner newCor2 = new Corner(
+        Point newCor2 = new Point(
             curRec.px,
             curRec.py + curRec.getHeight()
         );
  
         RC.addRectangle(curRec);
         fillSpots(curRec);
-        corners.add(newCor1);
-        corners.add(newCor2);
+        addCorner(newCor1);
+        addCorner(newCor2);
 
         Backtrack();
 
@@ -95,22 +80,20 @@ public class PackCorners implements PackerStrategy{
              
     }
     
-    public void tryToPlaceAndRecurse(Corner curCor, Rectangle curRec){
-        curRec.px = curCor.x;
-        curRec.py = curCor.y;
+    public void tryToPlaceAndRecurse(Point curCor, Rectangle curRec){
         
         curRec.rotated = false;
-        if(canBePlaced(curRec)) placeAndRecurse(curCor, curRec);
+        if(canBePlacedAt(curCor,curRec)) placeAndRecurse(curCor, curRec);
 
         if(PS.getRotationAllowed()){
             curRec.rotated = true;
-            if(canBePlaced(curRec)) placeAndRecurse(curCor, curRec);
+            if(canBePlacedAt(curCor, curRec)) placeAndRecurse(curCor, curRec);
         }
     }
    
     public void Backtrack(){
         //limit runtime to ~290 sec.     
-        if((System.currentTimeMillis() - startTime) > 290000) return; 
+        if((System.currentTimeMillis() - startTime) > 10000) return; 
         
         if(bestCost == 0) return;
         
@@ -119,7 +102,6 @@ public class PackCorners implements PackerStrategy{
         if(toPlace.isEmpty()){
             int newArea = RC.getBoundingArea();
             if(newArea < bestArea){
-                // TODO: remove the visualize for each solution
                 RC.visualize(); 
                 bestArea = newArea;
                 bestCost = RC.getCost();
@@ -133,7 +115,7 @@ public class PackCorners implements PackerStrategy{
             for(Rectangle curRec : new ArrayList<>(toPlace)){
                 toPlace.remove(curRec);
                 
-                for(Corner curCor : new ArrayList<>(corners)){
+                for(Point curCor : new ArrayList<>(corners)){
                     corners.remove(curCor);
                     
                     tryToPlaceAndRecurse(curCor, curRec);
@@ -160,7 +142,7 @@ public class PackCorners implements PackerStrategy{
         if(PS.getContainerHeight()>0) RC.setForcedBoundingHeight(PS.getContainerHeight());
         
         corners = new ArrayList<>();
-        corners.add(new Corner(0,0));
+        corners.add(new Point(0,0));
       
         toPlace = new ArrayList<>(Arrays.asList(PS.getRectangles()));
         
