@@ -6,9 +6,6 @@ public class StrategyPicker {
     
     public PackerStrategy pick(ProblemStatement PS){
         
-        //return new PackGuillotine();
-        //return new PackBuckets();
-        
         if(PS.getRectangleAmount()<25){
             return new PackCorners();
         }     
@@ -24,6 +21,6 @@ public class StrategyPicker {
             }
         }
         
-        return new PackNextToEachother();
+        return new PackLikeABeast();
     } 
 }

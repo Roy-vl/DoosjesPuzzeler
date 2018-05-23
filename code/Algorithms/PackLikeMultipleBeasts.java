@@ -24,7 +24,7 @@ public class PackLikeMultipleBeasts implements PackerStrategy{
         int bestCost = Integer.MAX_VALUE;
 
         for(int h=minimumHeight;h<=maximumHeight; h++){
-            if((System.currentTimeMillis() - startTime) > 290000) break; 
+            if((System.currentTimeMillis() - startTime) > 60000) break; 
             
             ProblemStatement curPS = new ProblemStatement(
                 h,
@@ -37,7 +37,6 @@ public class PackLikeMultipleBeasts implements PackerStrategy{
 
             int curCost = curRC.getCost();
             if(curCost<bestCost){
-                curRC.visualize(); 
                 bestCost = curCost;
                 bestRC = curRC.clone();
                 

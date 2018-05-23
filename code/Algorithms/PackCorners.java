@@ -110,7 +110,7 @@ public class PackCorners implements PackerStrategy{
    
     public void Backtrack(){
         //limit runtime to ~290 sec.     
-        if((System.currentTimeMillis() - startTime) > 290000) return; 
+        if((System.currentTimeMillis() - startTime) > 60000) return; 
         
         if(bestCost == 0) return;
         
@@ -119,8 +119,6 @@ public class PackCorners implements PackerStrategy{
         if(toPlace.isEmpty()){
             int newArea = RC.getBoundingArea();
             if(newArea < bestArea){
-                // TODO: remove the visualize for each solution
-                RC.visualize(); 
                 bestArea = newArea;
                 bestCost = RC.getCost();
                 bestRC = RC.clone();    
@@ -166,7 +164,6 @@ public class PackCorners implements PackerStrategy{
         
         if(PS.getContainerHeight()>0){
             bestRC = (new PackLikeABeast()).pack(PS).clone();
-            bestRC.visualize();
         }else{
             bestRC = (new PackLikeMultipleBeasts()).pack(PS).clone();
         }
