@@ -3,7 +3,25 @@ import java.util.Arrays;
 
 public class PackLikeABeast implements PackerStrategy{
     
+    ProblemStatement PS;
+    RectanglesContainer RC;
+    Rectangle[] rectangles;
+    int width;
     boolean[][] filledSpots;
+    
+    public void initialize(){
+        RC = new RectanglesContainer();
+        RC.setForcedBoundingHeight(PS.getContainerHeight());
+        
+        width = 10000;
+        filledSpots = new boolean[width][PS.getContainerHeight()];
+
+        rectangles = PS.getRectangles();
+        if(PS.getRotationAllowed()){
+            for(Rectangle curRec : rectangles) if(curRec.sy > curRec.sx) curRec.rotated = true;
+        }
+        Arrays.sort(rectangles,new SortByDecreasingWidth());
+    }
     
     public boolean canBePlacedAt(int tx, int ty, Rectangle R){
         for(int x = tx; x < tx+R.getWidth(); x++){
@@ -24,21 +42,10 @@ public class PackLikeABeast implements PackerStrategy{
     
     @Override
     public RectanglesContainer pack(ProblemStatement PS){
+        this.PS = PS;
         
-        RectanglesContainer RC = new RectanglesContainer();
-        RC.setForcedBoundingHeight(PS.getContainerHeight());
-        
-        int Width = 10000;
-
-        filledSpots = new boolean[Width][PS.getContainerHeight()];
-        
-        //create a clone of the PS rectangles
-        Rectangle[] rectangles = PS.getRectangles();
-        if(PS.getRotationAllowed()){
-            for(Rectangle curRec : rectangles) if(curRec.sy > curRec.sx) curRec.rotated = true;
-        }
-        Arrays.sort(rectangles,new SortByDecreasingWidth());
-        
+        initialize();
+ 
         int mx = 0;
         int my = 0;
               
@@ -62,7 +69,7 @@ public class PackLikeABeast implements PackerStrategy{
                     tx++;
                     ty = 0;
                 }
-                if(tx>=Width) break;
+                if(tx>=width) break;
        
                 if(canBePlacedAt(tx,ty,curRec)){
                     curRec.px = tx;
