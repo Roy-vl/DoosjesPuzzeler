@@ -70,9 +70,12 @@ public class PackLikeABeast implements PackerStrategy{
         corners.add(new Point(0,0));
 
         Rectangle[] rectangles = PS.getRectangles();
+        double relativeSize = (PS.getContainerHeight() / 20);
+        int relativeS = (int) relativeSize;
         if(PS.getRotationAllowed()){
-            for(Rectangle curRec : rectangles) if(curRec.sy > curRec.sx) curRec.rotated = true;
-        }
+            for(Rectangle curRec : rectangles) if((curRec.sy > curRec.sx && curRec.sy > relativeS) || curRec.sy > PS.getContainerHeight()) curRec.rotated = true;
+        } 
+        Arrays.sort(rectangles,new SortByArea());
         Arrays.sort(rectangles,new SortByDecreasingWidth());
  
         for(Rectangle curRec : rectangles){
