@@ -99,9 +99,6 @@ public class GreedyCornerPack implements PackerStrategy{
             }
             
             if(!placed){
-                System.out.println("RECTANGLE "+curRec.id+" COULD NOT BE PLACED BY PLACING IT IN A CORNER REVERTING TO OTHER (SLOW) METHODS");
-                System.out.println("Rectangle dimensions :"+curRec.sx+","+curRec.sy);
-                System.out.println("Container dimensions :"+width+","+height);
                 //basically just tries to find the first free spot
                 Point P = new Point(corners.get(0).x,0);
                 while(!placed){
@@ -111,8 +108,6 @@ public class GreedyCornerPack implements PackerStrategy{
                     }
                     P.x++;
                 }
-                
-                System.out.println("RECTANGLE "+curRec.id+" COULD BE PLACED BY REVERTING TO OTHER (SLOW) METHODS");
             }
         }
         
