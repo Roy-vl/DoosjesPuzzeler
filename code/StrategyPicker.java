@@ -5,9 +5,7 @@ StrategyPicker is a class that will pick and return an appropriate PackerStrateg
 public class StrategyPicker {
     
     public PackerStrategy pick(ProblemStatement PS){
-        
-        return new GreedyTrivialPack();
-        
+
         if(PS.getRectangleAmount()<25){
             return new BacktrackCornerPack();
         }     

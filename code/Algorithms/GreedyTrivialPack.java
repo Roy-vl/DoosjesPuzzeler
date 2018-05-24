@@ -49,8 +49,7 @@ public class GreedyTrivialPack implements PackerStrategy{
     public RectanglesContainer pack(ProblemStatement PS){
         width = 10000;
         height = PS.getContainerHeight();
-        
-        
+              
         RectanglesContainer RC = new RectanglesContainer();
         RC.setForcedBoundingHeight(height);
 
@@ -69,22 +68,19 @@ public class GreedyTrivialPack implements PackerStrategy{
             previousnode = spots[x][y];
         }
         
- 
+        //prepare the rectangles
         Rectangle[] rectangles = PS.getRectangles();
         if(PS.getRotationAllowed()){
             for(Rectangle curRec : rectangles) if(curRec.sy > curRec.sx) curRec.rotated = true;
         }
+        Arrays.sort(rectangles,new SortByArea());
         Arrays.sort(rectangles,new SortByDecreasingWidth());
         
         for(Rectangle curRec : rectangles){
-   
 
             boolean placed = false;
-
-            DoublyLinkedNode n = begin.next;
-            
-            while(!placed){
-                              
+            DoublyLinkedNode n = begin.next;  
+            while(!placed){                  
                 if(canBePlacedAt(n.x,n.y,curRec)){
                     curRec.px = n.x;
                     curRec.py = n.y;
@@ -92,9 +88,7 @@ public class GreedyTrivialPack implements PackerStrategy{
                     RC.addRectangle(curRec);
                     placed = true;     
                 }
-                
-                n = n.next;
-                
+                n = n.next;        
             }
              
             if(!placed){
