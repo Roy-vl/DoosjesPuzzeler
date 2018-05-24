@@ -93,7 +93,7 @@ public class BacktrackCornerPack implements PackerStrategy{
    
     public void Backtrack(){
         //limit runtime to ~290 sec.     
-        if((System.currentTimeMillis() - startTime) > 10000) return; 
+        if((System.currentTimeMillis() - startTime) > 20000) return; 
         
         if(bestCost == 0) return;
         

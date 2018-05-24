@@ -61,22 +61,22 @@ public class GreedyCornerPack implements PackerStrategy{
         RC = new RectanglesContainer();
         RC.setForcedBoundingHeight(PS.getContainerHeight());
         
-        width = 100000;
         height = PS.getContainerHeight();
+        width = Math.max(1000,PS.getTotalRectangleArea()/height*2);
         filledSpots = new boolean[width][height];
-        
+      
         corners = new ArrayList<>();
         corners.add(new Point(0,0));
 
         Rectangle[] rectangles = PS.getRectangles();
-        
+
         double relativeSize = (PS.getContainerHeight() / 20);
         int relativeS = (int) relativeSize;
         if(PS.getRotationAllowed()){
             for(Rectangle curRec : rectangles) 
-                if((curRec.sy > curRec.sx && curRec.sy > relativeS) || curRec.sy > PS.getContainerHeight()) 
+                if((curRec.sy > curRec.sx && curRec.sy > relativeS) || curRec.sy > height) 
                     curRec.rotated = true;
-        } 
+        }     
         
         Arrays.sort(rectangles,new SortByArea());
         Arrays.sort(rectangles,new SortByDecreasingWidth());
@@ -110,8 +110,7 @@ public class GreedyCornerPack implements PackerStrategy{
                         placed = true;
                     }
                     P.x++;
-                }
-                
+                }            
                 System.out.println("RECTANGLE "+curRec.id+" COULD BE PLACED BY REVERTING TO OTHER (SLOW) METHODS");
             }
         }

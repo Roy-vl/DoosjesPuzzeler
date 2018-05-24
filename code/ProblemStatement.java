@@ -10,19 +10,22 @@ public class ProblemStatement{
     private int         containerHeight;
     private boolean     rotationAllowed;
     private int         rectangleAmount;
+    private int         totalRectangleArea;
     private Rectangle[] rectangles;
     
     public ProblemStatement(){
         containerHeight = 0;
         rotationAllowed = false;
         rectangleAmount = 0;
+        totalRectangleArea = 0;
         rectangles = new Rectangle[rectangleAmount];
     }
     
-    public ProblemStatement(int _containerHeight, boolean _rotationAllowed, int _rectangleAmount, Rectangle[] _rectangles){
+    public ProblemStatement(int _containerHeight, boolean _rotationAllowed, int _rectangleAmount, int _totalRectangleArea, Rectangle[] _rectangles){
         containerHeight = _containerHeight;
         rotationAllowed = _rotationAllowed;
         rectangleAmount = _rectangleAmount;
+        totalRectangleArea = _totalRectangleArea;
         rectangles = _rectangles;
     }
     
@@ -36,6 +39,10 @@ public class ProblemStatement{
     
     public int getRectangleAmount(){
         return rectangleAmount;
+    }
+    
+    public int getTotalRectangleArea(){
+        return totalRectangleArea;
     }
     
     public Rectangle[] getRectangles(){
@@ -71,6 +78,7 @@ public class ProblemStatement{
             newRectangle.sy = scanner.nextInt();
             newRectangle.id = i;
             rectangles[i] = newRectangle;
+            totalRectangleArea += newRectangle.getArea();
         }
     }
     
@@ -85,6 +93,7 @@ public class ProblemStatement{
             newRectangle.sy = (int)(Math.random()*100)+1;
             newRectangle.id = i;
             rectangles[i] = newRectangle;
+            totalRectangleArea += newRectangle.getArea();
         }
     }
     
