@@ -3,7 +3,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 
-public class PackCorners implements PackerStrategy{
+public class BacktrackCornerPack implements PackerStrategy{
     long startTime;
     ProblemStatement PS; 
     
@@ -147,10 +147,10 @@ public class PackCorners implements PackerStrategy{
         toPlace = new ArrayList<>(Arrays.asList(PS.getRectangles()));
         
         if(PS.getContainerHeight()>0){
-            bestRC = (new PackLikeABeast()).pack(PS).clone();
+            bestRC = (new GreedyCornerPack()).pack(PS).clone();
             bestRC.visualize();
         }else{
-            bestRC = (new PackLikeMultipleBeasts()).pack(PS).clone();
+            bestRC = (new MultipleGreedyCornerPack()).pack(PS).clone();
         }
         bestArea = bestRC.getBoundingArea();//Integer.MAX_VALUE;
         bestCost = bestRC.getCost();//Integer.MAX_VALUE;

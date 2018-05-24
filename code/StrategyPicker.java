@@ -6,21 +6,19 @@ public class StrategyPicker {
     
     public PackerStrategy pick(ProblemStatement PS){
         
-        //return new PackGuillotine();
-        //return new PackBuckets();
         
         if(PS.getRectangleAmount()<25){
-            return new PackCorners();
+            return new BacktrackCornerPack();
         }     
         
         if(PS.getRectangleAmount()>=25){
             if(PS.getContainerHeight()>0){
                 
-                return new PackLikeABeast();
+                return new GreedyCornerPack();
                 
             }else{
 
-                return new PackLikeMultipleBeasts();
+                return new MultipleGreedyCornerPack();
             }
         }
         

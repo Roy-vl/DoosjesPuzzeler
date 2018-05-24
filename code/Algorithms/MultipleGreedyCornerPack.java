@@ -1,4 +1,4 @@
-public class PackLikeMultipleBeasts implements PackerStrategy{
+public class MultipleGreedyCornerPack implements PackerStrategy{
     
     @Override
     public RectanglesContainer pack(ProblemStatement PS){
@@ -18,7 +18,7 @@ public class PackLikeMultipleBeasts implements PackerStrategy{
             }
         }
         
-        PackerStrategy PLAB = new PackLikeABeast();
+        PackerStrategy GCP = new GreedyCornerPack();
         
         RectanglesContainer bestRC = null;
         int bestCost = Integer.MAX_VALUE;
@@ -33,7 +33,7 @@ public class PackLikeMultipleBeasts implements PackerStrategy{
                 PS.getRectangles()
             );
 
-            RectanglesContainer curRC = PLAB.pack(curPS);
+            RectanglesContainer curRC = GCP.pack(curPS);
 
             int curCost = curRC.getCost();
             if(curCost<bestCost){
