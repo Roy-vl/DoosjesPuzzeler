@@ -127,9 +127,9 @@ public class RectanglesContainer{
         for (Rectangle curRec : rectangles) {
             //to get rainbow, pastel colors, that are never black
             Random random = new Random();
-            final float hue = (float) (curRec.id*14.3124341234);
-            final float saturation = 0.9f;//1.0 for brilliant, 0.0 for dull
-            final float luminance = 1.0f; //1.0 for brighter, 0.0 for black
+            final float hue = (float) (curRec.id*1.61803398875);
+            final float saturation = random.nextFloat()*.5f+.5f;//1.0 for brilliant, 0.0 for dull
+            final float luminance = random.nextFloat()*.5f+.5f;; //1.0 for brighter, 0.0 for black
             final Color color = Color.getHSBColor(hue, saturation, luminance);
             g.setColor(color);    
             g.fillRect(curRec.px,curRec.py,curRec.getWidth(),curRec.getHeight());
