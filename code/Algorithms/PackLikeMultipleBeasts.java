@@ -59,7 +59,7 @@ public class PackLikeMultipleBeasts implements PackerStrategy{
             totalArea = totalArea + currec.getArea();
         }
         
-        Double smartMaxHeight = 1.05*(Math.sqrt(totalArea));
+        Double smartMaxHeight = (Math.sqrt(totalArea)+minimumHeight);
         
         //calculate optimals for each height and sort of cost
         ArrayList<PotHeight> potentials = new ArrayList<>();
@@ -77,9 +77,10 @@ public class PackLikeMultipleBeasts implements PackerStrategy{
         RectanglesContainer bestRC = null;
         int bestCost = Integer.MAX_VALUE;
 
+        
+        System.out.println("minHeight: " + minimumHeight + " maxHeight: " + smartMaxHeight + " center: "+Math.sqrt(totalArea));
         for(PotHeight pot : potentials) {
-            System.out.println("height: " + pot.potHeight + " potCost: " + pot.potCost);
-            
+            System.out.println("height: " + pot.potHeight + " potCost: " + pot.potCost);    
         }
         
         for (PotHeight pot : potentials) {
