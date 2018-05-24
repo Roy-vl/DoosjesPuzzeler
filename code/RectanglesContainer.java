@@ -1,16 +1,7 @@
-
-import java.awt.Color;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.image.BufferedImage;
 import static java.lang.Math.max;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
-import java.util.Random;
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.WindowConstants;
+
 
 public class RectanglesContainer{
     private ArrayList<Rectangle> rectangles;
@@ -101,7 +92,7 @@ public class RectanglesContainer{
         for (Rectangle curRec : rectangles) {
             System.out.println((rotationAllowed?(curRec.rotated?"yes ":"no "):"")+curRec.px+" "+curRec.py);
         }
-    } 
+    }
 
 }
 

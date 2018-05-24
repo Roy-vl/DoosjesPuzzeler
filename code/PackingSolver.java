@@ -2,9 +2,10 @@ import java.util.Scanner;
 
 public class PackingSolver {
 
-    public static void main(String[] args)  {
+    public static void main(String[] args){
         ProblemStatement PS = new ProblemStatement();
         
+        //Handle System.In input
         Scanner scanner = new Scanner(System.in);
         PS.parseInput(scanner);
         

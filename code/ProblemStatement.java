@@ -74,6 +74,20 @@ public class ProblemStatement{
         }
     }
     
+    public void generateRandomInput(int size, Boolean rotationAllowed, int containerHeight){
+        this.rotationAllowed = rotationAllowed;
+        this.containerHeight = containerHeight;
+        this.rectangleAmount = size;
+        rectangles = new Rectangle[rectangleAmount];
+        for(int i = 0; i < rectangleAmount; i++){
+            Rectangle newRectangle = new Rectangle();
+            newRectangle.sx = (int)(Math.random()*100)+1;
+            newRectangle.sy = (int)(Math.random()*100)+1;
+            newRectangle.id = i;
+            rectangles[i] = newRectangle;
+        }
+    }
+    
     public void print(){
         //print output
         System.out.println("container height: "+(containerHeight==0?"free":("fixed "+containerHeight)));
