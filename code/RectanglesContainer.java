@@ -137,7 +137,10 @@ public class RectanglesContainer{
         
         //create window
         JFrame frame = new JFrame();
-        frame.setTitle("Bounding Size : "+getBoundingWidth()+","+getBoundingHeight()+", Actual Bounding Size :"+boundingWidth+","+boundingHeight+", with area : "+getBoundingArea()+" and cost of : "+getCost());
+        frame.setTitle("  Bounding Dimensions : "+getBoundingWidth()+","+getBoundingHeight()+
+                       ", Bounding Area : "+getBoundingArea()+
+                       ", Rectangles Area :"+getRectanglesArea()+
+                       ", Cost : "+getCost());
         
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         frame.setSize(windowSizeX+16,windowSizeY+39);//+16,+40 for windows bullshit

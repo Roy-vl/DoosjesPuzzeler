@@ -62,7 +62,7 @@ public class GreedyCornerPack implements PackerStrategy{
         RC.setForcedBoundingHeight(PS.getContainerHeight());
         
         height = PS.getContainerHeight();
-        width = Math.max(1000,PS.getTotalRectangleArea()/height*2);
+        width = Math.max(1000,PS.getRectanglesArea()/height*2);
         filledSpots = new boolean[width][height];
       
         corners = new ArrayList<>();
