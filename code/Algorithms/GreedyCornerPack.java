@@ -105,7 +105,6 @@ public class GreedyCornerPack implements PackerStrategy{
                 //basically just tries to find the first free spot
                 Point P = new Point(corners.get(0).x,0);
                 while(!placed){
-                    System.out.println("Trying to place at :"+P.x+","+P.y);
                     if(canBePlacedAt(P,curRec)){
                         place(P,curRec);
                         placed = true;

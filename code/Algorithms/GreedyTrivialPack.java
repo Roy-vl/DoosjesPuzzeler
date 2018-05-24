@@ -1,17 +1,32 @@
-
 import java.util.Arrays;
+        
+class DoublyLinkedNode{
+    boolean filled;
+    int x;
+    int y;
+    DoublyLinkedNode previous;
+    DoublyLinkedNode next;
+    
+    public DoublyLinkedNode(int _x, int _y){
+        filled = false;
+        x = _x;
+        y = _y;
+        previous = null;
+        next = null; 
+    }
+}
 
 public class GreedyTrivialPack implements PackerStrategy{
 
     int width;
     int height;
-    boolean[][] filledSpots;
+    DoublyLinkedNode[][] spots;
  
     public boolean canBePlacedAt(int tx, int ty, Rectangle R){
         if(tx+R.getWidth()>width || ty+R.getHeight()>height) return false;//out of bounds
         for(int x = tx; x < tx+R.getWidth(); x++){
         for(int y = ty; y < ty+R.getHeight(); y++){
-            if(filledSpots[x][y]) return false;
+            if(spots[x][y].filled) return false;
         }
         }
         return true;
@@ -20,9 +35,14 @@ public class GreedyTrivialPack implements PackerStrategy{
     public void fillSpots(Rectangle R){
         for(int x = R.px; x < R.px+R.getWidth(); x++){
         for(int y = R.py; y < R.py+R.getHeight(); y++){
-            filledSpots[x][y] = true;
+            spots[x][y].filled = true;
         }
-        }   
+        }
+        
+        for(int x = R.px; x < R.px+R.getWidth(); x++){
+            spots[x][R.py].previous.next = spots[x][R.py+R.getHeight()-1].next;
+            spots[x][R.py+R.getHeight()-1].next.previous = spots[x][R.py].previous;
+        }
     }
     
     @Override
@@ -30,53 +50,50 @@ public class GreedyTrivialPack implements PackerStrategy{
         width = 10000;
         height = PS.getContainerHeight();
         
+        
         RectanglesContainer RC = new RectanglesContainer();
         RC.setForcedBoundingHeight(height);
 
-        filledSpots = new boolean[width][height];
+        spots = new DoublyLinkedNode[width][height];
+        
+        //link the list
+        DoublyLinkedNode begin =  new DoublyLinkedNode(0,-1);
+        DoublyLinkedNode previousnode = begin;   
+        for(int x=0;x<width;x++)
+        for(int y=0;y<height;y++){
+            spots[x][y] = new DoublyLinkedNode(x,y);
+            
+            previousnode.next = spots[x][y];
+            spots[x][y].previous = previousnode;
+            
+            previousnode = spots[x][y];
+        }
+        
  
         Rectangle[] rectangles = PS.getRectangles();
         if(PS.getRotationAllowed()){
             for(Rectangle curRec : rectangles) if(curRec.sy > curRec.sx) curRec.rotated = true;
         }
         Arrays.sort(rectangles,new SortByDecreasingWidth());
-  
-        int mx = 0;
-        int my = 0;
-              
+        
         for(Rectangle curRec : rectangles){
    
-            //find the earliest open spot
-            while(filledSpots[mx][my]){
-                my++;
-                if(my >= height){
-                    my = 0;
-                    mx++;
-                }
-            }
-            
+
             boolean placed = false;
-            int tx = mx;
-            int ty = my;
-             
+
+            DoublyLinkedNode n = begin.next;
+            
             while(!placed){
-                //System.out.println(tx+","+ty);
-                if(ty > height-curRec.getHeight()){
-                    tx++;
-                    ty = 0;
-                }
-                if(tx>=width) break;
-       
-                if(canBePlacedAt(tx,ty,curRec)){
-                    curRec.px = tx;
-                    curRec.py = ty;
+                              
+                if(canBePlacedAt(n.x,n.y,curRec)){
+                    curRec.px = n.x;
+                    curRec.py = n.y;
                     fillSpots(curRec);
                     RC.addRectangle(curRec);
                     placed = true;     
                 }
                 
-                ty++;
-                
+                n = n.next;
                 
             }
              

@@ -6,6 +6,7 @@ public class StrategyPicker {
     
     public PackerStrategy pick(ProblemStatement PS){
         
+        return new GreedyTrivialPack();
         
         if(PS.getRectangleAmount()<25){
             return new BacktrackCornerPack();
