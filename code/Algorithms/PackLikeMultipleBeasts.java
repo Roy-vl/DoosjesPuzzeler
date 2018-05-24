@@ -1,4 +1,16 @@
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.concurrent.TimeUnit;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 public class PackLikeMultipleBeasts implements PackerStrategy{
+    
+    public double getPotCost(int height, int area){
+        return height - height*(((area*1.0)/height)%1) ;
+    }
     
     @Override
     public RectanglesContainer pack(ProblemStatement PS){
@@ -18,16 +30,66 @@ public class PackLikeMultipleBeasts implements PackerStrategy{
             }
         }
         
+        class PotHeight{
+            int potHeight;
+            double potCost;
+            PotHeight(int h, double c){
+                potHeight = h;
+                potCost = c;
+            }
+        }
+        
+        class SortPotentials implements Comparator<PotHeight> {
+            public int compare(PotHeight a, PotHeight b) {
+                if (a.potCost > b.potCost) {
+                    return 1;
+                }
+                if (a.potCost < b.potCost) {
+                    return -1;
+                } else {
+                    return 0;
+                }
+            }
+        }
+
+        //calculate the optimal area
+        int totalArea = 0;
+        Rectangle[] rects = PS.getRectangles();
+        for (Rectangle currec : rects) {
+            totalArea = totalArea + currec.getArea();
+        }
+        
+        Double smartMaxHeight = 1.05*(Math.sqrt(totalArea));
+        
+        //calculate optimals for each height and sort of cost
+        ArrayList<PotHeight> potentials = new ArrayList<>();
+        for (int h = minimumHeight; h <= smartMaxHeight; h++) {
+            Double potCost = getPotCost(h, totalArea);
+            PotHeight newest = new PotHeight(h, potCost);
+            potentials.add(newest);
+        }
+        Collections.sort(potentials, new SortPotentials());
+        
+        
+        
         PackerStrategy PLAB = new PackLikeABeast();
         
         RectanglesContainer bestRC = null;
         int bestCost = Integer.MAX_VALUE;
 
-        for(int h=minimumHeight;h<=maximumHeight; h++){
-            if((System.currentTimeMillis() - startTime) > 10000) break; 
+        for(PotHeight pot : potentials) {
+            System.out.println("height: " + pot.potHeight + " potCost: " + pot.potCost);
             
+        }
+        
+        for (PotHeight pot : potentials) {
+            if ((System.currentTimeMillis() - startTime) > 10000) {
+                break;
+            }
+            if(pot.potCost>bestCost) break;
+
             ProblemStatement curPS = new ProblemStatement(
-                h,
+                pot.potHeight,
                 PS.getRotationAllowed(),
                 PS.getRectangleAmount(),
                 PS.getRectangles()
@@ -42,10 +104,8 @@ public class PackLikeMultipleBeasts implements PackerStrategy{
                 bestRC = curRC.clone();
                 
                 if(bestCost==0) break;
-            } 
-
+            }    
         }
-
         return bestRC;
     }
 }
