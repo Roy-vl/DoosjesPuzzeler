@@ -10,17 +10,13 @@ public class StrategyPicker {
             return new BacktrackCornerPack();
         }     
         
-        if(PS.getRectangleAmount()>=25){
-            if(PS.getContainerHeight()>0){
-                
-                return new GreedyCornerPack();
-                
-            }else{
 
-                return new MultipleGreedyCornerPack();
-            }
+        if(PS.getContainerHeight()>0){
+                
+            return new GreedyCornerPack();
+                
         }
         
-        return new GreedyCornerPack();
+        return new MultipleGreedyCornerPack();
     } 
 }

@@ -8,6 +8,8 @@ public class MultipleGreedyCornerPack implements PackerStrategy{
         int maximumHeight = 0;
         int minimumHeight = 0;
         
+        int rectanglesArea = PS.getRectanglesArea();
+        
         for(Rectangle curRec : PS.getRectangles()){
             if(PS.getRotationAllowed()){
                 maximumHeight += Math.min(curRec.sx,curRec.sy);
@@ -24,12 +26,17 @@ public class MultipleGreedyCornerPack implements PackerStrategy{
         int bestCost = Integer.MAX_VALUE;
 
         for(int h=minimumHeight;h<=maximumHeight; h++){
-            if((System.currentTimeMillis() - startTime) > 10000) break; 
+            //pruning
+            if(h-rectanglesArea%h>bestCost) continue;
+            
+            if((System.currentTimeMillis() - startTime) > 20000) break; 
             
             ProblemStatement curPS = new ProblemStatement(
                 h,
                 PS.getRotationAllowed(),
                 PS.getRectangleAmount(),
+                PS.getRectanglesArea(),
+                PS.getMaxDimension(),
                 PS.getRectangles()
             );
 

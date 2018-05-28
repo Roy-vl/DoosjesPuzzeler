@@ -1,8 +1,10 @@
+
 import java.util.Scanner;
+
 
 public class PackingSolver {
 
-    public static void main(String[] args){
+    public static void main(String[] args) {
         ProblemStatement PS = new ProblemStatement();
         
         //Handle System.In input
@@ -15,6 +17,5 @@ public class PackingSolver {
 
         PS.print();
         packedRC.printPlacement(PS.getRotationAllowed());
-
     }
 }

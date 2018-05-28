@@ -15,7 +15,14 @@ public class GreedyCornerPack implements PackerStrategy{
         if(P.x+R.getWidth()>width || P.y+R.getHeight()>height) return false;//out of bounds
         for(int x = P.x; x < P.x+R.getWidth(); x++){
         for(int y = P.y; y < P.y+R.getHeight(); y++){
-            if(filledSpots[x][y]) return false;
+            if(filledSpots[x][y]){
+                //First spot was filled, point is superfluous
+                if(x==P.x && y == P.y){
+                    corners.remove(P);
+                }
+                
+                return false;
+            }
         }
         }
         return true;
@@ -61,23 +68,28 @@ public class GreedyCornerPack implements PackerStrategy{
         RC = new RectanglesContainer();
         RC.setForcedBoundingHeight(PS.getContainerHeight());
         
-        width = 100000;
-        height = PS.getContainerHeight();
-        filledSpots = new boolean[width][height];
-        
-        corners = new ArrayList<>();
-        corners.add(new Point(0,0));
-
         Rectangle[] rectangles = PS.getRectangles();
         
+        
+        height = PS.getContainerHeight();
+        width = Math.max(PS.getMaxDimension(),PS.getRectanglesArea()/height*2);
+        
+        //Rotate rectangles if neccesary
         double relativeSize = (PS.getContainerHeight() / 20);
         int relativeS = (int) relativeSize;
         if(PS.getRotationAllowed()){
-            for(Rectangle curRec : rectangles) 
-                if((curRec.sy > curRec.sx && curRec.sy > relativeS) || curRec.sy > PS.getContainerHeight()) 
+            for(Rectangle curRec : rectangles){           
+                if((curRec.sy > curRec.sx && curRec.sy > relativeS) || curRec.sy > height){
                     curRec.rotated = true;
-        } 
-        
+                }
+            }
+        }  
+
+        filledSpots = new boolean[width][height];
+      
+        corners = new ArrayList<>();
+        corners.add(new Point(0,0));
+
         Arrays.sort(rectangles,new SortByArea());
         Arrays.sort(rectangles,new SortByDecreasingWidth());
  
@@ -99,15 +111,19 @@ public class GreedyCornerPack implements PackerStrategy{
             }
             
             if(!placed){
-                //basically just tries to find the first free spot
-                Point P = new Point(corners.get(0).x,0);
+                //basically just tries to find the first free spot in leftness order (just as in GreedyTrivialPack)
+                Point P = corners.get(0);
                 while(!placed){
                     if(canBePlacedAt(P,curRec)){
                         place(P,curRec);
                         placed = true;
                     }
-                    P.x++;
-                }
+                    P.y++;
+                    if(P.y>=height){
+                        P.x++;
+                        P.y = 0;
+                    }
+                }            
             }
         }
         

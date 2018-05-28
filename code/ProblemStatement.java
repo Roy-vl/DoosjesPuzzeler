@@ -10,19 +10,25 @@ public class ProblemStatement{
     private int         containerHeight;
     private boolean     rotationAllowed;
     private int         rectangleAmount;
+    private int         rectanglesArea;
+    private int         maxDimension;
     private Rectangle[] rectangles;
     
     public ProblemStatement(){
         containerHeight = 0;
         rotationAllowed = false;
         rectangleAmount = 0;
+        rectanglesArea = 0;
+        maxDimension = 0 ;
         rectangles = new Rectangle[rectangleAmount];
     }
     
-    public ProblemStatement(int _containerHeight, boolean _rotationAllowed, int _rectangleAmount, Rectangle[] _rectangles){
+    public ProblemStatement(int _containerHeight, boolean _rotationAllowed, int _rectangleAmount, int _totalRectangleArea, int _maxDimension, Rectangle[] _rectangles){
         containerHeight = _containerHeight;
         rotationAllowed = _rotationAllowed;
         rectangleAmount = _rectangleAmount;
+        rectanglesArea = _totalRectangleArea;
+        maxDimension = _maxDimension;
         rectangles = _rectangles;
     }
     
@@ -38,11 +44,27 @@ public class ProblemStatement{
         return rectangleAmount;
     }
     
+    public int getRectanglesArea(){
+        return rectanglesArea;
+    }
+    
+    public int getMaxDimension(){
+        return maxDimension;
+    }
+    
     public Rectangle[] getRectangles(){
         return rectangles.clone();
     }
     
     public void parseInput(Scanner scanner){
+        //refresh
+        containerHeight = 0;
+        rotationAllowed = false;
+        rectangleAmount = 0;
+        rectanglesArea = 0;
+        maxDimension = 0;
+        rectangles = new Rectangle[rectangleAmount];
+        
         //parse containerheight
         scanner.next();
         scanner.next();
@@ -71,6 +93,8 @@ public class ProblemStatement{
             newRectangle.sy = scanner.nextInt();
             newRectangle.id = i;
             rectangles[i] = newRectangle;
+            rectanglesArea += newRectangle.getArea();
+            maxDimension = Math.max(maxDimension, Math.max(newRectangle.sx,newRectangle.sy));
         }
     }
     
@@ -85,6 +109,7 @@ public class ProblemStatement{
             newRectangle.sy = (int)(Math.random()*100)+1;
             newRectangle.id = i;
             rectangles[i] = newRectangle;
+            rectanglesArea += newRectangle.getArea();
         }
     }
     

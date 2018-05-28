@@ -93,7 +93,7 @@ public class BacktrackCornerPack implements PackerStrategy{
    
     public void Backtrack(){
         //limit runtime to ~290 sec.     
-        if((System.currentTimeMillis() - startTime) > 10000) return; 
+        if((System.currentTimeMillis() - startTime) > 20000) return; 
         
         if(bestCost == 0) return;
         
@@ -138,7 +138,7 @@ public class BacktrackCornerPack implements PackerStrategy{
         filledSpots = new boolean[width][height];
        
         RC = new RectanglesContainer();
-        if(PS.getContainerHeight()>0) RC.setForcedBoundingHeight(height);
+        if(PS.getContainerHeight()>0) RC.setForcedBoundingHeight(PS.getContainerHeight());
         
         corners = new ArrayList<>();
         corners.add(new Point(0,0));
