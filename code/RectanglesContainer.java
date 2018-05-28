@@ -139,6 +139,7 @@ public class RectanglesContainer{
         JFrame frame = new JFrame();
         frame.setTitle("  Bounding Dimensions : "+getBoundingWidth()+","+getBoundingHeight()+
                        ", Bounding Area : "+getBoundingArea()+
+                       ", Rectangle Amount : "+rectangles.size()+
                        ", Rectangles Area :"+getRectanglesArea()+
                        ", Cost : "+getCost());
         
