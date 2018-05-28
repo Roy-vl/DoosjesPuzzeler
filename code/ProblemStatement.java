@@ -57,6 +57,14 @@ public class ProblemStatement{
     }
     
     public void parseInput(Scanner scanner){
+        //refresh
+        containerHeight = 0;
+        rotationAllowed = false;
+        rectangleAmount = 0;
+        rectanglesArea = 0;
+        maxDimension = 0;
+        rectangles = new Rectangle[rectangleAmount];
+        
         //parse containerheight
         scanner.next();
         scanner.next();
