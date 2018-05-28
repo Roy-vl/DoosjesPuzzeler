@@ -115,7 +115,7 @@ public class GreedyCornerPack implements PackerStrategy{
                 System.out.println("Rectangle dimensions :"+curRec.getWidth()+","+curRec.getHeight());
                 System.out.println("Container dimensions :"+width+","+height);
                 
-                //basically just tries to find the first free spot in leftness order
+                //basically just tries to find the first free spot in leftness order (just as in GreedyTrivialPack)
                 Point P = corners.get(0);
                 while(!placed){
                     if(canBePlacedAt(P,curRec)){
