@@ -36,7 +36,7 @@
                   <Group type="102" alignment="0" attributes="0">
                       <Component id="PackButton" min="-2" pref="85" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="EvauluateButton" min="-2" pref="104" max="-2" attributes="0"/>
+                      <Component id="EvaluateButton" min="-2" pref="104" max="-2" attributes="0"/>
                       <EmptySpace max="32767" attributes="0"/>
                   </Group>
                   <Group type="102" attributes="0">
@@ -61,7 +61,7 @@
               <EmptySpace type="unrelated" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="PackButton" alignment="3" min="-2" pref="46" max="-2" attributes="0"/>
-                  <Component id="EvauluateButton" alignment="3" min="-2" pref="46" max="-2" attributes="0"/>
+                  <Component id="EvaluateButton" alignment="3" min="-2" pref="46" max="-2" attributes="0"/>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
               <Component id="jScrollPane1" min="-2" pref="500" max="-2" attributes="0"/>
@@ -86,7 +86,7 @@
       <Layout>
         <DimensionLayout dim="0">
           <Group type="103" groupAlignment="0" attributes="0">
-              <EmptySpace min="0" pref="784" max="32767" attributes="0"/>
+              <EmptySpace min="0" pref="798" max="32767" attributes="0"/>
           </Group>
         </DimensionLayout>
         <DimensionLayout dim="1">
@@ -137,12 +137,12 @@
         <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="PackButtonMouseClicked"/>
       </Events>
     </Component>
-    <Component class="javax.swing.JButton" name="EvauluateButton">
+    <Component class="javax.swing.JButton" name="EvaluateButton">
       <Properties>
         <Property name="text" type="java.lang.String" value="Evaluate"/>
       </Properties>
       <Events>
-        <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="EvauluateButtonMouseClicked"/>
+        <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="EvaluateButtonMouseClicked"/>
       </Events>
     </Component>
   </SubComponents>

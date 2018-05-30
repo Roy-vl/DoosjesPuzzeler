@@ -38,7 +38,7 @@ public class GUI extends javax.swing.JFrame {
         NewWindow = new javax.swing.JCheckBox();
         AlgoSelector = new javax.swing.JComboBox<>();
         PackButton = new javax.swing.JButton();
-        EvauluateButton = new javax.swing.JButton();
+        EvaluateButton = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
@@ -56,7 +56,7 @@ public class GUI extends javax.swing.JFrame {
         Doos.getContentPane().setLayout(DoosLayout);
         DoosLayout.setHorizontalGroup(
             DoosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 784, Short.MAX_VALUE)
+            .addGap(0, 798, Short.MAX_VALUE)
         );
         DoosLayout.setVerticalGroup(
             DoosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -83,10 +83,10 @@ public class GUI extends javax.swing.JFrame {
             }
         });
 
-        EvauluateButton.setText("Evaluate");
-        EvauluateButton.addMouseListener(new java.awt.event.MouseAdapter() {
+        EvaluateButton.setText("Evaluate");
+        EvaluateButton.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                EvauluateButtonMouseClicked(evt);
+                EvaluateButtonMouseClicked(evt);
             }
         });
 
@@ -101,7 +101,7 @@ public class GUI extends javax.swing.JFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(PackButton, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(EvauluateButton, javax.swing.GroupLayout.PREFERRED_SIZE, 104, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(EvaluateButton, javax.swing.GroupLayout.PREFERRED_SIZE, 104, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -120,7 +120,7 @@ public class GUI extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(PackButton, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(EvauluateButton, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(EvaluateButton, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 500, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(191, Short.MAX_VALUE))
@@ -174,7 +174,7 @@ public class GUI extends javax.swing.JFrame {
         Doos.repaint();
     }//GEN-LAST:event_PackButtonMouseClicked
 
-    private void EvauluateButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_EvauluateButtonMouseClicked
+    private void EvaluateButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_EvaluateButtonMouseClicked
         PS = new ProblemStatement();
         if(!PS.fromFile()) return;
         
@@ -202,7 +202,7 @@ public class GUI extends javax.swing.JFrame {
         Evaluator E = new Evaluator();
         Evaluation eval = E.Evaluate(strategy, PS, 10);
         System.out.println(eval.t+","+eval.fr);
-    }//GEN-LAST:event_EvauluateButtonMouseClicked
+    }//GEN-LAST:event_EvaluateButtonMouseClicked
 
     /**
      * @param args the command line arguments
@@ -242,7 +242,7 @@ public class GUI extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JComboBox<String> AlgoSelector;
     private javax.swing.JInternalFrame Doos;
-    private javax.swing.JButton EvauluateButton;
+    private javax.swing.JButton EvaluateButton;
     private javax.swing.JCheckBox NewWindow;
     private javax.swing.JButton PackButton;
     private javax.swing.JTextArea SystemOut;
