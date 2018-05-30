@@ -127,19 +127,21 @@ public class ProblemStatement{
         }
     }
     
-    public void generateRandomInput(int size, Boolean rotationAllowed, int containerHeight){
+    public void generateRandomInput(int rectangleAmount, Boolean rotationAllowed, int containerHeight, int maxWidth, int maxHeight){
         this.rotationAllowed = rotationAllowed;
         this.containerHeight = containerHeight;
-        this.rectangleAmount = size;
+        this.rectangleAmount = rectangleAmount;
         rectangles = new Rectangle[rectangleAmount];
+        
         for(int i = 0; i < rectangleAmount; i++){
             Rectangle newRectangle = new Rectangle();
-            newRectangle.sx = (int)(Math.random()*100)+1;
-            newRectangle.sy = (int)(Math.random()*100)+1;
+            newRectangle.sx = (int)(Math.random()*maxWidth)+1;
+            newRectangle.sy = (int)(Math.random()*maxHeight)+1;
             newRectangle.id = i;
             rectangles[i] = newRectangle;
             rectanglesArea += newRectangle.getArea();
         }
+        
     }
     
     public void print(){
