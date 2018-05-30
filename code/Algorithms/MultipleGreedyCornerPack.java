@@ -2,6 +2,10 @@ public class MultipleGreedyCornerPack implements PackerStrategy{
     
     @Override
     public RectanglesContainer pack(ProblemStatement PS){
+        if(PS.getContainerHeight()>0){
+            System.out.println("MultipleGreedyCornerPack is not applicable");
+            return new RectanglesContainer();
+        }
         
         long startTime = System.currentTimeMillis();
         

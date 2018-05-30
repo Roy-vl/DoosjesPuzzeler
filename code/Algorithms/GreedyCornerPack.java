@@ -65,6 +65,11 @@ public class GreedyCornerPack implements PackerStrategy{
     
     @Override
     public RectanglesContainer pack(ProblemStatement PS){
+        if(PS.getContainerHeight()==0){
+            System.out.println("GreedyCornerPack is not applicable");
+            return new RectanglesContainer();
+        }
+        
         RC = new RectanglesContainer();
         RC.setForcedBoundingHeight(PS.getContainerHeight());
         
