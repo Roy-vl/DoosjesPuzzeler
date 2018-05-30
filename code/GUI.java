@@ -227,7 +227,6 @@ public class GUI extends javax.swing.JFrame {
     private void fileChooserMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_fileChooserMouseClicked
  
         FileDialog dialog = new FileDialog((Frame) null, "Select File to Open");
-        dialog.setMultipleMode(true);
         dialog.setMode(FileDialog.LOAD);
         dialog.setVisible(true);
         File[] files = dialog.getFiles();
