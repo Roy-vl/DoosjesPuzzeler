@@ -107,19 +107,16 @@ public class ProblemStatement{
         }
     }
     
-    public boolean fromFile(){    
+    public void fromFile(){    
         FileDialog dialog = new FileDialog((Frame) null, "Select File to Open");
         dialog.setMultipleMode(true);
         dialog.setMode(FileDialog.LOAD);
         dialog.setVisible(true);
         File[] files = dialog.getFiles();
         if (files != null && files.length > 0) {
-            for (File file : files) {
-                    
+            for (File file : files) { 
                 try {
-                    System.out.println(file + " chosen.");
                     parseInput(new Scanner(file));
-                    return true;
                 } catch (FileNotFoundException ex) {
                     Logger.getLogger(GUI.class.getName()).log(Level.SEVERE, null, ex);
                 }
@@ -128,7 +125,6 @@ public class ProblemStatement{
         } else {
             System.out.println("No file chosen");
         }
-        return false;
     }
     
     public void generateRandomInput(int rectangleAmount, Boolean rotationAllowed, int containerHeight, int maxWidth, int maxHeight){

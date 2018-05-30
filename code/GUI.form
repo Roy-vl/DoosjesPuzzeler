@@ -126,7 +126,7 @@
     <Component class="javax.swing.JComboBox" name="AlgoSelector">
       <Properties>
         <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-          <Connection code="new javax.swing.DefaultComboBoxModel&lt;&gt;(new String[] { &quot; &quot;, &quot;BackTrackCorner&quot;, &quot;GreedyCorner&quot;, &quot;GreedyTrivial&quot;, &quot;MultipleGreedyCorner&quot; })" type="code"/>
+          <Connection code="new javax.swing.DefaultComboBoxModel&lt;&gt;(new String[] { &quot;AutoSelect&quot;, &quot;BackTrackCorner&quot;, &quot;GreedyCorner&quot;, &quot;GreedyTrivial&quot;, &quot;MultipleGreedyCorner&quot; })" type="code"/>
         </Property>
       </Properties>
       <Events>

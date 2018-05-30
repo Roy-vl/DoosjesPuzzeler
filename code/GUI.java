@@ -9,7 +9,7 @@ import javax.swing.WindowConstants;
 public class GUI extends javax.swing.JFrame {
     
     ProblemStatement PS = null;
-    PackerStrategy strategy = null;
+    PackerStrategy strategy = new AutoSelectPack();
 
     /**
      * Creates new form GUI
@@ -69,7 +69,7 @@ public class GUI extends javax.swing.JFrame {
 
         NewWindow.setText("Open in New window");
 
-        AlgoSelector.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { " ", "BackTrackCorner", "GreedyCorner", "GreedyTrivial", "MultipleGreedyCorner" }));
+        AlgoSelector.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "AutoSelect", "BackTrackCorner", "GreedyCorner", "GreedyTrivial", "MultipleGreedyCorner" }));
         AlgoSelector.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 AlgoSelectorActionPerformed(evt);
@@ -148,7 +148,9 @@ public class GUI extends javax.swing.JFrame {
 
     private void AlgoSelectorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AlgoSelectorActionPerformed
         // TODO add your handling code here:
-        if (AlgoSelector.getSelectedItem() == "GreedyTrivial") {
+        if(AlgoSelector.getSelectedItem() == "AutoSelect"){
+            strategy = (new AutoSelectPack());
+        }else if (AlgoSelector.getSelectedItem() == "GreedyTrivial") {
             strategy = (new GreedyTrivialPack());
         }else if (AlgoSelector.getSelectedItem() == "BackTrackCorner") {
             strategy = (new BacktrackCornerPack());
@@ -166,11 +168,7 @@ public class GUI extends javax.swing.JFrame {
             System.out.println("No PS selected");
             return;
         }
-        if(strategy==null){
-            System.out.println("No strategy selected");
-            return;
-        }
-        
+
         System.out.println("Applying " + strategy.getClass().getSimpleName());
 
         long startTime = System.currentTimeMillis();
@@ -190,11 +188,7 @@ public class GUI extends javax.swing.JFrame {
             System.out.println("No PS selected");
             return;
         }
-        if(strategy==null){
-            System.out.println("No strategy selected");
-            return;
-        }
-        
+
         System.out.println("Applying " + strategy.getClass().getSimpleName());
        
         Evaluator E = new Evaluator();
