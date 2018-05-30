@@ -1,4 +1,3 @@
-
 import java.awt.Color;
 import java.awt.FileDialog;
 import java.awt.Frame;
@@ -211,6 +210,7 @@ public class GUI extends javax.swing.JFrame {
                 new GUI().setVisible(true);
             }
         });
+        
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
