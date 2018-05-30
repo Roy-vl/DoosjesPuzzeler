@@ -128,10 +128,15 @@ public class BacktrackCornerPack implements PackerStrategy{
     }
     
     @Override
-    public RectanglesContainer pack(ProblemStatement _PS){ 
+    public RectanglesContainer pack(ProblemStatement PS){ 
+        if(PS.getRectangleAmount()>25){
+            System.out.println("GreedyCornerPack is not applicable; problem has too many rectangles.");
+            return new RectanglesContainer();
+        }
+        
         startTime = System.currentTimeMillis();
         
-        PS = _PS;
+        this.PS = PS;
         
         width = 10000;
         height = PS.getContainerHeight()>0 ? PS.getContainerHeight() : 10000;
