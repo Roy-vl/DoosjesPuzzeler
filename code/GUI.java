@@ -7,25 +7,13 @@ import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.util.ArrayList;
-import java.util.Random;
 import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.WindowConstants;
 
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-/**
- *
- * @author s165433
- */
 public class GUI extends javax.swing.JFrame {
 
     /**
@@ -39,10 +27,13 @@ public class GUI extends javax.swing.JFrame {
         mc.redirectOut(Color.green, System.out);
 
         //Set all algos to false
-        AlgoBacktrack.setState(false);
-        AlgoMultipleGreedyCorner.setState(false);
+        AlgoGreedyTrivial.setState(false);
+
+        AlgoBacktrackCorner.setState(false);
+
         AlgoGreedyCorner.setState(false);
-        AlgoPackNext.setState(false);
+
+        AlgoMultipleGreedyCorner.setState(false);
     }
 
     /**
@@ -66,10 +57,10 @@ public class GUI extends javax.swing.JFrame {
         File = new javax.swing.JMenu();
         jMenu2 = new javax.swing.JMenu();
         AlgoSelector = new javax.swing.JMenu();
-        AlgoBacktrack = new javax.swing.JCheckBoxMenuItem();
+        AlgoBacktrackCorner = new javax.swing.JCheckBoxMenuItem();
         AlgoGreedyCorner = new javax.swing.JCheckBoxMenuItem();
         AlgoMultipleGreedyCorner = new javax.swing.JCheckBoxMenuItem();
-        AlgoPackNext = new javax.swing.JCheckBoxMenuItem();
+        AlgoGreedyTrivial = new javax.swing.JCheckBoxMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
@@ -87,11 +78,11 @@ public class GUI extends javax.swing.JFrame {
         Doos.getContentPane().setLayout(DoosLayout);
         DoosLayout.setHorizontalGroup(
             DoosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 784, Short.MAX_VALUE)
+            .addGap(0, 798, Short.MAX_VALUE)
         );
         DoosLayout.setVerticalGroup(
             DoosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 764, Short.MAX_VALUE)
+            .addGap(0, 778, Short.MAX_VALUE)
         );
 
         jButton1.setText("jButton1");
@@ -121,9 +112,9 @@ public class GUI extends javax.swing.JFrame {
 
         AlgoSelector.setText("Algo");
 
-        AlgoBacktrack.setSelected(true);
-        AlgoBacktrack.setText("BacktrackCornerPack");
-        AlgoSelector.add(AlgoBacktrack);
+        AlgoBacktrackCorner.setSelected(true);
+        AlgoBacktrackCorner.setText("BacktrackCornerPack");
+        AlgoSelector.add(AlgoBacktrackCorner);
 
         AlgoGreedyCorner.setSelected(true);
         AlgoGreedyCorner.setText("GreedyCornerPack");
@@ -133,9 +124,9 @@ public class GUI extends javax.swing.JFrame {
         AlgoMultipleGreedyCorner.setText("MultipleGreedyCornerPack");
         AlgoSelector.add(AlgoMultipleGreedyCorner);
 
-        AlgoPackNext.setSelected(true);
-        AlgoPackNext.setText("PackNextToEachother");
-        AlgoSelector.add(AlgoPackNext);
+        AlgoGreedyTrivial.setSelected(true);
+        AlgoGreedyTrivial.setText("GreedyTrivialPack");
+        AlgoSelector.add(AlgoGreedyTrivial);
 
         jMenuBar1.add(AlgoSelector);
 
@@ -225,11 +216,11 @@ public class GUI extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JCheckBoxMenuItem AlgoBacktrack;
+    private javax.swing.JCheckBoxMenuItem AlgoBacktrackCorner;
     private javax.swing.JCheckBoxMenuItem AlgoGreedyCorner;
+    private javax.swing.JCheckBoxMenuItem AlgoGreedyTrivial;
     private javax.swing.JCheckBoxMenuItem AlgoMultipleGreedyCorner;
     private javax.swing.JCheckBox AlgoOverride;
-    private javax.swing.JCheckBoxMenuItem AlgoPackNext;
     private javax.swing.JMenu AlgoSelector;
     private javax.swing.JInternalFrame Doos;
     private javax.swing.JMenu File;
@@ -273,14 +264,14 @@ public class GUI extends javax.swing.JFrame {
         PackerStrategy strategy = null;
         if (AlgoOverride.isSelected()) {
             System.out.println("Algorithm Selection Overriden");
-            if (AlgoBacktrack.isSelected()) {
+            if (AlgoGreedyTrivial.isSelected()) {
+                strategy = (new GreedyTrivialPack());
+            }else if (AlgoBacktrackCorner.isSelected()) {
                 strategy = (new BacktrackCornerPack());
             } else if (AlgoGreedyCorner.isSelected()) {
                 strategy = (new GreedyCornerPack());
             } else if (AlgoMultipleGreedyCorner.isSelected()) {
                 strategy = (new MultipleGreedyCornerPack());
-            } else if (AlgoPackNext.isSelected()) {
-                strategy = (new PackNextToEachother());
             } else {
                 System.out.println("No algorithm chosen to override");
                 strategy = (new StrategyPicker()).pick(PS);
@@ -323,17 +314,7 @@ public class GUI extends javax.swing.JFrame {
         g.setColor(new Color(0, 0, 0));
         g.fillRect(0, 0, maxx, maxy);
 
-        //color rectangles
-        for (Rectangle curRec : packedRC.rectangles) {
-            //to get rainbow, pastel colors, that are never black
-            Random random = new Random();
-            final float hue = (float) (curRec.id * 1.61803398875);
-            final float saturation = random.nextFloat() * .5f + .5f;//1.0 for brilliant, 0.0 for dull
-            final float luminance = random.nextFloat() * .5f + .5f;; //1.0 for brighter, 0.0 for black
-            final Color color = Color.getHSBColor(hue, saturation, luminance);
-            g.setColor(color);
-            g.fillRect(curRec.px, curRec.py, curRec.getWidth(), curRec.getHeight());
-        }
+        packedRC.drawTo(g);
 
         //create window
         JFrame Doos2 = new JFrame();

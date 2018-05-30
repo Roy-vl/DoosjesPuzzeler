@@ -103,6 +103,18 @@ public class RectanglesContainer{
         }
     }
     
+    public void drawTo(Graphics2D g){
+        for (Rectangle curRec : rectangles) {
+            Random random = new Random();
+            final float hue = (float) (curRec.id*1.61803398875);
+            final float saturation = random.nextFloat()*.5f+.5f;//1.0 for brilliant, 0.0 for dull
+            final float luminance = random.nextFloat()*.5f+.5f;; //1.0 for brighter, 0.0 for black
+            final Color color = Color.getHSBColor(hue, saturation, luminance);
+            g.setColor(color);    
+            g.fillRect(curRec.px,curRec.py,curRec.getWidth(),curRec.getHeight());
+        }
+    }
+    
     public void visualize(){
         
         int windowSizeX = 1000;
@@ -123,17 +135,7 @@ public class RectanglesContainer{
         g.setColor(new Color(0,0,0));
         g.fillRect(0,0,maxx,maxy);
 
-        //color rectangles
-        for (Rectangle curRec : rectangles) {
-            //to get rainbow, pastel colors, that are never black
-            Random random = new Random();
-            final float hue = (float) (curRec.id*1.61803398875);
-            final float saturation = random.nextFloat()*.5f+.5f;//1.0 for brilliant, 0.0 for dull
-            final float luminance = random.nextFloat()*.5f+.5f;; //1.0 for brighter, 0.0 for black
-            final Color color = Color.getHSBColor(hue, saturation, luminance);
-            g.setColor(color);    
-            g.fillRect(curRec.px,curRec.py,curRec.getWidth(),curRec.getHeight());
-        }
+        drawTo(g);
         
         //create window
         JFrame frame = new JFrame();

@@ -22,7 +22,7 @@
             <Property name="text" type="java.lang.String" value="Algo"/>
           </Properties>
           <SubComponents>
-            <MenuItem class="javax.swing.JCheckBoxMenuItem" name="AlgoBacktrack">
+            <MenuItem class="javax.swing.JCheckBoxMenuItem" name="AlgoBacktrackCorner">
               <Properties>
                 <Property name="selected" type="boolean" value="true"/>
                 <Property name="text" type="java.lang.String" value="BacktrackCornerPack"/>
@@ -40,10 +40,10 @@
                 <Property name="text" type="java.lang.String" value="MultipleGreedyCornerPack"/>
               </Properties>
             </MenuItem>
-            <MenuItem class="javax.swing.JCheckBoxMenuItem" name="AlgoPackNext">
+            <MenuItem class="javax.swing.JCheckBoxMenuItem" name="AlgoGreedyTrivial">
               <Properties>
                 <Property name="selected" type="boolean" value="true"/>
-                <Property name="text" type="java.lang.String" value="PackNextToEachother"/>
+                <Property name="text" type="java.lang.String" value="GreedyTrivialPack"/>
               </Properties>
             </MenuItem>
           </SubComponents>
@@ -134,12 +134,12 @@
       <Layout>
         <DimensionLayout dim="0">
           <Group type="103" groupAlignment="0" attributes="0">
-              <EmptySpace min="0" pref="784" max="32767" attributes="0"/>
+              <EmptySpace min="0" pref="798" max="32767" attributes="0"/>
           </Group>
         </DimensionLayout>
         <DimensionLayout dim="1">
           <Group type="103" groupAlignment="0" attributes="0">
-              <EmptySpace min="0" pref="764" max="32767" attributes="0"/>
+              <EmptySpace min="0" pref="778" max="32767" attributes="0"/>
           </Group>
         </DimensionLayout>
       </Layout>
