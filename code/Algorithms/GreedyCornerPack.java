@@ -98,7 +98,6 @@ public class GreedyCornerPack implements PackerStrategy{
         Arrays.sort(rectangles,new SortByDecreasingWidth());
  
         for(Rectangle curRec : rectangles){
-  
             boolean placed = false;
             
             Collections.sort(corners, new SortByLeftness());
@@ -120,7 +119,7 @@ public class GreedyCornerPack implements PackerStrategy{
                 //System.out.println("Container dimensions :"+width+","+height);
                 
                 //basically just tries to find the first free spot in leftness order (just as in GreedyTrivialPack)
-                Point P = corners.get(0);
+                Point P = corners.get(0).clone();
                 while(!placed){
                     if(canBePlacedAt(P,curRec)){
                         place(P,curRec);
