@@ -1,5 +1,11 @@
 
+import java.awt.FileDialog;
+import java.awt.Frame;
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.Scanner;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /*
 ProblemStatement is purely used for parsing the input and storing that data.
@@ -52,8 +58,11 @@ public class ProblemStatement{
         return maxDimension;
     }
     
+    //DEEP COPY OF RECTANGLES, DO NOT TOUCH
     public Rectangle[] getRectangles(){
-        return rectangles.clone();
+        Rectangle[] clone = new Rectangle[rectangleAmount];
+        for(int i=0;i<rectangleAmount;i++) clone[i] = rectangles[i].clone();
+        return clone;
     }
     
     public void parseInput(Scanner scanner){
@@ -98,19 +107,45 @@ public class ProblemStatement{
         }
     }
     
-    public void generateRandomInput(int size, Boolean rotationAllowed, int containerHeight){
+    public boolean fromFile(){    
+        FileDialog dialog = new FileDialog((Frame) null, "Select File to Open");
+        dialog.setMultipleMode(true);
+        dialog.setMode(FileDialog.LOAD);
+        dialog.setVisible(true);
+        File[] files = dialog.getFiles();
+        if (files != null && files.length > 0) {
+            for (File file : files) {
+                    
+                try {
+                    System.out.println(file + " chosen.");
+                    parseInput(new Scanner(file));
+                    return true;
+                } catch (FileNotFoundException ex) {
+                    Logger.getLogger(GUI.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                   
+            }
+        } else {
+            System.out.println("No file chosen");
+        }
+        return false;
+    }
+    
+    public void generateRandomInput(int rectangleAmount, Boolean rotationAllowed, int containerHeight, int maxWidth, int maxHeight){
         this.rotationAllowed = rotationAllowed;
         this.containerHeight = containerHeight;
-        this.rectangleAmount = size;
+        this.rectangleAmount = rectangleAmount;
         rectangles = new Rectangle[rectangleAmount];
+        
         for(int i = 0; i < rectangleAmount; i++){
             Rectangle newRectangle = new Rectangle();
-            newRectangle.sx = (int)(Math.random()*100)+1;
-            newRectangle.sy = (int)(Math.random()*100)+1;
+            newRectangle.sx = (int)(Math.random()*maxWidth)+1;
+            newRectangle.sy = (int)(Math.random()*maxHeight)+1;
             newRectangle.id = i;
             rectangles[i] = newRectangle;
             rectanglesArea += newRectangle.getArea();
         }
+        
     }
     
     public void print(){
