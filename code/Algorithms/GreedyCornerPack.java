@@ -75,7 +75,6 @@ public class GreedyCornerPack implements PackerStrategy{
         
         Rectangle[] rectangles = PS.getRectangles();
         
-        
         height = PS.getContainerHeight();
         width = Math.max(PS.getMaxDimension(),PS.getRectanglesArea()/height*2);
         

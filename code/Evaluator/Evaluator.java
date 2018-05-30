@@ -10,6 +10,7 @@ public class Evaluator {
         float ct = 0;
         float cfr = 0;
         for(int i=0;i<tries;i++){
+            System.out.println("Pass "+(i+1));
             long startTime = System.currentTimeMillis();
             RectanglesContainer packedRC = strategy.pack(PS);
             long estimatedTime = System.currentTimeMillis() - startTime;

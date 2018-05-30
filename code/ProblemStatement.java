@@ -58,8 +58,11 @@ public class ProblemStatement{
         return maxDimension;
     }
     
+    //DEEP COPY OF RECTANGLES, DO NOT TOUCH
     public Rectangle[] getRectangles(){
-        return rectangles.clone();
+        Rectangle[] clone = new Rectangle[rectangleAmount];
+        for(int i=0;i<rectangleAmount;i++) clone[i] = rectangles[i].clone();
+        return clone;
     }
     
     public void parseInput(Scanner scanner){

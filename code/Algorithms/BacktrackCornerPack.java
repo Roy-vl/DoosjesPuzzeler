@@ -128,10 +128,10 @@ public class BacktrackCornerPack implements PackerStrategy{
     }
     
     @Override
-    public RectanglesContainer pack(ProblemStatement PS){
+    public RectanglesContainer pack(ProblemStatement _PS){ 
         startTime = System.currentTimeMillis();
         
-        this.PS = PS;
+        PS = _PS;
         
         width = 10000;
         height = PS.getContainerHeight()>0 ? PS.getContainerHeight() : 10000;
@@ -152,7 +152,7 @@ public class BacktrackCornerPack implements PackerStrategy{
         }
         bestArea = bestRC.getBoundingArea();//Integer.MAX_VALUE;
         bestCost = bestRC.getCost();//Integer.MAX_VALUE;
-            
+        
         Backtrack();
         
         return bestRC;

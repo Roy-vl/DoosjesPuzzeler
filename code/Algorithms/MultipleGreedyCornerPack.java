@@ -30,6 +30,7 @@ public class MultipleGreedyCornerPack implements PackerStrategy{
         int bestCost = Integer.MAX_VALUE;
 
         for(int h=minimumHeight;h<=maximumHeight; h++){
+
             //pruning
             if(h-rectanglesArea%h>bestCost) continue;
             
@@ -45,7 +46,7 @@ public class MultipleGreedyCornerPack implements PackerStrategy{
             );
 
             RectanglesContainer curRC = GCP.pack(curPS);
-
+            
             int curCost = curRC.getCost();
             if(curCost<bestCost){
                 bestCost = curCost;
@@ -53,9 +54,9 @@ public class MultipleGreedyCornerPack implements PackerStrategy{
                 
                 if(bestCost==0) break;
             } 
-
+ 
         }
-
+       
         return bestRC;
     }
 }
