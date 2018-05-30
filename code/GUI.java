@@ -78,11 +78,11 @@ public class GUI extends javax.swing.JFrame {
         Doos.getContentPane().setLayout(DoosLayout);
         DoosLayout.setHorizontalGroup(
             DoosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 798, Short.MAX_VALUE)
+            .addGap(0, 784, Short.MAX_VALUE)
         );
         DoosLayout.setVerticalGroup(
             DoosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 778, Short.MAX_VALUE)
+            .addGap(0, 0, Short.MAX_VALUE)
         );
 
         jButton1.setText("jButton1");
@@ -151,9 +151,6 @@ public class GUI extends javax.swing.JFrame {
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(Doos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
-            .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jButton1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -164,9 +161,10 @@ public class GUI extends javax.swing.JFrame {
                 .addComponent(jButton4)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(AlgoOverride)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 119, Short.MAX_VALUE)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 500, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
+            .addComponent(Doos, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
         pack();
@@ -294,8 +292,8 @@ public class GUI extends javax.swing.JFrame {
 
     public void visualize(RectanglesContainer packedRC) {
 
-        int windowSizeX = 1000;
-        int windowSizeY = 1000;
+        int windowSizeX = 800;
+        int windowSizeY = 800;
 
         int maxx = packedRC.getBoundingWidth();
         int maxy = packedRC.getBoundingHeight();
@@ -307,14 +305,7 @@ public class GUI extends javax.swing.JFrame {
         float scale = maxx >= maxy ? (float) windowSizeX / maxx : (float) windowSizeY / maxy;
 
         //create an image and its graphics 
-        BufferedImage image = new BufferedImage(maxx, maxy, BufferedImage.TYPE_INT_ARGB);
-        Graphics2D g = image.createGraphics();
-
-        //black background
-        g.setColor(new Color(0, 0, 0));
-        g.fillRect(0, 0, maxx, maxy);
-
-        packedRC.drawTo(g);
+        BufferedImage image = packedRC.visualize();
 
         //create window
         JFrame Doos2 = new JFrame();

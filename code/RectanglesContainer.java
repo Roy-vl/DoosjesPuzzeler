@@ -115,18 +115,11 @@ public class RectanglesContainer{
         }
     }
     
-    public void visualize(){
-        
-        int windowSizeX = 1000;
-        int windowSizeY = 1000;
-        
+    public BufferedImage visualize(){
+
         int maxx = getBoundingWidth();
         int maxy = getBoundingHeight();
-        
-        if(maxx==0||maxy==0) return;
-        
-        float scale = maxx>=maxy ? (float)windowSizeX/maxx : (float)windowSizeY/maxy;
-             
+
         //create an image and its graphics 
         BufferedImage image = new BufferedImage(maxx,maxy,BufferedImage.TYPE_INT_ARGB);
         Graphics2D g = image.createGraphics();
@@ -138,24 +131,7 @@ public class RectanglesContainer{
         drawTo(g);
         
         //create window
-        JFrame frame = new JFrame();
-        frame.setTitle("  Bounding Dimensions : "+getBoundingWidth()+","+getBoundingHeight()+
-                       ", Bounding Area : "+getBoundingArea()+
-                       ", Rectangle Amount : "+rectangles.size()+
-                       ", Rectangles Area :"+getRectanglesArea()+
-                       ", Cost : "+getCost());
-        
-        frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        frame.setSize(windowSizeX+16,windowSizeY+39);//+16,+40 for windows bullshit
-        frame.setVisible(true);
-
-        frame.add(new JPanel(){
-            @Override
-            protected void paintComponent(Graphics g) {
-                super.paintComponent(g);
-                g.drawImage(image, 0, 0, (int)(maxx*scale), (int)(maxy*scale), 0, 0, maxx, maxy, null);
-            }
-        });
+        return image;
     }
 
 }

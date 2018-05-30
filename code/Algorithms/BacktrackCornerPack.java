@@ -102,7 +102,6 @@ public class BacktrackCornerPack implements PackerStrategy{
         if(toPlace.isEmpty()){
             int newArea = RC.getBoundingArea();
             if(newArea < bestArea){
-                RC.visualize(); 
                 bestArea = newArea;
                 bestCost = RC.getCost();
                 bestRC = RC.clone();    
@@ -148,7 +147,6 @@ public class BacktrackCornerPack implements PackerStrategy{
         
         if(PS.getContainerHeight()>0){
             bestRC = (new GreedyCornerPack()).pack(PS).clone();
-            bestRC.visualize();
         }else{
             bestRC = (new MultipleGreedyCornerPack()).pack(PS).clone();
         }

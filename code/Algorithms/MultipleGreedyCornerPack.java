@@ -44,7 +44,6 @@ public class MultipleGreedyCornerPack implements PackerStrategy{
 
             int curCost = curRC.getCost();
             if(curCost<bestCost){
-                curRC.visualize(); 
                 bestCost = curCost;
                 bestRC = curRC.clone();
                 

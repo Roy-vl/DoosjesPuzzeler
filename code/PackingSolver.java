@@ -9,14 +9,6 @@ import java.util.logging.Logger;
 
 public class PackingSolver {
 
-    public static void main(String[] args) {
-
-        //Comment this line out for Momotor Submission
-        fromFile();
-        
-        //fromSystemIn();
-    }
-
     public static void fromFile() {
         ProblemStatement PS = new ProblemStatement();
         
@@ -54,8 +46,6 @@ public class PackingSolver {
 
         PS.print();
         packedRC.printPlacement(PS.getRotationAllowed());
-        
-        packedRC.visualize();
     }
 
     public static void fromSystemIn() {
