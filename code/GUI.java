@@ -243,15 +243,18 @@ public class GUI extends javax.swing.JFrame {
         File[] files = dialog.getFiles();
         if (files != null && files.length > 0) {
             for (File file : files) {
+                    
                 try {
                     System.out.println(file + " chosen.");
-                    Scanner scanner = new Scanner(file);
-                    PS.parseInput(scanner);
+                    Scanner scanner;
+                    scanner = new Scanner(file);
+                     PS.parseInput(scanner);
                     getSolution(PS);
 
                 } catch (FileNotFoundException ex) {
-                    Logger.getLogger(PackingSolver.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger(GUI.class.getName()).log(Level.SEVERE, null, ex);
                 }
+                   
             }
         } else {
             System.out.println("No file chosen");
