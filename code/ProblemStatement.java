@@ -104,7 +104,7 @@ public class ProblemStatement{
         }
     }
     
-    public void fromFile(){    
+    public boolean fromFile(){    
         FileDialog dialog = new FileDialog((Frame) null, "Select File to Open");
         dialog.setMultipleMode(true);
         dialog.setMode(FileDialog.LOAD);
@@ -116,7 +116,7 @@ public class ProblemStatement{
                 try {
                     System.out.println(file + " chosen.");
                     parseInput(new Scanner(file));
-
+                    return true;
                 } catch (FileNotFoundException ex) {
                     Logger.getLogger(GUI.class.getName()).log(Level.SEVERE, null, ex);
                 }
@@ -125,6 +125,7 @@ public class ProblemStatement{
         } else {
             System.out.println("No file chosen");
         }
+        return false;
     }
     
     public void generateRandomInput(int rectangleAmount, Boolean rotationAllowed, int containerHeight, int maxWidth, int maxHeight){

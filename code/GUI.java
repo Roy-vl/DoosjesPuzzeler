@@ -1,3 +1,4 @@
+
 import java.awt.Color;
 import java.awt.FileDialog;
 import java.awt.Frame;
@@ -14,12 +15,16 @@ import javax.swing.JPanel;
 import javax.swing.WindowConstants;
 
 public class GUI extends javax.swing.JFrame {
+    
+    ProblemStatement PS;
 
     /**
      * Creates new form GUI
      */
     public GUI() {
         initComponents();
+        
+        PS = null;
 
         //Initialize Systemout Dump
         MessageConsole mc = new MessageConsole(SystemOut);
@@ -36,15 +41,12 @@ public class GUI extends javax.swing.JFrame {
     private void initComponents() {
 
         Doos = new javax.swing.JInternalFrame();
-        FileChoose = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
-        jButton4 = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         SystemOut = new javax.swing.JTextArea();
-        AlgoOverride = new javax.swing.JCheckBox();
         NewWindow = new javax.swing.JCheckBox();
         AlgoSelector = new javax.swing.JComboBox<>();
+        PackButton = new javax.swing.JButton();
+        EvauluateButton = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
@@ -69,31 +71,30 @@ public class GUI extends javax.swing.JFrame {
             .addGap(0, 0, Short.MAX_VALUE)
         );
 
-        FileChoose.setText("Choose File");
-        FileChoose.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                FileChooseMouseClicked(evt);
-            }
-        });
-
-        jButton2.setText("jButton2");
-
-        jButton3.setText("jButton3");
-
-        jButton4.setText("jButton4");
-
         SystemOut.setColumns(20);
         SystemOut.setRows(5);
         jScrollPane1.setViewportView(SystemOut);
 
-        AlgoOverride.setText("Override Alorithm Selection");
-
         NewWindow.setText("Open in New window");
 
-        AlgoSelector.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "BackTrackCorner", "GreedyCorner", "GreedyTrivial", "MultipleGreedyCorner" }));
+        AlgoSelector.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Automatic Selection", "BackTrackCorner", "GreedyCorner", "GreedyTrivial", "MultipleGreedyCorner" }));
         AlgoSelector.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 AlgoSelectorActionPerformed(evt);
+            }
+        });
+
+        PackButton.setText("Pack");
+        PackButton.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                PackButtonMouseClicked(evt);
+            }
+        });
+
+        EvauluateButton.setText("Evaluate");
+        EvauluateButton.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                EvauluateButtonMouseClicked(evt);
             }
         });
 
@@ -105,41 +106,32 @@ public class GUI extends javax.swing.JFrame {
                 .addComponent(Doos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(AlgoSelector, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(PackButton, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(EvauluateButton, javax.swing.GroupLayout.PREFERRED_SIZE, 104, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jButton3)
-                                .addGap(18, 18, 18)
-                                .addComponent(jButton2))
-                            .addComponent(jButton4)
                             .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(AlgoOverride)
-                            .addComponent(NewWindow)
-                            .addComponent(FileChoose, javax.swing.GroupLayout.PREFERRED_SIZE, 166, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(0, 0, Short.MAX_VALUE)))
-                .addGap(0, 0, 0))
+                            .addComponent(AlgoSelector, javax.swing.GroupLayout.PREFERRED_SIZE, 213, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(NewWindow))
+                        .addGap(0, 7, Short.MAX_VALUE))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(AlgoSelector, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(42, 42, 42)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton3)
-                    .addComponent(jButton2))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButton4)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(AlgoOverride)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGap(13, 13, 13)
                 .addComponent(NewWindow)
-                .addGap(18, 18, 18)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 500, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(PackButton, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(EvauluateButton, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(FileChoose, javax.swing.GroupLayout.DEFAULT_SIZE, 90, Short.MAX_VALUE)
-                .addContainerGap())
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 500, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(191, Short.MAX_VALUE))
             .addComponent(Doos, javax.swing.GroupLayout.DEFAULT_SIZE, 826, Short.MAX_VALUE)
         );
 
@@ -150,13 +142,75 @@ public class GUI extends javax.swing.JFrame {
 
     }//GEN-LAST:event_DoosComponentResized
 
-    private void FileChooseMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_FileChooseMouseClicked
-        getFile();
-    }//GEN-LAST:event_FileChooseMouseClicked
-
     private void AlgoSelectorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AlgoSelectorActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_AlgoSelectorActionPerformed
+
+    private void PackButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_PackButtonMouseClicked
+        PS = new ProblemStatement();
+        if(!PS.fromFile()) return;
+        
+        PackerStrategy strategy = null;
+        if (AlgoSelector.getSelectedItem() == "Automatic Selection") {
+          System.out.println("Automatic Selection Chosen");
+           strategy = (new StrategyPicker()).pick(PS);
+        } else {
+          System.out.println("Algorithm Selection Overriden");
+          if (AlgoSelector.getSelectedItem() == "GreedyTrivial") {
+              strategy = (new GreedyTrivialPack());
+          }else if (AlgoSelector.getSelectedItem() == "BackTrackCorner") {
+              strategy = (new BacktrackCornerPack());
+          } else if (AlgoSelector.getSelectedItem() == "GreedyCorner") {
+              strategy = (new GreedyCornerPack());
+          } else if (AlgoSelector.getSelectedItem() == "MultipleGreedyCorner") {
+              strategy = (new MultipleGreedyCornerPack());
+          } else {
+              System.out.println("No algorithm chosen to override");
+              strategy = (new StrategyPicker()).pick(PS);
+          }
+        } 
+        System.out.println("Applying " + strategy.getClass().getSimpleName());
+
+        long startTime = System.currentTimeMillis();
+        RectanglesContainer packedRC = strategy.pack(PS);
+        long estimatedTime = System.currentTimeMillis() - startTime;
+        System.out.println("Packing time : " + estimatedTime + "ms");
+
+        PS.print();
+        packedRC.printPlacement(PS.getRotationAllowed());
+        visualize(packedRC);
+        Doos.repaint();
+    }//GEN-LAST:event_PackButtonMouseClicked
+
+    private void EvauluateButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_EvauluateButtonMouseClicked
+        PS = new ProblemStatement();
+        if(!PS.fromFile()) return;
+        
+        PackerStrategy strategy = null;
+        if (AlgoSelector.getSelectedItem() == "Automatic Selection") {
+          System.out.println("Automatic Selection Chosen");
+           strategy = (new StrategyPicker()).pick(PS);
+        } else {
+          System.out.println("Algorithm Selection Overriden");
+          if (AlgoSelector.getSelectedItem() == "GreedyTrivial") {
+              strategy = (new GreedyTrivialPack());
+          }else if (AlgoSelector.getSelectedItem() == "BackTrackCorner") {
+              strategy = (new BacktrackCornerPack());
+          } else if (AlgoSelector.getSelectedItem() == "GreedyCorner") {
+              strategy = (new GreedyCornerPack());
+          } else if (AlgoSelector.getSelectedItem() == "MultipleGreedyCorner") {
+              strategy = (new MultipleGreedyCornerPack());
+          } else {
+              System.out.println("No algorithm chosen to override");
+              strategy = (new StrategyPicker()).pick(PS);
+          }
+        } 
+        System.out.println("Applying " + strategy.getClass().getSimpleName());
+       
+        Evaluator E = new Evaluator();
+        Evaluation eval = E.Evaluate(strategy, PS, 10);
+        System.out.println(eval.t+","+eval.fr);
+    }//GEN-LAST:event_EvauluateButtonMouseClicked
 
     /**
      * @param args the command line arguments
@@ -187,66 +241,21 @@ public class GUI extends javax.swing.JFrame {
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
-            @Override
             public void run() {
                 new GUI().setVisible(true);
             }
         });
-  
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JCheckBox AlgoOverride;
     private javax.swing.JComboBox<String> AlgoSelector;
     private javax.swing.JInternalFrame Doos;
-    private javax.swing.JButton FileChoose;
+    private javax.swing.JButton EvauluateButton;
     private javax.swing.JCheckBox NewWindow;
+    private javax.swing.JButton PackButton;
     private javax.swing.JTextArea SystemOut;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
-    private javax.swing.JButton jButton4;
     private javax.swing.JScrollPane jScrollPane1;
     // End of variables declaration//GEN-END:variables
-
-    public void getFile() {
-
-        ProblemStatement PS = new ProblemStatement();
-        PS.fromFile();
-        getSolution(PS);
-
-    }
-
-    public void getSolution(ProblemStatement PS) {
-        PackerStrategy strategy = null;
-        if (AlgoOverride.isSelected()) {
-            System.out.println("Algorithm Selection Overriden");
-            if (AlgoSelector.getSelectedItem() == "GreedyTrivial") {
-                strategy = (new GreedyTrivialPack());
-            }else if (AlgoSelector.getSelectedItem() == "BackTrackCorner") {
-                strategy = (new BacktrackCornerPack());
-            } else if (AlgoSelector.getSelectedItem() == "GreedyCorner") {
-                strategy = (new GreedyCornerPack());
-            } else if (AlgoSelector.getSelectedItem() == "MultipleGreedyCorner") {
-                strategy = (new MultipleGreedyCornerPack());
-            } else {
-                System.out.println("No algorithm chosen to override");
-                strategy = (new StrategyPicker()).pick(PS);
-            }
-        } else {
-            strategy = (new StrategyPicker()).pick(PS);
-        }
-        System.out.println("Applying " + strategy.getClass().getSimpleName());
-
-        long startTime = System.currentTimeMillis();
-        RectanglesContainer packedRC = strategy.pack(PS);
-        long estimatedTime = System.currentTimeMillis() - startTime;
-        System.out.println("Packing time : " + estimatedTime + "ms");
-
-        PS.print();
-        packedRC.printPlacement(PS.getRotationAllowed());
-        visualize(packedRC);
-        Doos.repaint();
-    }
 
     public void visualize(RectanglesContainer packedRC) {
 

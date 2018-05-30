@@ -33,24 +33,21 @@
               <Component id="Doos" min="-2" max="-2" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Component id="AlgoSelector" alignment="0" max="32767" attributes="0"/>
+                  <Group type="102" alignment="0" attributes="0">
+                      <Component id="PackButton" min="-2" pref="85" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="EvauluateButton" min="-2" pref="104" max="-2" attributes="0"/>
+                      <EmptySpace max="32767" attributes="0"/>
+                  </Group>
                   <Group type="102" attributes="0">
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Group type="102" attributes="0">
-                              <Component id="jButton3" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace type="separate" max="-2" attributes="0"/>
-                              <Component id="jButton2" min="-2" max="-2" attributes="0"/>
-                          </Group>
-                          <Component id="jButton4" min="-2" max="-2" attributes="0"/>
                           <Component id="jScrollPane1" min="-2" max="-2" attributes="0"/>
-                          <Component id="AlgoOverride" min="-2" max="-2" attributes="0"/>
-                          <Component id="NewWindow" min="-2" max="-2" attributes="0"/>
-                          <Component id="FileChoose" min="-2" pref="166" max="-2" attributes="0"/>
+                          <Component id="AlgoSelector" alignment="0" min="-2" pref="213" max="-2" attributes="0"/>
+                          <Component id="NewWindow" alignment="0" min="-2" max="-2" attributes="0"/>
                       </Group>
-                      <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                      <EmptySpace min="0" pref="7" max="32767" attributes="0"/>
                   </Group>
               </Group>
-              <EmptySpace min="0" pref="0" max="-2" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -59,22 +56,16 @@
           <Group type="102" alignment="0" attributes="0">
               <EmptySpace max="-2" attributes="0"/>
               <Component id="AlgoSelector" min="-2" max="-2" attributes="0"/>
-              <EmptySpace min="-2" pref="42" max="-2" attributes="0"/>
+              <EmptySpace min="-2" pref="13" max="-2" attributes="0"/>
+              <Component id="NewWindow" min="-2" max="-2" attributes="0"/>
+              <EmptySpace type="unrelated" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
-                  <Component id="jButton3" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="jButton2" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="PackButton" alignment="3" min="-2" pref="46" max="-2" attributes="0"/>
+                  <Component id="EvauluateButton" alignment="3" min="-2" pref="46" max="-2" attributes="0"/>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
-              <Component id="jButton4" min="-2" max="-2" attributes="0"/>
-              <EmptySpace type="unrelated" max="-2" attributes="0"/>
-              <Component id="AlgoOverride" min="-2" max="-2" attributes="0"/>
-              <EmptySpace type="unrelated" max="-2" attributes="0"/>
-              <Component id="NewWindow" min="-2" max="-2" attributes="0"/>
-              <EmptySpace type="separate" max="-2" attributes="0"/>
               <Component id="jScrollPane1" min="-2" pref="500" max="-2" attributes="0"/>
-              <EmptySpace max="-2" attributes="0"/>
-              <Component id="FileChoose" pref="90" max="32767" attributes="0"/>
-              <EmptySpace max="-2" attributes="0"/>
+              <EmptySpace pref="191" max="32767" attributes="0"/>
           </Group>
           <Component id="Doos" alignment="0" pref="826" max="32767" attributes="0"/>
       </Group>
@@ -105,29 +96,6 @@
         </DimensionLayout>
       </Layout>
     </Container>
-    <Component class="javax.swing.JButton" name="FileChoose">
-      <Properties>
-        <Property name="text" type="java.lang.String" value="Choose File"/>
-      </Properties>
-      <Events>
-        <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="FileChooseMouseClicked"/>
-      </Events>
-    </Component>
-    <Component class="javax.swing.JButton" name="jButton2">
-      <Properties>
-        <Property name="text" type="java.lang.String" value="jButton2"/>
-      </Properties>
-    </Component>
-    <Component class="javax.swing.JButton" name="jButton3">
-      <Properties>
-        <Property name="text" type="java.lang.String" value="jButton3"/>
-      </Properties>
-    </Component>
-    <Component class="javax.swing.JButton" name="jButton4">
-      <Properties>
-        <Property name="text" type="java.lang.String" value="jButton4"/>
-      </Properties>
-    </Component>
     <Container class="javax.swing.JScrollPane" name="jScrollPane1">
       <AuxValues>
         <AuxValue name="autoScrollPane" type="java.lang.Boolean" value="true"/>
@@ -143,11 +111,6 @@
         </Component>
       </SubComponents>
     </Container>
-    <Component class="javax.swing.JCheckBox" name="AlgoOverride">
-      <Properties>
-        <Property name="text" type="java.lang.String" value="Override Alorithm Selection"/>
-      </Properties>
-    </Component>
     <Component class="javax.swing.JCheckBox" name="NewWindow">
       <Properties>
         <Property name="text" type="java.lang.String" value="Open in New window"/>
@@ -156,7 +119,7 @@
     <Component class="javax.swing.JComboBox" name="AlgoSelector">
       <Properties>
         <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-          <Connection code="new javax.swing.DefaultComboBoxModel&lt;&gt;(new String[] { &quot;BackTrackCorner&quot;, &quot;GreedyCorner&quot;, &quot;GreedyTrivial&quot;, &quot;MultipleGreedyCorner&quot; })" type="code"/>
+          <Connection code="new javax.swing.DefaultComboBoxModel&lt;&gt;(new String[] { &quot;Automatic Selection&quot;, &quot;BackTrackCorner&quot;, &quot;GreedyCorner&quot;, &quot;GreedyTrivial&quot;, &quot;MultipleGreedyCorner&quot; })" type="code"/>
         </Property>
       </Properties>
       <Events>
@@ -165,6 +128,22 @@
       <AuxValues>
         <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
       </AuxValues>
+    </Component>
+    <Component class="javax.swing.JButton" name="PackButton">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Pack"/>
+      </Properties>
+      <Events>
+        <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="PackButtonMouseClicked"/>
+      </Events>
+    </Component>
+    <Component class="javax.swing.JButton" name="EvauluateButton">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Evaluate"/>
+      </Properties>
+      <Events>
+        <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="EvauluateButtonMouseClicked"/>
+      </Events>
     </Component>
   </SubComponents>
 </Form>
