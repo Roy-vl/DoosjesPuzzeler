@@ -3,13 +3,16 @@ import java.awt.Color;
 import java.awt.FileDialog;
 import java.awt.Frame;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.ImageIcon;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.WindowConstants;
 
@@ -114,15 +117,12 @@ public class GUI extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(AlgoSelector, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(fileChooser, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addComponent(PackButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(EvaluateButton, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(0, 19, Short.MAX_VALUE))
-                    .addComponent(NewWindow, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(NewWindow, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(PackButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(EvaluateButton, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jScrollPane1))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -135,13 +135,13 @@ public class GUI extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(NewWindow)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(PackButton, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(EvaluateButton, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(338, 338, 338)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 500, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addComponent(Doos, javax.swing.GroupLayout.DEFAULT_SIZE, 996, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 836, Short.MAX_VALUE)
+                .addContainerGap())
+            .addComponent(Doos, javax.swing.GroupLayout.DEFAULT_SIZE, 1000, Short.MAX_VALUE)
         );
 
         pack();
@@ -295,8 +295,8 @@ public class GUI extends javax.swing.JFrame {
 
     public void visualize(RectanglesContainer packedRC) {
 
-        int windowSizeX = 700;
-        int windowSizeY = 700;
+        int windowSizeX = Doos.getWidth();
+        int windowSizeY = Doos.getHeight();
 
         int maxx = packedRC.getBoundingWidth();
         int maxy = packedRC.getBoundingHeight();
@@ -305,39 +305,32 @@ public class GUI extends javax.swing.JFrame {
             return;
         }
 
-        float scale = maxx >= maxy ? (float) windowSizeX / maxx : (float) windowSizeY / maxy;
-
         //create an image and its graphics 
-        BufferedImage image = packedRC.visualize();
+        BufferedImage image = new BufferedImage(maxx,maxy,BufferedImage.TYPE_INT_ARGB);
+        Graphics2D g = image.createGraphics();
+        
+        //black background
+        g.setColor(new Color(0,0,0));
+        g.fillRect(0,0,maxx,maxy);
 
+        packedRC.drawTo(g);
+        
         //create window
-        JFrame Doos2 = new JFrame();
         Doos.setTitle("  Bounding Dimensions : " + packedRC.getBoundingWidth() + "," + packedRC.getBoundingHeight()
                 + ", Bounding Area : " + packedRC.getBoundingArea()
                 + ", Rectangles Area :" + packedRC.getRectanglesArea()
                 + ", Cost : " + packedRC.getCost());
 
         Doos.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        Doos.setSize(windowSizeX + 16, windowSizeY + 39);//+16,+40 for windows bullshit
-
-        JPanel paintBox = new JPanel() {
+        JPanel pane = new JPanel() {
             @Override
             protected void paintComponent(Graphics g) {
                 super.paintComponent(g);
-                g.drawImage(image, 0, 0, (int) (maxx * scale), (int) (maxy * scale), 0, 0, maxx, maxy, null);
+                g.drawImage(image, 0, 0, this.getWidth(), this.getHeight(), this);
             }
         };
-        Doos2.getContentPane().add(paintBox);
-        if (NewWindow.isSelected()) {
-            Doos2.setSize(windowSizeX + 16, windowSizeY + 39);//+16,+40 for windows bullshit
-            Doos2.setTitle("  Bounding Dimensions : " + packedRC.getBoundingWidth() + "," + packedRC.getBoundingHeight()
-                + ", Bounding Area : " + packedRC.getBoundingArea()
-                + ", Rectangles Area :" + packedRC.getRectanglesArea()
-                + ", Cost : " + packedRC.getCost());
-            Doos2.setVisible(true);
-        } else {
-        Doos.setContentPane(Doos2.getContentPane());
-        paintBox.setVisible(true);
-        }
+        Doos.setContentPane(pane);
+        
+        
     }
 }

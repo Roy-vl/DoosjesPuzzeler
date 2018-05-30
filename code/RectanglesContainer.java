@@ -114,25 +114,6 @@ public class RectanglesContainer{
             g.fillRect(curRec.px,curRec.py,curRec.getWidth(),curRec.getHeight());
         }
     }
-    
-    public BufferedImage visualize(){
-
-        int maxx = getBoundingWidth();
-        int maxy = getBoundingHeight();
-
-        //create an image and its graphics 
-        BufferedImage image = new BufferedImage(maxx,maxy,BufferedImage.TYPE_INT_ARGB);
-        Graphics2D g = image.createGraphics();
-        
-        //black background
-        g.setColor(new Color(0,0,0));
-        g.fillRect(0,0,maxx,maxy);
-
-        drawTo(g);
-        
-        //create window
-        return image;
-    }
 
 }
 
