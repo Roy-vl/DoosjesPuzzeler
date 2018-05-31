@@ -1,9 +1,12 @@
 
+import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.FileDialog;
 import java.awt.Frame;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.GridBagLayout;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -14,7 +17,9 @@ import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.WindowConstants;
+import javax.swing.border.EmptyBorder;
 
 public class GUI extends javax.swing.JFrame {
     
@@ -41,10 +46,8 @@ public class GUI extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        Doos = new javax.swing.JInternalFrame();
         jScrollPane1 = new javax.swing.JScrollPane();
         SystemOut = new javax.swing.JTextArea();
-        NewWindow = new javax.swing.JCheckBox();
         AlgoSelector = new javax.swing.JComboBox<>();
         PackButton = new javax.swing.JButton();
         EvaluateButton = new javax.swing.JButton();
@@ -54,30 +57,9 @@ public class GUI extends javax.swing.JFrame {
         setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         setIconImages(null);
 
-        Doos.setPreferredSize(new java.awt.Dimension(800, 800));
-        Doos.setVisible(true);
-        Doos.addComponentListener(new java.awt.event.ComponentAdapter() {
-            public void componentResized(java.awt.event.ComponentEvent evt) {
-                DoosComponentResized(evt);
-            }
-        });
-
-        javax.swing.GroupLayout DoosLayout = new javax.swing.GroupLayout(Doos.getContentPane());
-        Doos.getContentPane().setLayout(DoosLayout);
-        DoosLayout.setHorizontalGroup(
-            DoosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 798, Short.MAX_VALUE)
-        );
-        DoosLayout.setVerticalGroup(
-            DoosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
-
         SystemOut.setColumns(20);
         SystemOut.setRows(5);
         jScrollPane1.setViewportView(SystemOut);
-
-        NewWindow.setText("Open in New window");
 
         AlgoSelector.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "AutoSelect", "BackTrackCorner", "GreedyCorner", "GreedyTrivial", "MultipleGreedyCorner" }));
         AlgoSelector.addActionListener(new java.awt.event.ActionListener() {
@@ -112,12 +94,10 @@ public class GUI extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(Doos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(AlgoSelector, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(fileChooser, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(NewWindow, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addComponent(PackButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -133,23 +113,16 @@ public class GUI extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(AlgoSelector, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(NewWindow)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(PackButton, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(EvaluateButton, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 836, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 407, Short.MAX_VALUE)
                 .addContainerGap())
-            .addComponent(Doos, javax.swing.GroupLayout.DEFAULT_SIZE, 1000, Short.MAX_VALUE)
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
-    private void DoosComponentResized(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_DoosComponentResized
-
-    }//GEN-LAST:event_DoosComponentResized
 
     private void AlgoSelectorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AlgoSelectorActionPerformed
 
@@ -191,7 +164,6 @@ public class GUI extends javax.swing.JFrame {
         System.out.println("Packing time : " + estimatedTime + "ms");
         
         visualize(packedRC);
-        Doos.repaint();
     }//GEN-LAST:event_PackButtonMouseClicked
 
     private void EvaluateButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_EvaluateButtonMouseClicked
@@ -284,9 +256,7 @@ public class GUI extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JComboBox<String> AlgoSelector;
-    private javax.swing.JInternalFrame Doos;
     private javax.swing.JButton EvaluateButton;
-    private javax.swing.JCheckBox NewWindow;
     private javax.swing.JButton PackButton;
     private javax.swing.JTextArea SystemOut;
     private javax.swing.JButton fileChooser;
@@ -294,9 +264,6 @@ public class GUI extends javax.swing.JFrame {
     // End of variables declaration//GEN-END:variables
 
     public void visualize(RectanglesContainer packedRC) {
-
-        int windowSizeX = Doos.getWidth();
-        int windowSizeY = Doos.getHeight();
 
         int maxx = packedRC.getBoundingWidth();
         int maxy = packedRC.getBoundingHeight();
@@ -314,23 +281,26 @@ public class GUI extends javax.swing.JFrame {
         g.fillRect(0,0,maxx,maxy);
 
         packedRC.drawTo(g);
-        
-        //create window
-        Doos.setTitle("  Bounding Dimensions : " + packedRC.getBoundingWidth() + "," + packedRC.getBoundingHeight()
+      
+        //make a new windows frame
+        JFrame window = new JFrame("  Bounding Dimensions : " + packedRC.getBoundingWidth() + "," + packedRC.getBoundingHeight()
                 + ", Bounding Area : " + packedRC.getBoundingArea()
                 + ", Rectangles Area :" + packedRC.getRectanglesArea()
                 + ", Cost : " + packedRC.getCost());
 
-        Doos.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        JPanel pane = new JPanel() {
-            @Override
-            protected void paintComponent(Graphics g) {
-                super.paintComponent(g);
-                g.drawImage(image, 0, 0, this.getWidth(), this.getHeight(), this);
-            }
-        };
-        Doos.setContentPane(pane);
+        //Make a doos
+        JPanel  doos = new JPanel(new BorderLayout());
+        doos.setBorder(new EmptyBorder(5,5,5,5));
+
+        //add scrolling
+        ZoomableScrollPane imageZoom = new ZoomableScrollPane(image);
+        imageZoom.setPreferredSize(new Dimension(800,800));
         
+        doos.add(imageZoom, BorderLayout.CENTER);
         
+        window.setContentPane(doos);
+        window.pack();
+        window.setVisible(true);
+
     }
 }
