@@ -293,8 +293,7 @@ public class GUI extends javax.swing.JFrame {
         doos.setBorder(new EmptyBorder(5,5,5,5));
 
         //add scrolling
-        ZoomableScrollPane imageZoom = new ZoomableScrollPane(image);
-        imageZoom.setPreferredSize(new Dimension(800,800));
+        ZoomableScrollPane imageZoom = new ZoomableScrollPane(image, 800, 800);
         
         doos.add(imageZoom, BorderLayout.CENTER);
         
