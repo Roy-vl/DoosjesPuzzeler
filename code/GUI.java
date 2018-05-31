@@ -163,7 +163,7 @@ public class GUI extends javax.swing.JFrame {
 
         System.out.println("Packing time : " + estimatedTime + "ms");
         
-        visualize(packedRC);
+        packedRC.visualize();
     }//GEN-LAST:event_PackButtonMouseClicked
 
     private void EvaluateButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_EvaluateButtonMouseClicked
@@ -263,43 +263,4 @@ public class GUI extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane1;
     // End of variables declaration//GEN-END:variables
 
-    public void visualize(RectanglesContainer packedRC) {
-
-        int maxx = packedRC.getBoundingWidth();
-        int maxy = packedRC.getBoundingHeight();
-
-        if (maxx == 0 || maxy == 0) {
-            return;
-        }
-
-        //create an image and its graphics 
-        BufferedImage image = new BufferedImage(maxx,maxy,BufferedImage.TYPE_INT_ARGB);
-        Graphics2D g = image.createGraphics();
-        
-        //black background
-        g.setColor(new Color(0,0,0));
-        g.fillRect(0,0,maxx,maxy);
-
-        packedRC.drawTo(g);
-      
-        //make a new windows frame
-        JFrame window = new JFrame("  Bounding Dimensions : " + packedRC.getBoundingWidth() + "," + packedRC.getBoundingHeight()
-                + ", Bounding Area : " + packedRC.getBoundingArea()
-                + ", Rectangles Area :" + packedRC.getRectanglesArea()
-                + ", Cost : " + packedRC.getCost());
-
-        //Make a doos
-        JPanel  doos = new JPanel(new BorderLayout());
-        doos.setBorder(new EmptyBorder(5,5,5,5));
-
-        //add scrolling
-        ZoomableScrollPane imageZoom = new ZoomableScrollPane(image, 800, 800);
-        
-        doos.add(imageZoom, BorderLayout.CENTER);
-        
-        window.setContentPane(doos);
-        window.pack();
-        window.setVisible(true);
-
-    }
 }
