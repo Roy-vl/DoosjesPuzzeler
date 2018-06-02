@@ -1,30 +1,18 @@
-
-import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.FileDialog;
 import java.awt.Frame;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.GridBagLayout;
-import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.Comparator;
 import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.ImageIcon;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.WindowConstants;
-import javax.swing.border.EmptyBorder;
 
 public class GUI extends javax.swing.JFrame {
     
     ProblemStatement PS = null;
     PackerStrategy strategy = new AutoSelectPack();
+    Comparator<Rectangle> comparator = new SortByArea();
 
     /**
      * Creates new form GUI
@@ -52,6 +40,7 @@ public class GUI extends javax.swing.JFrame {
         PackButton = new javax.swing.JButton();
         EvaluateButton = new javax.swing.JButton();
         fileChooser = new javax.swing.JButton();
+        SortSelector = new javax.swing.JComboBox<>();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
@@ -89,6 +78,13 @@ public class GUI extends javax.swing.JFrame {
             }
         });
 
+        SortSelector.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Area", "Id", "Width", "Height" }));
+        SortSelector.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                SortSelectorActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -98,11 +94,12 @@ public class GUI extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(AlgoSelector, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(fileChooser, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 357, Short.MAX_VALUE)
+                    .addGroup(layout.createSequentialGroup()
                         .addComponent(PackButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(EvaluateButton, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jScrollPane1))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(EvaluateButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(SortSelector, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -113,11 +110,13 @@ public class GUI extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(AlgoSelector, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(SortSelector, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(PackButton, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(EvaluateButton, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 407, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 375, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
 
@@ -156,13 +155,18 @@ public class GUI extends javax.swing.JFrame {
             System.out.println("No strategy selected");
             return;
         }
+        if(comparator==null){
+            System.out.println("No comparator selected");
+            return;
+        }
         if(!strategy.applicable(PS)){
             System.out.println("Strategy not applicable to current problem");
             return;
         }
         
         long startTime = System.currentTimeMillis();
-        RectanglesContainer packedRC = strategy.pack(PS);
+        ProblemStatement sortedPS = PS.getSortedProblemStatement(comparator);
+        RectanglesContainer packedRC = strategy.pack(sortedPS);
         long estimatedTime = System.currentTimeMillis() - startTime;  
 
         System.out.println("Packing time : " + estimatedTime + "ms");
@@ -180,6 +184,10 @@ public class GUI extends javax.swing.JFrame {
             System.out.println("No strategy selected");
             return;
         }
+        if(comparator==null){
+            System.out.println("No comparator selected");
+            return;
+        }
         if(strategy instanceof AutoSelectPack){
             System.out.println("Evaluation should not be run with AutoSelect");
             return;
@@ -194,7 +202,8 @@ public class GUI extends javax.swing.JFrame {
         int tries = 10;
         for(int i=0;i<tries;i++){
             long startTime = System.currentTimeMillis();
-            RectanglesContainer packedRC = strategy.pack(PS);
+            ProblemStatement sortedPS = PS.getSortedProblemStatement(comparator);
+            RectanglesContainer packedRC = strategy.pack(sortedPS);
             long estimatedTime = System.currentTimeMillis() - startTime;
             ct += estimatedTime;
             cfr += (float)(packedRC.getRectanglesArea())/packedRC.getBoundingArea();
@@ -226,6 +235,26 @@ public class GUI extends javax.swing.JFrame {
         }
 
     }//GEN-LAST:event_fileChooserMouseClicked
+
+    private void SortSelectorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SortSelectorActionPerformed
+
+        switch(SortSelector.getSelectedItem().toString()){
+            case "Area" :
+                comparator = new SortByArea();
+                break;
+            case "Id" :
+                comparator = new SortByID();
+                break;
+            case "Width" :
+                comparator = new SortByDecreasingWidth();
+                break;
+            case "Height" :
+                comparator = new SortByDecreasingHeight();
+                break;
+            default:
+                strategy = null;
+        }
+    }//GEN-LAST:event_SortSelectorActionPerformed
 
     /**
      * @param args the command line arguments
@@ -266,6 +295,7 @@ public class GUI extends javax.swing.JFrame {
     private javax.swing.JComboBox<String> AlgoSelector;
     private javax.swing.JButton EvaluateButton;
     private javax.swing.JButton PackButton;
+    private javax.swing.JComboBox<String> SortSelector;
     private javax.swing.JTextArea SystemOut;
     private javax.swing.JButton fileChooser;
     private javax.swing.JScrollPane jScrollPane1;

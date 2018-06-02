@@ -68,7 +68,6 @@ public class GreedyCornerPack implements PackerStrategy{
         if(PS.getContainerHeight()==0){
             return false;
         }
-        
         return true;
     }
     
@@ -82,7 +81,7 @@ public class GreedyCornerPack implements PackerStrategy{
         Rectangle[] rectangles = PS.getRectangles();
         
         height = PS.getContainerHeight();
-        width = Math.max(PS.getMaxDimension(),PS.getRectanglesArea()/height*2);
+        width = Math.max(PS.getMaxDimension(),PS.getRectanglesArea()/height*3);
         
         //Rotate rectangles if neccesary
         double relativeSize = (PS.getContainerHeight() / 20);
@@ -99,9 +98,6 @@ public class GreedyCornerPack implements PackerStrategy{
       
         corners = new ArrayList<>();
         corners.add(new Point(0,0));
-
-        Arrays.sort(rectangles,new SortByArea());
-        Arrays.sort(rectangles,new SortByDecreasingWidth());
  
         for(Rectangle curRec : rectangles){
             boolean placed = false;

@@ -3,6 +3,8 @@ import java.awt.FileDialog;
 import java.awt.Frame;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.Arrays;
+import java.util.Comparator;
 import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -56,6 +58,20 @@ public class ProblemStatement{
     
     public int getMaxDimension(){
         return maxDimension;
+    }
+    
+    public ProblemStatement getSortedProblemStatement(Comparator<Rectangle> comparator){
+        Rectangle[] sortedrectangles = getRectangles();
+        Arrays.sort(sortedrectangles,comparator);   
+        
+        return new ProblemStatement(
+           containerHeight,
+           rotationAllowed,
+           rectangleAmount,
+           rectanglesArea,
+           maxDimension,
+           sortedrectangles
+        );
     }
     
     //DEEP COPY OF RECTANGLES, DO NOT TOUCH
