@@ -46,11 +46,15 @@ public class GreedyTrivialPack implements PackerStrategy{
     }
     
     @Override
-    public RectanglesContainer pack(ProblemStatement PS){
+    public boolean applicable(ProblemStatement PS){
         if(PS.getContainerHeight()==0){
-            System.out.println("GreedyTrivialPack is not applicable");
-            return new RectanglesContainer();
-        }
+            return false;
+        }   
+        return true;
+    }
+    
+    @Override
+    public RectanglesContainer pack(ProblemStatement PS){
         
         width = 10000;
         height = PS.getContainerHeight();

@@ -156,6 +156,10 @@ public class GUI extends javax.swing.JFrame {
             System.out.println("No strategy selected");
             return;
         }
+        if(!strategy.applicable(PS)){
+            System.out.println("Strategy not applicable to current problem");
+            return;
+        }
         
         long startTime = System.currentTimeMillis();
         RectanglesContainer packedRC = strategy.pack(PS);
@@ -178,6 +182,10 @@ public class GUI extends javax.swing.JFrame {
         }
         if(strategy instanceof AutoSelectPack){
             System.out.println("Evaluation should not be run with AutoSelect");
+            return;
+        }
+        if(!strategy.applicable(PS)){
+            System.out.println("Strategy not applicable to current problem");
             return;
         }
         

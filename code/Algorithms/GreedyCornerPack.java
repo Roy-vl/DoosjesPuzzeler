@@ -64,11 +64,17 @@ public class GreedyCornerPack implements PackerStrategy{
     }
     
     @Override
-    public RectanglesContainer pack(ProblemStatement PS){
+    public boolean applicable(ProblemStatement PS){
         if(PS.getContainerHeight()==0){
-            System.out.println("GreedyCornerPack is not applicable; problem has no preset container height.");
-            return new RectanglesContainer();
+            return false;
         }
+        
+        return true;
+    }
+    
+    
+    @Override
+    public RectanglesContainer pack(ProblemStatement PS){
         
         RC = new RectanglesContainer();
         RC.setForcedBoundingHeight(PS.getContainerHeight());

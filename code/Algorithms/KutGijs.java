@@ -74,6 +74,15 @@ public class KutGijs implements PackerStrategy{
     }
     
     @Override
+    public boolean applicable(ProblemStatement PS){
+        if(PS.getContainerHeight()==0){
+            return false;
+        }   
+        return true;
+    }
+    
+    
+    @Override
     public RectanglesContainer pack(ProblemStatement PS){
         bestRC = null;
         bestCost = Integer.MAX_VALUE;

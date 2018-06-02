@@ -1,6 +1,11 @@
 
 
 public class AutoSelectPack implements PackerStrategy{
+    
+    @Override
+    public boolean applicable(ProblemStatement PS){
+        return true;
+    }
  
     @Override
     public RectanglesContainer pack(ProblemStatement PS){

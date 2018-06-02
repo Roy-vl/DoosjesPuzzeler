@@ -1,11 +1,17 @@
 public class MultipleGreedyCornerPack implements PackerStrategy{
     
     @Override
-    public RectanglesContainer pack(ProblemStatement PS){
+    public boolean applicable(ProblemStatement PS){
         if(PS.getContainerHeight()>0){
-            System.out.println("MultipleGreedyCornerPack is not applicable; problem has a fixed container height.");
-            return new RectanglesContainer();
-        }
+            return false;
+        }   
+        return true;
+    }
+    
+    
+    @Override
+    public RectanglesContainer pack(ProblemStatement PS){
+        
         
         long startTime = System.currentTimeMillis();
         
