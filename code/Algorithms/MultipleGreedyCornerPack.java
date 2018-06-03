@@ -22,7 +22,7 @@ public class MultipleGreedyCornerPack implements PackerStrategy{
         
         for(Rectangle curRec : PS.getRectangles()){
             if(PS.getRotationAllowed()){
-                maximumHeight += Math.min(curRec.sx,curRec.sy);
+                maximumHeight += Math.max(curRec.sx,curRec.sy);
                 minimumHeight = Math.max(minimumHeight,Math.min(curRec.sx,curRec.sy));
             }else{
                 maximumHeight += curRec.getHeight();
