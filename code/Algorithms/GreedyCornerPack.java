@@ -10,12 +10,16 @@ public class GreedyCornerPack implements PackerStrategy{
     boolean[][] filledSpots;
     
     ArrayList<Point> corners; 
+    
+    public boolean checkSpot(int x, int y){
+        if(x<0 || y<0 || x>=width || y>=height) return true;
+        return filledSpots[x][y];
+    }
 
     public boolean canBePlacedAt(Point P, Rectangle R){
-        if(P.x+R.getWidth()>width || P.y+R.getHeight()>height) return false;//out of bounds
         for(int x = P.x; x < P.x+R.getWidth(); x++){
         for(int y = P.y; y < P.y+R.getHeight(); y++){
-            if(filledSpots[x][y]){
+            if(checkSpot(x,y)){
                 //First spot was filled, point is superfluous
                 if(x==P.x && y == P.y){
                     corners.remove(P);
@@ -37,8 +41,7 @@ public class GreedyCornerPack implements PackerStrategy{
     }
     
     public void addCorner(Point C){
-        if(C.x>=width || C.y>=height) return;//within bounds
-        if(filledSpots[C.x][C.y]) return;//not already filled
+        if(checkSpot(C.x,C.y)) return;//already filled corner
         corners.add(C);
     }
     

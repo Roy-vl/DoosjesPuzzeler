@@ -199,7 +199,7 @@ public class GUI extends javax.swing.JFrame {
         
         float ct = 0;
         float cfr = 0;
-        int tries = 10;
+        int tries = 100;
         for(int i=0;i<tries;i++){
             long startTime = System.currentTimeMillis();
             ProblemStatement sortedPS = PS.getSortedProblemStatement(comparator);
