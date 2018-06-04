@@ -96,12 +96,9 @@ public class GreedyCornerPack implements PackerStrategy{
                 }
             }
         }  
-        
-        Arrays.sort(rectangles, new SortByArea());
-        Arrays.sort(rectangles, new SortByDecreasingWidth());
 
         filledSpots = new boolean[width][height];
-        
+      
         corners = new ArrayList<>();
         corners.add(new Point(0,0));
  
