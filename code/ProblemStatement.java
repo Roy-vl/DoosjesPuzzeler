@@ -53,20 +53,6 @@ public class ProblemStatement{
         return maxDimension;
     }
     
-    public ProblemStatement getSortedProblemStatement(Comparator<Rectangle> comparator){
-        Rectangle[] sortedrectangles = getRectangles();
-        Arrays.sort(sortedrectangles,comparator);   
-        
-        return new ProblemStatement(
-           containerHeight,
-           rotationAllowed,
-           rectangleAmount,
-           rectanglesArea,
-           maxDimension,
-           sortedrectangles
-        );
-    }
-    
     //DEEP COPY OF RECTANGLES, DO NOT TOUCH
     public Rectangle[] getRectangles(){
         Rectangle[] clone = new Rectangle[rectangleAmount];
@@ -116,7 +102,7 @@ public class ProblemStatement{
         }
     }
     
-    public void generateRandomInput(int rectangleAmount, Boolean rotationAllowed, int containerHeight, int maxWidth, int maxHeight){
+    public void generateRandomInput(int rectangleAmount, boolean rotationAllowed, int containerHeight, int minWidth, int minHeight, int maxWidth, int maxHeight){
         this.rotationAllowed = rotationAllowed;
         this.containerHeight = containerHeight;
         this.rectangleAmount = rectangleAmount;
@@ -124,8 +110,8 @@ public class ProblemStatement{
         
         for(int i = 0; i < rectangleAmount; i++){
             Rectangle newRectangle = new Rectangle();
-            newRectangle.sx = (int)(Math.random()*maxWidth)+1;
-            newRectangle.sy = (int)(Math.random()*maxHeight)+1;
+            newRectangle.sx = (int)(Math.random()*maxWidth)+minWidth;
+            newRectangle.sy = (int)(Math.random()*maxHeight)+minHeight;
             newRectangle.id = i;
             rectangles[i] = newRectangle;
             rectanglesArea += newRectangle.getArea();
