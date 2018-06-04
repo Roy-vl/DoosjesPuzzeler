@@ -1,15 +1,24 @@
+
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.FileDialog;
 import java.awt.Frame;
+import java.awt.Image;
+import java.awt.Toolkit;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.Comparator;
 import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.imageio.ImageIO;
+import javax.swing.ImageIcon;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
 
 public class GUI extends javax.swing.JFrame {
-    
+
     ProblemStatement PS = null;
     PackerStrategy strategy = new AutoSelectPack();
     Comparator<Rectangle> comparator = new SortByArea();
@@ -19,10 +28,13 @@ public class GUI extends javax.swing.JFrame {
      */
     public GUI() {
         initComponents();
-        
+
         //Initialize Systemout Dump
         MessageConsole mc = new MessageConsole(SystemOut);
         mc.redirectOut(Color.green, System.out);
+
+        //Set image
+     
     }
 
     /**
@@ -41,6 +53,7 @@ public class GUI extends javax.swing.JFrame {
         EvaluateButton = new javax.swing.JButton();
         fileChooser = new javax.swing.JButton();
         SortSelector = new javax.swing.JComboBox<>();
+        WordArt = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
@@ -85,6 +98,8 @@ public class GUI extends javax.swing.JFrame {
             }
         });
 
+        WordArt.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Resize.png"))); // NOI18N
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -92,9 +107,10 @@ public class GUI extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(WordArt, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(AlgoSelector, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(fileChooser, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 357, Short.MAX_VALUE)
+                    .addComponent(jScrollPane1)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(PackButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -106,12 +122,14 @@ public class GUI extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
+                .addComponent(WordArt, javax.swing.GroupLayout.PREFERRED_SIZE, 116, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
                 .addComponent(fileChooser)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(AlgoSelector, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(SortSelector, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(PackButton, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(EvaluateButton, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -125,17 +143,17 @@ public class GUI extends javax.swing.JFrame {
 
     private void AlgoSelectorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AlgoSelectorActionPerformed
 
-        switch(AlgoSelector.getSelectedItem().toString()){
-            case "AutoSelect" :
+        switch (AlgoSelector.getSelectedItem().toString()) {
+            case "AutoSelect":
                 strategy = new AutoSelectPack();
                 break;
-            case "BackTrackCorner" :
+            case "BackTrackCorner":
                 strategy = new BacktrackCornerPack();
                 break;
-            case "GreedyCorner" :
+            case "GreedyCorner":
                 strategy = new GreedyCornerPack();
                 break;
-            case "MultipleGreedyCorner" :
+            case "MultipleGreedyCorner":
                 strategy = new MultipleGreedyCornerPack();
                 break;
             case "GreedyTrivial":
@@ -147,87 +165,87 @@ public class GUI extends javax.swing.JFrame {
     }//GEN-LAST:event_AlgoSelectorActionPerformed
 
     private void PackButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_PackButtonMouseClicked
-        if(PS==null){
+        if (PS == null) {
             System.out.println("No problem selected");
             return;
         }
-        if(strategy==null){
+        if (strategy == null) {
             System.out.println("No strategy selected");
             return;
         }
-        if(comparator==null){
+        if (comparator == null) {
             System.out.println("No comparator selected");
             return;
         }
-        if(!strategy.applicable(PS)){
+        if (!strategy.applicable(PS)) {
             System.out.println("Strategy not applicable to current problem");
             return;
         }
-        
+
         long startTime = System.currentTimeMillis();
         ProblemStatement sortedPS = PS.getSortedProblemStatement(comparator);
         RectanglesContainer packedRC = strategy.pack(sortedPS);
-        long estimatedTime = System.currentTimeMillis() - startTime;  
+        long estimatedTime = System.currentTimeMillis() - startTime;
 
         System.out.println("Packing time : " + estimatedTime + "ms");
-        
+
         packedRC.visualize();
     }//GEN-LAST:event_PackButtonMouseClicked
 
     private void EvaluateButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_EvaluateButtonMouseClicked
 
-        if(PS==null){
+        if (PS == null) {
             System.out.println("No PS selected");
             return;
         }
-        if(strategy==null){
+        if (strategy == null) {
             System.out.println("No strategy selected");
             return;
         }
-        if(comparator==null){
+        if (comparator == null) {
             System.out.println("No comparator selected");
             return;
         }
-        if(strategy instanceof AutoSelectPack){
+        if (strategy instanceof AutoSelectPack) {
             System.out.println("Evaluation should not be run with AutoSelect");
             return;
         }
-        if(!strategy.applicable(PS)){
+        if (!strategy.applicable(PS)) {
             System.out.println("Strategy not applicable to current problem");
             return;
         }
-        
+
         float ct = 0;
         float cfr = 0;
         int tries = 100;
-        for(int i=0;i<tries;i++){
+        for (int i = 0; i < tries; i++) {
             long startTime = System.currentTimeMillis();
             ProblemStatement sortedPS = PS.getSortedProblemStatement(comparator);
             RectanglesContainer packedRC = strategy.pack(sortedPS);
             long estimatedTime = System.currentTimeMillis() - startTime;
             ct += estimatedTime;
-            cfr += (float)(packedRC.getRectanglesArea())/packedRC.getBoundingArea();
+            cfr += (float) (packedRC.getRectanglesArea()) / packedRC.getBoundingArea();
         }
-        
-        System.out.println("Average time(ms) of "+tries+" runs: "+ct/tries);
-        System.out.println("Filling ratio of :"+cfr/tries);
+
+        System.out.println("Average time(ms) of " + tries + " runs: " + ct / tries);
+        System.out.println("Filling ratio of :" + cfr / tries);
     }//GEN-LAST:event_EvaluateButtonMouseClicked
 
     private void fileChooserMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_fileChooserMouseClicked
- 
+
         FileDialog dialog = new FileDialog((Frame) null, "Select File to Open");
         dialog.setMode(FileDialog.LOAD);
         dialog.setVisible(true);
         File[] files = dialog.getFiles();
         if (files != null && files.length > 0) {
-            for (File file : files) { 
+            for (File file : files) {
                 try {
                     fileChooser.setText(file.getName());
                     PS = new ProblemStatement();
                     PS.parseInput(new Scanner(file));
                 } catch (FileNotFoundException ex) {
                     Logger.getLogger(GUI.class.getName()).log(Level.SEVERE, null, ex);
-                }        
+                }
             }
         } else {
             fileChooser.setText("Choose problem");
@@ -238,17 +256,17 @@ public class GUI extends javax.swing.JFrame {
 
     private void SortSelectorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SortSelectorActionPerformed
 
-        switch(SortSelector.getSelectedItem().toString()){
-            case "Area" :
+        switch (SortSelector.getSelectedItem().toString()) {
+            case "Area":
                 comparator = new SortByArea();
                 break;
-            case "Id" :
+            case "Id":
                 comparator = new SortByID();
                 break;
-            case "Width" :
+            case "Width":
                 comparator = new SortByDecreasingWidth();
                 break;
-            case "Height" :
+            case "Height":
                 comparator = new SortByDecreasingHeight();
                 break;
             default:
@@ -297,6 +315,7 @@ public class GUI extends javax.swing.JFrame {
     private javax.swing.JButton PackButton;
     private javax.swing.JComboBox<String> SortSelector;
     private javax.swing.JTextArea SystemOut;
+    private javax.swing.JLabel WordArt;
     private javax.swing.JButton fileChooser;
     private javax.swing.JScrollPane jScrollPane1;
     // End of variables declaration//GEN-END:variables
