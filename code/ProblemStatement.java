@@ -14,7 +14,6 @@ public class ProblemStatement{
     private int         rectanglesArea;
     private int         maxDimension;
     private Rectangle[] rectangles;
-    private int         iteration;
     
     public ProblemStatement(){
         containerHeight = 0;
@@ -23,17 +22,15 @@ public class ProblemStatement{
         rectanglesArea = 0;
         maxDimension = 0 ;
         rectangles = new Rectangle[rectangleAmount];
-        iteration = 1;
     }
     
-    public ProblemStatement(int  _containerHeight, boolean _rotationAllowed, int  _rectangleAmount, int _totalRectangleArea, int  _maxDimension, Rectangle[] _rectangles, int _iteration){
+    public ProblemStatement(int  _containerHeight, boolean _rotationAllowed, int  _rectangleAmount, int _totalRectangleArea, int  _maxDimension, Rectangle[] _rectangles){
         containerHeight = _containerHeight;
         rotationAllowed = _rotationAllowed;
         rectangleAmount = _rectangleAmount;
         rectanglesArea = _totalRectangleArea;
         maxDimension = _maxDimension;
         rectangles = _rectangles;
-        iteration = _iteration;
     }
     
     public int getContainerHeight(){
@@ -56,28 +53,6 @@ public class ProblemStatement{
         return maxDimension;
     }
     
-
-    public int getIteration(){
-        return iteration;
-    }
-    
-    public ProblemStatement getSortedProblemStatement(Comparator<Rectangle> comparator){
-        Rectangle[] sortedrectangles = getRectangles();
-        Arrays.sort(sortedrectangles,comparator);   
-        
-        return new ProblemStatement(
-           containerHeight,
-           rotationAllowed,
-           rectangleAmount,
-           rectanglesArea,
-           maxDimension,
-           sortedrectangles,
-           iteration
-             
-        );
-    }
-    
-
     //DEEP COPY OF RECTANGLES, DO NOT TOUCH
     public Rectangle[] getRectangles(){
         Rectangle[] clone = new Rectangle[rectangleAmount];

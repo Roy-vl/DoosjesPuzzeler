@@ -78,7 +78,7 @@ public class MultipleGreedyCornerPack implements PackerStrategy{
                 PS.getRectanglesArea(),
                 PS.getMaxDimension(),
                 PS.getRectangles(),
-                PS.getIteration()
+
             );
 
             RectanglesContainer curRC = GCP.pack(curPS);

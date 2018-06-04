@@ -113,9 +113,9 @@ public class GreedyCornerPack implements PackerStrategy{
             }
             
             if(!placed){
-                //System.out.println("RECTANGLE "+curRec.id+" COULD NOT BE PLACED BY PLACING IT IN A CORNER REVERTING TO OTHER (SLOW) METHODS");
-                //System.out.println("Rectangle dimensions :"+curRec.getWidth()+","+curRec.getHeight());
-                //System.out.println("Container dimensions :"+width+","+height);
+                System.out.println("RECTANGLE "+curRec.id+" COULD NOT BE PLACED BY PLACING IT IN A CORNER REVERTING TO OTHER (SLOW) METHODS");
+                System.out.println("Rectangle dimensions :"+curRec.getWidth()+","+curRec.getHeight());
+                System.out.println("Container dimensions :"+width+","+height);
                 
                 //basically just tries to find the first free spot in leftness order (just as in GreedyTrivialPack)
                 Point P = corners.get(0).clone();
@@ -130,7 +130,7 @@ public class GreedyCornerPack implements PackerStrategy{
                         P.y = 0;
                     }
                 }            
-                //System.out.println("RECTANGLE "+curRec.id+" COULD BE PLACED BY REVERTING TO OTHER (SLOW) METHODS");
+                System.out.println("RECTANGLE "+curRec.id+" COULD BE PLACED BY REVERTING TO OTHER (SLOW) METHODS");
             }
         }
         
