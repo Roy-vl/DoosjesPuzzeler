@@ -56,6 +56,7 @@ public class ProblemStatement{
         return maxDimension;
     }
     
+
     public int getIteration(){
         return iteration;
     }
@@ -76,6 +77,7 @@ public class ProblemStatement{
         );
     }
     
+
     //DEEP COPY OF RECTANGLES, DO NOT TOUCH
     public Rectangle[] getRectangles(){
         Rectangle[] clone = new Rectangle[rectangleAmount];
@@ -125,7 +127,7 @@ public class ProblemStatement{
         }
     }
     
-    public void generateRandomInput(int rectangleAmount, Boolean rotationAllowed, int containerHeight, int maxWidth, int maxHeight){
+    public void generateRandomInput(int rectangleAmount, Boolean rotationAllowed, int containerHeight, int minWidth, int maxWidth, int minHeight, int maxHeight){
         this.rotationAllowed = rotationAllowed;
         this.containerHeight = containerHeight;
         this.rectangleAmount = rectangleAmount;
@@ -133,8 +135,8 @@ public class ProblemStatement{
         
         for(int i = 0; i < rectangleAmount; i++){
             Rectangle newRectangle = new Rectangle();
-            newRectangle.sx = (int)(Math.random()*maxWidth)+1;
-            newRectangle.sy = (int)(Math.random()*maxHeight)+1;
+            newRectangle.sx = (int)(Math.random()*maxWidth)+minWidth;
+            newRectangle.sy = (int)(Math.random()*maxHeight)+minHeight;
             newRectangle.id = i;
             rectangles[i] = newRectangle;
             rectanglesArea += newRectangle.getArea();
@@ -142,8 +144,8 @@ public class ProblemStatement{
         
     }
     
-    public void prlong(){
-        //prlong output
+    public void print(){
+        //print output
         System.out.println("container height: "+(containerHeight==0?"free":("fixed "+containerHeight)));
         System.out.println("rotations allowed: "+(rotationAllowed?"yes":"no"));
         System.out.println("number of rectangles: "+rectangleAmount);

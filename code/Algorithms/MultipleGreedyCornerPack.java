@@ -1,3 +1,24 @@
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+
+
+class PotHeight{
+    int potHeight;
+    int potCost;
+    PotHeight(int h, int c){
+        potHeight = h;
+        potCost = c;
+    }
+}
+
+class SortPotentials implements Comparator<PotHeight> {
+    public int compare(PotHeight a, PotHeight b) {
+        return a.potCost - b.potCost;
+    }
+}
+
+
 public class MultipleGreedyCornerPack implements PackerStrategy{
     
     @Override
@@ -34,16 +55,24 @@ public class MultipleGreedyCornerPack implements PackerStrategy{
         
         RectanglesContainer bestRC = null;
         int bestCost = Integer.MAX_VALUE;
-
+        
+        ArrayList<PotHeight> potentials = new ArrayList<>();
         for(int h=minimumHeight;h<=maximumHeight; h++){
+            PotHeight p = new PotHeight(h, h-rectanglesArea%h);
+            potentials.add(p);
+        }
+        
+        Collections.sort(potentials, new SortPotentials());
+
+        for(PotHeight p : potentials){
 
             //pruning
-            if(h-rectanglesArea%h>bestCost) continue;
+            if(p.potCost>bestCost) continue;
             
             if((System.currentTimeMillis() - startTime) > 20000) break; 
             
             ProblemStatement curPS = new ProblemStatement(
-                h,
+                p.potHeight,
                 PS.getRotationAllowed(),
                 PS.getRectangleAmount(),
                 PS.getRectanglesArea(),
