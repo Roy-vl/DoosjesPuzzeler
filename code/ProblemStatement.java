@@ -133,8 +133,8 @@ public class ProblemStatement{
         
     }
     
-    public void print(){
-        //print output
+    public void prlong(){
+        //prlong output
         System.out.println("container height: "+(containerHeight==0?"free":("fixed "+containerHeight)));
         System.out.println("rotations allowed: "+(rotationAllowed?"yes":"no"));
         System.out.println("number of rectangles: "+rectangleAmount);
