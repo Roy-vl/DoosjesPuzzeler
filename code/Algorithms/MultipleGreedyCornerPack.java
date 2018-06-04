@@ -4,7 +4,7 @@ import java.util.Comparator;
 
 
 class PotHeight{
-   int potHeight;
+    int potHeight;
     int potCost;
     PotHeight(int h, int c){
         potHeight = h;
