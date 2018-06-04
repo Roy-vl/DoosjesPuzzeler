@@ -1,25 +1,12 @@
-
-import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.FileDialog;
 import java.awt.Frame;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.GridBagLayout;
-import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.ImageIcon;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.WindowConstants;
-import javax.swing.border.EmptyBorder;
+
 
 public class GUI extends javax.swing.JFrame {
     
@@ -191,7 +178,7 @@ public class GUI extends javax.swing.JFrame {
         
         float ct = 0;
         float cfr = 0;
-        int tries = 10;
+        int tries = 100;
         for(int i=0;i<tries;i++){
             long startTime = System.currentTimeMillis();
             RectanglesContainer packedRC = strategy.pack(PS);

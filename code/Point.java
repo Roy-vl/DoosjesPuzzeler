@@ -28,7 +28,7 @@ class SortByLeftness implements Comparator<Point>
 {
     public int compare(Point a, Point b)
     {
-        return a.x*100000+a.y - (b.x*100000+b.y);
+        return a.x*2000+a.y - (b.x*2000+b.y);
     }
 }
 

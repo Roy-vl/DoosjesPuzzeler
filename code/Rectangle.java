@@ -3,7 +3,8 @@ import java.util.Comparator;
 
 public class Rectangle {
     int id;
-    int px,py,sx,sy;
+    int px,py;
+    int sx,sy;
     boolean rotated;
     
     public Rectangle(){
@@ -21,7 +22,7 @@ public class Rectangle {
         return clone;
     }
     
-    public Rectangle(int _id, int _px, int _py, int _sx, int _sy, boolean _rotated){
+    public Rectangle(int _id, int _px, int _py, int  _sx, int _sy, boolean _rotated){
         id=_id;
         px=_px;
         py=_py;
@@ -43,10 +44,10 @@ public class Rectangle {
     }
     
     public int getAntiSquariness(){
-        return (int)(sx>sy ? (float)sx/sy: (float)sy/sx);
+        return (int )(sx>sy ? (float)sx/sy: (float)sy/sx);
     }
     
-    public int getPackingScore(){
+    public int  getPackingScore(){
         int score;
         score = 1000*getArea()+10*getHeight()+getWidth();
         return score;

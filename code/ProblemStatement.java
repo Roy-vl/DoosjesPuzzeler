@@ -1,11 +1,5 @@
 
-import java.awt.FileDialog;
-import java.awt.Frame;
-import java.io.File;
-import java.io.FileNotFoundException;
 import java.util.Scanner;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /*
 ProblemStatement is purely used for parsing the input and storing that data.
@@ -29,7 +23,7 @@ public class ProblemStatement{
         rectangles = new Rectangle[rectangleAmount];
     }
     
-    public ProblemStatement(int _containerHeight, boolean _rotationAllowed, int _rectangleAmount, int _totalRectangleArea, int _maxDimension, Rectangle[] _rectangles){
+    public ProblemStatement(int  _containerHeight, boolean _rotationAllowed, int  _rectangleAmount, int _totalRectangleArea, int  _maxDimension, Rectangle[] _rectangles){
         containerHeight = _containerHeight;
         rotationAllowed = _rotationAllowed;
         rectangleAmount = _rectangleAmount;
@@ -124,8 +118,8 @@ public class ProblemStatement{
         
     }
     
-    public void print(){
-        //print output
+    public void prlong(){
+        //prlong output
         System.out.println("container height: "+(containerHeight==0?"free":("fixed "+containerHeight)));
         System.out.println("rotations allowed: "+(rotationAllowed?"yes":"no"));
         System.out.println("number of rectangles: "+rectangleAmount);
