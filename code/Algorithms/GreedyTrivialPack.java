@@ -82,8 +82,6 @@ public class GreedyTrivialPack implements PackerStrategy{
         if(PS.getRotationAllowed()){
             for(Rectangle curRec : rectangles) if(curRec.sy > curRec.sx) curRec.rotated = true;
         }
-        Arrays.sort(rectangles,new SortByArea());
-        Arrays.sort(rectangles,new SortByDecreasingWidth());
         
         for(Rectangle curRec : rectangles){
 

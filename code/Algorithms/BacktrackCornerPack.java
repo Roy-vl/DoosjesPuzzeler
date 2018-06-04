@@ -135,7 +135,6 @@ public class BacktrackCornerPack implements PackerStrategy{
         if(PS.getRectangleAmount()>10){
             return false;
         }
-        
         return true;
     }
     
