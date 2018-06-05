@@ -35,32 +35,18 @@ public class MultipleGreedyCornerPack implements PackerStrategy{
         
         
         long startTime = System.currentTimeMillis();
-        
-        int maximumHeight = 0;
-        int minimumHeight = 0;
-        int minimumWidth = 0;
-        
+  
+        int minimumHeight = PS.getMinPosContainerHeight();
+        int maximumHeight = PS.getRectanglesArea()/PS.getMinPosContainerWidth();
         int rectanglesArea = PS.getRectanglesArea();
-        
-        for(Rectangle curRec : PS.getRectangles()){
-            if(PS.getRotationAllowed()){
-                maximumHeight += Math.max(curRec.sx,curRec.sy);
-                minimumHeight = Math.max(minimumHeight,Math.min(curRec.sx,curRec.sy));
-                minimumWidth = Math.max(Math.min(curRec.sx,curRec.sy), minimumWidth);
-            }else{
-                maximumHeight += curRec.getHeight();
-                minimumHeight = Math.max(minimumHeight,curRec.getHeight());
-                minimumWidth = Math.max(curRec.getWidth(), minimumWidth);
-            }
-        }
-        
+
         PackerStrategy GCP = new GreedyCornerPack();
         
         RectanglesContainer bestRC = null;
         int bestCost = Integer.MAX_VALUE;
         
         ArrayList<PotHeight> potentials = new ArrayList<>();
-        for(int h=minimumHeight;h<=(rectanglesArea/minimumWidth); h++){
+        for(int h=minimumHeight;h<=maximumHeight ; h++){
             PotHeight p = new PotHeight(h, (h-rectanglesArea%h)%h);
             potentials.add(p);
         }
@@ -78,8 +64,6 @@ public class MultipleGreedyCornerPack implements PackerStrategy{
                 p.potHeight,
                 PS.getRotationAllowed(),
                 PS.getRectangleAmount(),
-                PS.getRectanglesArea(),
-                PS.getMaxDimension(),
                 PS.getRectangles()
             );
 

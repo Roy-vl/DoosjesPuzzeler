@@ -62,7 +62,7 @@ public class GreedyCornerPack implements PackerStrategy{
         RC.addRectangle(R);
         fillSpots(R);
         addCorner(newCor1);
-        addCorner(newCor2);
+        addCorner(newCor2);        
         corners.remove(C);
     }
     
@@ -78,20 +78,20 @@ public class GreedyCornerPack implements PackerStrategy{
     @Override
     public RectanglesContainer pack(ProblemStatement PS){
         
-        RC = new RectanglesContainer();
+        RC = new RectanglesContainer();        
         RC.setForcedBoundingHeight(PS.getContainerHeight());
         
         Rectangle[] rectangles = PS.getRectangles();
         
         height = PS.getContainerHeight();
-        width = Math.max(PS.getMaxDimension(),PS.getRectanglesArea()/height*3);
+        width = Math.max(PS.getMinPosContainerWidth(),PS.getRectanglesArea()/height*3);
         
         //Rotate rectangles if neccesary
         double relativeSize = (PS.getContainerHeight() / 20);
         int relativeS = (int) relativeSize;
         if(PS.getRotationAllowed()){
             for(Rectangle curRec : rectangles){           
-                if((curRec.sy > curRec.sx && curRec.sy > relativeS) || curRec.sy > height){
+                if((curRec.sy > curRec.sx && curRec.sy > relativeS) || curRec.sy > height || curRec.sx > width){
                     curRec.rotated = true;
                 }
             }
@@ -122,9 +122,10 @@ public class GreedyCornerPack implements PackerStrategy{
             }
             
             if(!placed){
-                //System.out.println("RECTANGLE "+curRec.id+" COULD NOT BE PLACED BY PLACING IT IN A CORNER REVERTING TO OTHER (SLOW) METHODS");
-                //System.out.println("Rectangle dimensions :"+curRec.getWidth()+","+curRec.getHeight());
-                //System.out.println("Container dimensions :"+width+","+height);
+                System.out.println("RECTANGLE "+curRec.id+" COULD NOT BE PLACED BY PLACING IT IN A CORNER REVERTING TO OTHER (SLOW) METHODS");
+                System.out.println("Rectangle dimensions :"+curRec.getWidth()+","+curRec.getHeight());
+                System.out.println("Rectangle rotated :"+curRec.rotated);
+                System.out.println("Container dimensions :"+width+","+height);
                 
                 //basically just tries to find the first free spot in leftness order (just as in GreedyTrivialPack)
                 Point P = corners.get(0).clone();
@@ -139,7 +140,7 @@ public class GreedyCornerPack implements PackerStrategy{
                         P.y = 0;
                     }
                 }            
-                //System.out.println("RECTANGLE "+curRec.id+" COULD BE PLACED BY REVERTING TO OTHER (SLOW) METHODS");
+                System.out.println("RECTANGLE "+curRec.id+" COULD BE PLACED BY REVERTING TO OTHER (SLOW) METHODS");
             }
         }
         

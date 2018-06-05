@@ -1,5 +1,3 @@
-import java.util.Arrays;
-import java.util.Comparator;
 import java.util.Scanner;
 
 /*
@@ -8,29 +6,63 @@ NO changing is allowed.
 */
 
 public class ProblemStatement{
+    //actual problem statement
     private int         containerHeight;
     private boolean     rotationAllowed;
     private int         rectangleAmount;
-    private int         rectanglesArea;
-    private int         maxDimension;
     private Rectangle[] rectangles;
+    
+    //helpers
+    private int rectanglesArea;
+    private int minPosContainerWidth;
+    private int minPosContainerHeight;
+    private int maxPosContainerWidth; 
+    private int maxPosContainerHeight;
+    
     
     public ProblemStatement(){
         containerHeight = 0;
         rotationAllowed = false;
         rectangleAmount = 0;
-        rectanglesArea = 0;
-        maxDimension = 0 ;
         rectangles = new Rectangle[rectangleAmount];
+        
+        rectanglesArea = 0;
+        minPosContainerWidth = 0;
+        minPosContainerHeight = 0;
+        maxPosContainerWidth = 0;
+        maxPosContainerHeight = 0;       
     }
     
-    public ProblemStatement(int  _containerHeight, boolean _rotationAllowed, int  _rectangleAmount, int _totalRectangleArea, int  _maxDimension, Rectangle[] _rectangles){
+    public ProblemStatement(int  _containerHeight, boolean _rotationAllowed, int  _rectangleAmount, Rectangle[] _rectangles){
         containerHeight = _containerHeight;
         rotationAllowed = _rotationAllowed;
         rectangleAmount = _rectangleAmount;
-        rectanglesArea = _totalRectangleArea;
-        maxDimension = _maxDimension;
         rectangles = _rectangles;
+        
+        calculateHelpers();
+    }
+    
+    public void calculateHelpers(){
+        rectanglesArea = 0;
+        minPosContainerWidth = 0;
+        minPosContainerHeight = 0;
+        maxPosContainerWidth = 0;
+        maxPosContainerHeight = 0;
+        
+        for(Rectangle R : rectangles){
+            rectanglesArea += R.getArea();
+            if(rotationAllowed){
+                minPosContainerWidth = Math.max(minPosContainerWidth, Math.min(R.sx,R.sy));
+                minPosContainerHeight = Math.max(minPosContainerHeight, Math.min(R.sx,R.sy));
+                maxPosContainerWidth += Math.max(R.sx,R.sy);
+                maxPosContainerHeight += Math.max(R.sx,R.sy);;
+            }else{
+                minPosContainerWidth = Math.max(minPosContainerWidth, R.getWidth());
+                minPosContainerHeight = Math.max(minPosContainerHeight, R.getHeight());
+                maxPosContainerWidth += R.getWidth();
+                maxPosContainerHeight += R.getHeight();
+            }
+        }
     }
     
     public int getContainerHeight(){
@@ -48,9 +80,21 @@ public class ProblemStatement{
     public int getRectanglesArea(){
         return rectanglesArea;
     }
-    
-    public int getMaxDimension(){
-        return maxDimension;
+   
+    public int getMinPosContainerWidth() {
+        return minPosContainerWidth;
+    }
+
+    public int getMinPosContainerHeight() {
+        return minPosContainerHeight;
+    }
+
+    public int getMaxPosContainerWidth() {
+        return maxPosContainerWidth;
+    }
+
+    public int getMaxPosContainerHeight() {
+        return maxPosContainerHeight;
     }
     
     //DEEP COPY OF RECTANGLES, DO NOT TOUCH
@@ -65,8 +109,6 @@ public class ProblemStatement{
         containerHeight = 0;
         rotationAllowed = false;
         rectangleAmount = 0;
-        rectanglesArea = 0;
-        maxDimension = 0;
         rectangles = new Rectangle[rectangleAmount];
         
         //parse containerheight
@@ -97,9 +139,9 @@ public class ProblemStatement{
             newRectangle.sy = scanner.nextInt();
             newRectangle.id = i;
             rectangles[i] = newRectangle;
-            rectanglesArea += newRectangle.getArea();
-            maxDimension = Math.max(maxDimension, Math.max(newRectangle.sx,newRectangle.sy));
         }
+        
+        calculateHelpers();
     }
     
     public void generateRandomInput(int rectangleAmount, Boolean rotationAllowed, int containerHeight, int minWidth, int maxWidth, int minHeight, int maxHeight){
@@ -114,9 +156,9 @@ public class ProblemStatement{
             newRectangle.sy = (int)(Math.random()*maxHeight)+minHeight;
             newRectangle.id = i;
             rectangles[i] = newRectangle;
-            rectanglesArea += newRectangle.getArea();
         }
         
+        calculateHelpers();
     }
     
     public void print(){

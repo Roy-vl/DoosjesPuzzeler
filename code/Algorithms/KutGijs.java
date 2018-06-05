@@ -88,7 +88,7 @@ public class KutGijs implements PackerStrategy{
         bestCost = Integer.MAX_VALUE;
         
         height = PS.getContainerHeight();
-        width = Math.max(PS.getMaxDimension(),PS.getRectanglesArea()/height*2);
+        width = Math.max(PS.getMinPosContainerWidth(),PS.getRectanglesArea()/height*3);
         Rectangle[] rectangles = PS.getRectangles();
         
         for( int r = 0; r < rectangles.length; r++){
