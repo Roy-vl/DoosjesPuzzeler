@@ -46,11 +46,11 @@ public class MultipleGreedyCornerPack implements PackerStrategy{
             if(PS.getRotationAllowed()){
                 maximumHeight += Math.max(curRec.sx,curRec.sy);
                 minimumHeight = Math.max(minimumHeight,Math.min(curRec.sx,curRec.sy));
-                minimumWidth = Math.max(curRec.sx, minimumWidth);
+                minimumWidth = Math.max(Math.min(curRec.sx,curRec.sy), minimumWidth);
             }else{
                 maximumHeight += curRec.getHeight();
                 minimumHeight = Math.max(minimumHeight,curRec.getHeight());
-                minimumWidth = Math.max(curRec.sx, minimumWidth);
+                minimumWidth = Math.max(curRec.getWidth(), minimumWidth);
             }
         }
         
@@ -61,7 +61,7 @@ public class MultipleGreedyCornerPack implements PackerStrategy{
         
         ArrayList<PotHeight> potentials = new ArrayList<>();
         for(int h=minimumHeight;h<=(rectanglesArea/minimumWidth); h++){
-            PotHeight p = new PotHeight(h, h-rectanglesArea%h);
+            PotHeight p = new PotHeight(h, (h-rectanglesArea%h)%h);
             potentials.add(p);
         }
         
@@ -70,10 +70,7 @@ public class MultipleGreedyCornerPack implements PackerStrategy{
         for(PotHeight p : potentials){
 
             //pruning
-            if(p.potCost>=bestCost) {
-                System.out.println("prunned");
-                break;
-            }
+            if(p.potCost>=bestCost) continue;
             
             if((System.currentTimeMillis() - startTime) > 20000) break; 
             
