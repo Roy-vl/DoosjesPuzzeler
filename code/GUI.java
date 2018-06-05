@@ -148,11 +148,11 @@ public class GUI extends javax.swing.JFrame {
             return;
         }
         
-        long startTime = System.currentTimeMillis();
+        long startTime = System.nanoTime();
         RectanglesContainer packedRC = strategy.pack(PS);
-        long estimatedTime = System.currentTimeMillis() - startTime;  
+        long estimatedTime = System.nanoTime() - startTime;  
 
-        System.out.println("Packing time : " + estimatedTime + "ms");
+        System.out.println("Packing time : " + (double)(estimatedTime)/1000000 + "ms");
         
         packedRC.visualize();
     }//GEN-LAST:event_PackButtonMouseClicked
@@ -176,18 +176,18 @@ public class GUI extends javax.swing.JFrame {
             return;
         }
         
-        float ct = 0;
-        float cfr = 0;
+        double ct = 0;
+        double cfr = 0;
         int tries = 100;
         for(int i=0;i<tries;i++){
-            long startTime = System.currentTimeMillis();
+            long startTime = System.nanoTime();
             RectanglesContainer packedRC = strategy.pack(PS);
-            long estimatedTime = System.currentTimeMillis() - startTime;
+            long estimatedTime = System.nanoTime() - startTime;
             ct += estimatedTime;
             cfr += (float)(packedRC.getRectanglesArea())/packedRC.getBoundingArea();
         }
         
-        System.out.println("Average time(ms) of "+tries+" runs: "+ct/tries);
+        System.out.println("Average time(ms) of "+tries+" runs: "+ct/tries/1000000);
         System.out.println("Filling ratio of :"+cfr/tries);
     }//GEN-LAST:event_EvaluateButtonMouseClicked
 
