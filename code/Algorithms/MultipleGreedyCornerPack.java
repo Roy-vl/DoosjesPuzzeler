@@ -38,6 +38,7 @@ public class MultipleGreedyCornerPack implements PackerStrategy{
         
         int maximumHeight = 0;
         int minimumHeight = 0;
+        int minimumWidth = 0;
         
         int rectanglesArea = PS.getRectanglesArea();
         
@@ -45,9 +46,11 @@ public class MultipleGreedyCornerPack implements PackerStrategy{
             if(PS.getRotationAllowed()){
                 maximumHeight += Math.max(curRec.sx,curRec.sy);
                 minimumHeight = Math.max(minimumHeight,Math.min(curRec.sx,curRec.sy));
+                minimumWidth = Math.max(curRec.sx, minimumWidth);
             }else{
                 maximumHeight += curRec.getHeight();
                 minimumHeight = Math.max(minimumHeight,curRec.getHeight());
+                minimumWidth = Math.max(curRec.sx, minimumWidth);
             }
         }
         
@@ -57,7 +60,7 @@ public class MultipleGreedyCornerPack implements PackerStrategy{
         int bestCost = Integer.MAX_VALUE;
         
         ArrayList<PotHeight> potentials = new ArrayList<>();
-        for(int h=minimumHeight;h<=maximumHeight; h++){
+        for(int h=minimumHeight;h<=(rectanglesArea/minimumWidth); h++){
             PotHeight p = new PotHeight(h, h-rectanglesArea%h);
             potentials.add(p);
         }
@@ -67,7 +70,10 @@ public class MultipleGreedyCornerPack implements PackerStrategy{
         for(PotHeight p : potentials){
 
             //pruning
-            if(p.potCost>bestCost) continue;
+            if(p.potCost>=bestCost) {
+                System.out.println("prunned");
+                break;
+            }
             
             if((System.currentTimeMillis() - startTime) > 20000) break; 
             
@@ -81,17 +87,14 @@ public class MultipleGreedyCornerPack implements PackerStrategy{
             );
 
             RectanglesContainer curRC = GCP.pack(curPS);
-            
             int curCost = curRC.getCost();
+            
             if(curCost<bestCost){
                 bestCost = curCost;
                 bestRC = curRC.clone();
-                
                 if(bestCost==0) break;
             } 
- 
         }
-       
         return bestRC;
     }
 }
