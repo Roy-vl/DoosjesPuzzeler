@@ -77,7 +77,7 @@ public class MultipleGreedyCornerPack implements PackerStrategy{
                 PS.getRectangleAmount(),
                 PS.getRectanglesArea(),
                 PS.getMaxDimension(),
-                PS.getRectangles(),
+                PS.getRectangles()
 
             );
 

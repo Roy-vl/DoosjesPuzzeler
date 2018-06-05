@@ -17,7 +17,7 @@ public class AutoSelectPack implements PackerStrategy{
         Rectangle[] rectangles = PS.getRectangles();
         if(PS.getRotationAllowed()){
             for(Rectangle curRec : rectangles){           
-                if((curRec.sy > curRec.sx && curRec.sy > relativeS) || curRec.sy > PS.getContainerHeight()){
+                if((curRec.sy > curRec.sx && curRec.sy > relativeS) || (curRec.sy > PS.getContainerHeight())){
                     curRec.rotated = true;
                 }
             }
@@ -47,13 +47,13 @@ public class AutoSelectPack implements PackerStrategy{
                     System.out.println("Choosed GreedyCornerPack");
                     
                     ProblemStatement sortedPS = new ProblemStatement(
-                        PS.containerHeight,
-                        PS.rotationAllowed,
-                        PS.rectangleAmount,
-                        PS.rectanglesArea,
-                        PS.maxDimension,
+                        PS.getContainerHeight(),
+                        PS.getRotationAllowed(),
+                        PS.getRectangleAmount(),
+                        PS.getRectanglesArea(),
+                        PS.getMaxDimension(),
                         rectangles
-                    )
+                    );
                     
                     return new GreedyCornerPack().pack(PS);               
                 }

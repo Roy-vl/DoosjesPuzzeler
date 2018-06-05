@@ -98,6 +98,9 @@ public class GreedyCornerPack implements PackerStrategy{
  
         for(Rectangle curRec : rectangles){
             boolean placed = false;
+            if (curRec.getHeight() > height){
+                curRec.rotated = !curRec.rotated;
+            }
             
             Collections.sort(corners, new SortByLeftness());
      
