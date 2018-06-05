@@ -28,8 +28,12 @@ public class AutoSelectPack implements PackerStrategy{
             return new BacktrackCornerPack().pack(PS);
         }     
         
-        for(int sorting = 1; sorting <= 3; sorting++){
-            switch (sorting){
+        RectanglesContainer bestRC = new RectanglesContainer();
+        int bestCost = Integer.MAX_VALUE;
+        RectanglesContainer curRC;
+        
+        for(int sorting = 1; sorting <= 3; sorting++) {
+            switch (sorting) {
                 case 1:
                     Arrays.sort(rectangles, new SortByArea());
                     break;
@@ -43,26 +47,39 @@ public class AutoSelectPack implements PackerStrategy{
                     break;
             }
 
-                if(PS.getContainerHeight()>0){
-                    System.out.println("Choosed GreedyCornerPack");
-                    
-                    ProblemStatement sortedPS = new ProblemStatement(
+            if (PS.getContainerHeight() > 0) {
+                System.out.println("Choosed GreedyCornerPack, with sorting: " + sorting);
+
+                ProblemStatement sortedPS = new ProblemStatement(
                         PS.getContainerHeight(),
                         PS.getRotationAllowed(),
                         PS.getRectangleAmount(),
                         PS.getRectanglesArea(),
                         PS.getMaxDimension(),
                         rectangles
-                    );
-                    
-                    return new GreedyCornerPack().pack(PS);               
-                }
+                );
 
-                System.out.println("Choosed MultipleGreedyCornerPack");
-                return new MultipleGreedyCornerPack().pack(PS);
-        
+                curRC = new GreedyCornerPack().pack(sortedPS);
+            } else {
+
+                System.out.println("Choosed MultipleGreedyCornerPack, with sorting: " + sorting);
+                ProblemStatement sortedPS = new ProblemStatement(
+                        PS.getContainerHeight(),
+                        PS.getRotationAllowed(),
+                        PS.getRectangleAmount(),
+                        PS.getRectanglesArea(),
+                        PS.getMaxDimension(),
+                        rectangles
+                );
+                curRC = new MultipleGreedyCornerPack().pack(sortedPS);
+            }
+
+            if (curRC.getCost() < bestCost) {
+                bestCost = curRC.getCost();
+                bestRC = curRC;
+                System.out.println("sorting: "+sorting+" gave score: "+bestCost);
+            }
         }
-        
-        return new RectanglesContainer();
+        return bestRC;
     }
 }
