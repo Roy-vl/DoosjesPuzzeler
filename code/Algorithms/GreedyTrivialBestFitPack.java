@@ -2,14 +2,6 @@
 import java.util.ArrayList;
 import java.util.Arrays;
 
-class RectanglePlus extends Rectangle{
-    boolean placed;
-    
-    public void place() {
-        placed = true;
-    }
-}
-
 public class GreedyTrivialBestFitPack implements PackerStrategy {
 
     int width;
@@ -57,53 +49,27 @@ public class GreedyTrivialBestFitPack implements PackerStrategy {
         Rectangle bestRec = new Rectangle();
         int bestcost = Integer.MAX_VALUE;
         for (Rectangle curRec : rects) {
-            for (int j = 0; j < 2; j++) {
-                
-                if (PS.getRotationAllowed() && j == 2){
-                    curRec.rotated = !curRec.rotated;
-                    if (!canBePlacedAt(x, y, curRec)) {
-                        curRec.rotated = !curRec.rotated;
-                        continue;
-                    }
-                } else {
-                }
-                
-                //calculate the exces room after placement
-                int topRightSpace = 0;
-                int bottomRightSpace = 0;
-                int leftBottomSpace = 0;
-                int rightBottomSpace = 0;
-                
-                for (int i = x + curRec.getWidth(); i < x + 50; i++) {
-                    if (!spots[i][y].filled) {
-                        topRightSpace++;
-                    }
-                }
-                for (int i = x + curRec.getWidth(); i < x + 50; i++) {
-                    if (!spots[i][Math.min(PS.getContainerHeight()-1, y + curRec.getHeight())].filled) {
-                        bottomRightSpace++;
-                    }
-                }
-                for (int i = y + curRec.getHeight(); i < Math.min(y + curRec.getHeight() + 50, PS.getContainerHeight()); i++) {
-                    if (!spots[x][i].filled) {
-                        leftBottomSpace++;
-                    }
-                }
-                for (int i = y + curRec.getHeight(); i < Math.min(y + curRec.getHeight() + 50, PS.getContainerHeight()); i++) {
-                    if (!spots[x + curRec.getWidth()][i].filled) {
-                        rightBottomSpace++;
-                    }
-                }
-
-                //remember the "tightest" fit with the current ratio
-                if (topRightSpace + bottomRightSpace + fitRatio * leftBottomSpace + rightBottomSpace < bestcost) {
-                    if (canBePlacedAt(x, y, curRec)) {
-                        bestcost = topRightSpace + bottomRightSpace + (int) fitRatio * leftBottomSpace + rightBottomSpace;
-                        bestRec = curRec;
-                    }
+            //calculate the exces room after placement
+            int rightSpace = 0;
+            int bottomSpace = 0;
+            for (int i = x + curRec.getWidth(); i < x + 50; i++) {
+                if (!spots[i][y].filled) {
+                    rightSpace++;
                 }
             }
-            
+            for (int i = y + curRec.getHeight(); i < Math.min(y + curRec.getHeight() + 50, PS.getContainerHeight()); i++) {
+                if (!spots[x][i].filled) {
+                    bottomSpace++;
+                }
+            }
+
+            //remember the "tightest" fit with the current ratio
+            if (rightSpace + fitRatio * bottomSpace < bestcost) {
+                if (canBePlacedAt(x, y, curRec)) {
+                    bestcost = rightSpace + (int) fitRatio * bottomSpace;
+                    bestRec = curRec;
+                }
+            }
         }
         return bestRec;
     }
@@ -115,7 +81,7 @@ public class GreedyTrivialBestFitPack implements PackerStrategy {
         int bestCost = Integer.MAX_VALUE;
                 
         //try packing for differnt ratio of importance between hight and width
-        for (double ratio = 0.5; ratio <= 2.5; ratio = ratio + 0.25) {
+        for (double ratio = 0.5; ratio <= 2.5; ratio = ratio + 0.05) {
             fitRatio = ratio;
             width = 10000;
             height = PS.getContainerHeight();
@@ -200,6 +166,7 @@ public class GreedyTrivialBestFitPack implements PackerStrategy {
                     System.out.println("Container dimensions :" + width + "," + height);
                 }
             }
+                System.out.println("current ratio cost combo: "+ratio+" with cost: "+RC.getCost());
             if (RC.getCost() < bestCost){
                 bestRC = RC;
                 bestCost = RC.getCost();

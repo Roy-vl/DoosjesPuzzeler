@@ -140,7 +140,7 @@ public class GreedyCornerPack implements PackerStrategy{
                         P.y = 0;
                     }
                 }            
-                System.out.println("RECTANGLE "+curRec.id+" COULD BE PLACED BY REVERTING TO OTHER (SLOW) METHODS");
+                //System.out.println("RECTANGLE "+curRec.id+" COULD BE PLACED BY REVERTING TO OTHER (SLOW) METHODS");
             }
         }
         
