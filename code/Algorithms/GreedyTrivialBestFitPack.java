@@ -113,12 +113,12 @@ public class GreedyTrivialBestFitPack implements PackerStrategy {
                 toPlace.add(curRec);
             }
 
+            //Rotate rectangles if neccesary
+            double relativeSize = (PS.getContainerHeight() / 20);
+            int relativeS = (int) relativeSize;
             if (PS.getRotationAllowed()) {
                 for (Rectangle curRec : rectangles) {
-                    if (curRec.rotated && curRec.sx > height) {
-                        curRec.rotated = false;
-                    }
-                    if (!curRec.rotated && curRec.sy > height) {
+                    if ((curRec.sy > curRec.sx && curRec.sy > relativeS) || curRec.sy > height || curRec.sx > width) {
                         curRec.rotated = true;
                     }
                 }
