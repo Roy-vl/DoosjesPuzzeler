@@ -226,10 +226,7 @@ public class QuadTree {
         float my = (container_bound.y1+container_bound.y2)/2;  
         
         //create children
-        /*
         tl = new QuadTree(container_bound.x1,container_bound.y1,mx                ,my                );
-        */
-        tl = new QuadTree(0,0,0,0);
         tr = new QuadTree(mx                ,container_bound.y1,container_bound.x2,my                );
         bl = new QuadTree(container_bound.x1,my                ,mx                ,container_bound.y2);
         br = new QuadTree(mx                ,my                ,container_bound.x2,container_bound.y2);
@@ -268,12 +265,12 @@ public class QuadTree {
     public void drawTo(Graphics2D g){
         for (Rectangle curRec : rectangles) {
             g.setColor(curRec.getColor());    
-            g.fillRect(curRec.px*3,curRec.py*3,curRec.getWidth()*3,curRec.getHeight()*3);
+            g.fillRect(curRec.px,curRec.py,curRec.getWidth(),curRec.getHeight());
         }
         g.setColor(new Color(255,255,255));
-        g.drawRect((int) container_bound.x1*3, (int) container_bound.y1*3, (int)(container_bound.getWidth())*3 , (int)(container_bound.getHeight())*3);
+        g.drawRect((int) container_bound.x1, (int) container_bound.y1, (int)(container_bound.getWidth()) , (int)(container_bound.getHeight()));
         g.setColor(new Color(255,0,0));
-        g.drawRect((int) rectangles_bound.x1*3, (int) rectangles_bound.y1*3, (int)(rectangles_bound.getWidth())*3 , (int)(rectangles_bound.getHeight())*3);
+        g.drawRect((int) rectangles_bound.x1, (int) rectangles_bound.y1, (int)(rectangles_bound.getWidth()) , (int)(rectangles_bound.getHeight()));
         
         if(split){
             tl.drawTo(g);
@@ -284,8 +281,8 @@ public class QuadTree {
     }
     
     public BufferedImage createImage(){
-        int maxx = (int) (container_bound.getWidth()*3);
-        int maxy = (int) (container_bound.getHeight()*3);
+        int maxx = (int) (container_bound.getWidth());
+        int maxy = (int) (container_bound.getHeight());
       
         
         int windowSizeX = 1000;
