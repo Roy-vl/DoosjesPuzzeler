@@ -166,7 +166,7 @@ public class GreedyTrivialBestFitPack implements PackerStrategy {
                     System.out.println("Container dimensions :" + width + "," + height);
                 }
             }
-                System.out.println("current ratio cost combo: "+ratio+" with cost: "+RC.getCost());
+                //System.out.println("current ratio cost combo: "+ratio+" with cost: "+RC.getCost());
             if (RC.getCost() < bestCost){
                 bestRC = RC;
                 bestCost = RC.getCost();
