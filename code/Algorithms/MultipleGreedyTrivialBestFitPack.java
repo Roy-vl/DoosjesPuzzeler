@@ -20,12 +20,12 @@ public class MultipleGreedyTrivialBestFitPack implements PackerStrategy{
         long startTime = System.currentTimeMillis();
   
         int minimumHeight = PS.getMinPosContainerHeight();
-        int maximumHeight = PS.getRectanglesArea()/PS.getMinPosContainerWidth();
+        int maximumHeight = PS.getRectanglesArea()/PS.getMinPosContainerWidth()*2;
         int rectanglesArea = PS.getRectanglesArea();
 
         PackerStrategy GTPP = new GreedyTrivialBestFitPack();
         
-        RectanglesContainer bestRC = null;
+        RectanglesContainer bestRC = new RectanglesContainer();
         int bestCost = Integer.MAX_VALUE;
         
         ArrayList<PotHeight> potentials = new ArrayList<>();

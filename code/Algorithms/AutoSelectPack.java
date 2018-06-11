@@ -18,8 +18,8 @@ public class AutoSelectPack implements PackerStrategy{
         if (PS.getRectangleAmount() == 25) {
             if (PS.getContainerHeight() == 0) {
                 System.out.println("Choosed MultipleGreedyTriviaBestFitPack vs. MultipleGreedyCornerPack");
-                RectanglesContainer RCOne = new MultipleGreedyTrivialBestFitPack().pack(PS);
                 RectanglesContainer RCTwo = new MultipleGreedyCornerPack().pack(PS);
+                RectanglesContainer RCOne = new MultipleGreedyTrivialBestFitPack().pack(PS);
                 if (RCOne.getCost() > RCTwo.getCost()) {
                     return RCTwo;
                 } else {
