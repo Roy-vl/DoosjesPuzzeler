@@ -2,7 +2,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 
-public class GreedyCornerPack implements PackerStrategy{
+public class GreedyCornerBestFitPack implements PackerStrategy{
     RectanglesContainer RC;
     
     int width;
