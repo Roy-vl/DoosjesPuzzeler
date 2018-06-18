@@ -1,18 +1,7 @@
 
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.image.BufferedImage;
 import static java.lang.Math.max;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
-import java.util.Random;
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.WindowConstants;
-import javax.swing.border.EmptyBorder;
 
 public class RectanglesContainer{
     private ArrayList<Rectangle> rectangles;
@@ -105,47 +94,5 @@ public class RectanglesContainer{
         }
     }
     
-    public BufferedImage createImage(){
-        int maxx = getBoundingWidth();
-        int maxy = getBoundingHeight();
-        
-        BufferedImage image = new BufferedImage(maxx,maxy,BufferedImage.TYPE_INT_ARGB);
-        Graphics2D g = image.createGraphics();
-        
-        //black background
-        g.setColor(new Color(0,0,0));
-        g.fillRect(0,0,maxx,maxy);
-        
-        for (Rectangle curRec : rectangles) {
-            Random random = new Random();
-            final float hue = (float) (curRec.id*1.61803398875);
-            final float saturation = random.nextFloat()*.5f+.5f;//1.0 for brilliant, 0.0 for dull
-            final float luminance = random.nextFloat()*.5f+.5f;; //1.0 for brighter, 0.0 for black
-            final Color color = Color.getHSBColor(hue, saturation, luminance);
-            g.setColor(color);    
-            g.fillRect(curRec.px,curRec.py,curRec.getWidth(),curRec.getHeight());
-        }
-
-        return image;
-    }
-    
-    public void visualize(){
-        //create an image and its graphics 
-        BufferedImage image = createImage();
-      
-        //make a new windows frame
-        JFrame window = new JFrame("  Bounding Dimensions : " + getBoundingWidth() + "," + getBoundingHeight()
-                + ", Bounding Area : " + getBoundingArea()
-                + ", Rectangles Area :" + getRectanglesArea()
-                + ", Cost : " + getCost());
-
-        //create a zoomable pane
-        ZoomableScrollPane imageZoom = new ZoomableScrollPane(image, 800, 800);     
-
-        window.setContentPane(imageZoom);
-        window.pack();
-        window.setVisible(true);
-    }
-
 }
 
