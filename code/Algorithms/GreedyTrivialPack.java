@@ -99,9 +99,6 @@ public class GreedyTrivialPack implements PackerStrategy{
             }
              
             if(!placed){
-                System.out.println("RECTANGLE "+curRec.id+" COULD NOT BE PLACED");
-                System.out.println("Rectangle dimensions :"+curRec.sx+","+curRec.sy);
-                System.out.println("Container dimensions :"+width+","+height);
             }
 
         }

@@ -20,7 +20,7 @@ public class MultipleGreedyTrivialBestFitPack implements PackerStrategy{
         long startTime = System.currentTimeMillis();
   
         int minimumHeight = PS.getMinPosContainerHeight();
-        int maximumHeight = PS.getRectanglesArea()/PS.getMinPosContainerWidth()*2;
+        int maximumHeight = Math.max(minimumHeight,PS.getRectanglesArea()/PS.getMinPosContainerWidth()*2);
         int rectanglesArea = PS.getRectanglesArea();
 
         PackerStrategy GTPP = new GreedyTrivialBestFitPack();
@@ -41,7 +41,7 @@ public class MultipleGreedyTrivialBestFitPack implements PackerStrategy{
             //pruning
             if(p.potCost>=bestCost) continue;
             
-            if((System.currentTimeMillis() - startTime) > 20000) break; 
+            if((System.currentTimeMillis() - startTime) > 60000) break; 
             
             ProblemStatement curPS = new ProblemStatement(
                 p.potHeight,

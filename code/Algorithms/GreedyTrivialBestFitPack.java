@@ -153,20 +153,11 @@ public class GreedyTrivialBestFitPack implements PackerStrategy {
                         toPlace.remove(bestFit);
                     }
                     n = n.next;
-
-                    //this is for debugging rotations. if this throws then it made an illegal rotation
-                    if (n.next == null) {
-                        System.out.println(bestFit.sx + " " + bestFit.sy + " " + bestFit.rotated + " " + height + " whoops");
-                    }
                 }
 
                 if (!placed) {
-                    System.out.println("RECTANGLE " + rectangles[i].id + " COULD NOT BE PLACED");
-                    System.out.println("Rectangle dimensions :" + rectangles[i].sx + "," + rectangles[i].sy);
-                    System.out.println("Container dimensions :" + width + "," + height);
                 }
             }
-                //System.out.println("current ratio cost combo: "+ratio+" with cost: "+RC.getCost());
             if (RC.getCost() < bestCost){
                 bestRC = RC;
                 bestCost = RC.getCost();
