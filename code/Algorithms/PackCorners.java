@@ -40,7 +40,7 @@ public class PackCorners implements PackerStrategy{
     @Override
     public QuadTree pack(ProblemStatement PS){
         int height = 400;
-        QT = new QuadTree(0,0,300,PS.getContainerHeight());
+        QT = new QuadTree(0,0,100000,PS.getContainerHeight());
         
         Rectangle[] rectangles = PS.getRectangles();
       
@@ -56,6 +56,8 @@ public class PackCorners implements PackerStrategy{
             place(curRec);
             continue;*/
             
+            if(PS.getRotationAllowed()) if(curRec.sy>PS.getContainerHeight()) curRec.rotated = true;
+            
             boolean placed = false;
             Collections.sort(corners, new SortByLeftness());
             for(Point curCor : new ArrayList<>(corners)){
@@ -64,6 +66,7 @@ public class PackCorners implements PackerStrategy{
                 
                 if(canBePlaced(curRec)){
                     place(curRec);
+                    //QT.visualize();
                     corners.remove(curCor);
                     placed = true;
                     break;       
@@ -72,20 +75,19 @@ public class PackCorners implements PackerStrategy{
             
             if(!placed){
                 System.out.println("RECTANGLE "+curRec.id+" COULD NOT BE PLACED BY PLACING IT IN A CORNER REVERTING TO OTHER (SLOW) METHODS");
-                //System.out.println("Rectangle dimensions :"+curRec.getWidth()+","+curRec.getHeight());
-                //System.out.println("Rectangle rotated :"+curRec.rotated);
-                //System.out.println("Container dimensions :"+width+","+height);
-                
+                System.out.println("Rectangle dimensions :"+curRec.getWidth()+","+curRec.getHeight());
+                System.out.println("Rectangle rotated :"+curRec.rotated);
                 //basically just tries to find the first free spot in leftness order (just as in GreedyTrivialPack)
                 Point P = corners.get(0).clone();
                 while(!placed){
+                    //System.out.println(P.x+","+P.y);
                     curRec.px = P.x;
                     curRec.py = P.y;
                     if(canBePlaced(curRec)){
                         place(curRec);
                         placed = true;
                     }
-                    P.y++;
+                    P.y+=curRec.getHeight();
                     if(P.y>=height){
                         P.x++;
                         P.y = 0;

@@ -115,7 +115,7 @@ public class QuadTree {
         return clone;
     }
     
-    public float getTotalRectanglesArea(){
+    public int getTotalRectanglesArea(){
         return totalRectanglesArea;
     }
     
@@ -220,16 +220,39 @@ public class QuadTree {
             System.out.println("ALREADY SPLITTED");
             return;
         }
-        
-        //aquire midpoint
-        float mx = (container_bound.x1+container_bound.x2)/2;
-        float my = (container_bound.y1+container_bound.y2)/2;  
+
         
         //create children
+        /*
+        float mx = (rectangles_bound.x1+rectangles_bound.x2)/2;
+        float my = (rectangles_bound.y1+rectangles_bound.y2)/2;  
         tl = new QuadTree(container_bound.x1,container_bound.y1,mx                ,my                );
         tr = new QuadTree(mx                ,container_bound.y1,container_bound.x2,my                );
         bl = new QuadTree(container_bound.x1,my                ,mx                ,container_bound.y2);
         br = new QuadTree(mx                ,my                ,container_bound.x2,container_bound.y2);
+        */
+        
+        
+        if(container_bound.getHeight()/container_bound.getWidth() > 1.5){
+            float my = container_bound.y1+container_bound.getWidth();  
+            tl = new QuadTree(container_bound.x1,container_bound.y1,container_bound.x2,my);
+            tr = new QuadTree(container_bound.x1,my,container_bound.x2,container_bound.y2);
+            bl = new QuadTree(0,0,0,0);
+            br = new QuadTree(0,0,0,0);
+        }else if(container_bound.getWidth()/container_bound.getHeight() > 1.5){
+            float mx = container_bound.x1+container_bound.getHeight();  
+            tl = new QuadTree(container_bound.x1,container_bound.y1,mx,container_bound.y2);
+            tr = new QuadTree(mx,container_bound.y1,container_bound.x2,container_bound.y2);
+            bl = new QuadTree(0,0,0,0);
+            br = new QuadTree(0,0,0,0);
+        }else{    
+            float mx = (container_bound.x1+container_bound.x2)/2;  
+            float my = (container_bound.y1+container_bound.y2)/2;  
+            tl = new QuadTree(container_bound.x1,container_bound.y1,mx                ,my                );
+            tr = new QuadTree(mx                ,container_bound.y1,container_bound.x2,my                );
+            bl = new QuadTree(container_bound.x1,my                ,mx                ,container_bound.y2);
+            br = new QuadTree(mx                ,my                ,container_bound.x2,container_bound.y2);
+        }
         
         //divide rectangles into children if possible
         for(Rectangle curRec : new ArrayList<>(rectangles)){
@@ -281,8 +304,8 @@ public class QuadTree {
     }
     
     public BufferedImage createImage(){
-        int maxx = (int) (container_bound.getWidth());
-        int maxy = (int) (container_bound.getHeight());
+        int maxx = (int) (rectangles_bound.getWidth());
+        int maxy = (int) (rectangles_bound.getHeight());
       
         
         int windowSizeX = 1000;
@@ -309,10 +332,10 @@ public class QuadTree {
         BufferedImage image = createImage();
       
         //make a new windows frame
-        JFrame window = new JFrame("  Bounding Dimensions : " + rectangles_bound.getWidth() + "," + rectangles_bound.getHeight() 
-                + ", Bounding Area : " + rectangles_bound.getArea()
+        JFrame window = new JFrame("  Bounding Dimensions : " + (int)(rectangles_bound.getWidth()) + "," + (int)(rectangles_bound.getHeight()) 
+                + ", Bounding Area : " + (int)(rectangles_bound.getArea())
                 + ", Rectangles Area :" + getTotalRectanglesArea()
-                + ", Cost : " + getCost());
+                + ", Cost : " + (int)(getCost()));
 
         //create a zoomable pane
         ZoomableScrollPane imageZoom = new ZoomableScrollPane(image, 800, 800);     
