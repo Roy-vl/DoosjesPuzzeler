@@ -40,7 +40,6 @@ public class PackingSolver {
         } else {
             System.out.println("No file chosen");
         }
-        
     }
 
     public static void getSolution(ProblemStatement PS) {

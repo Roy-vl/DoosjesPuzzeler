@@ -39,10 +39,20 @@ public class PackCorners implements PackerStrategy{
     
     @Override
     public QuadTree pack(ProblemStatement PS){
-        int height = 400;
         QT = new QuadTree(0,0,100000,PS.getContainerHeight());
         
         Rectangle[] rectangles = PS.getRectangles();
+        
+        //Rotate rectangles if neccesary
+        double relativeSize = (PS.getContainerHeight() / 20);
+        int relativeS = (int) relativeSize;
+        if(PS.getRotationAllowed()){
+            for(Rectangle curRec : rectangles){           
+                if((curRec.sy > curRec.sx && curRec.sy > relativeS) || curRec.sy > PS.getContainerHeight() ){
+                    curRec.rotated = true;
+                }
+            }
+        }
       
         corners = new ArrayList<>();
         corners.add(new Point(0,0));
@@ -55,18 +65,20 @@ public class PackCorners implements PackerStrategy{
             curRec.py = (int)(Math.random()*2000);
             place(curRec);
             continue;*/
-            
-            if(PS.getRotationAllowed()) if(curRec.sy>PS.getContainerHeight()) curRec.rotated = true;
-            
+
             boolean placed = false;
             Collections.sort(corners, new SortByLeftness());
             for(Point curCor : new ArrayList<>(corners)){
+                if(QT.collides(curCor.x,curCor.y)){
+                    corners.remove(curCor);
+                    continue;
+                }
+                
                 curRec.px = curCor.x;
                 curRec.py = curCor.y;
                 
                 if(canBePlaced(curRec)){
                     place(curRec);
-                    //QT.visualize();
                     corners.remove(curCor);
                     placed = true;
                     break;       
@@ -88,7 +100,7 @@ public class PackCorners implements PackerStrategy{
                         placed = true;
                     }
                     P.y+=curRec.getHeight();
-                    if(P.y>=height){
+                    if(P.y>=PS.getContainerHeight()){
                         P.x++;
                         P.y = 0;
                     }

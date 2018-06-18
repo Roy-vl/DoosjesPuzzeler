@@ -217,7 +217,7 @@ public class QuadTree {
     public void split(){
         //System.out.println("split");
         if(split){
-            System.out.println("ALREADY SPLITTED");
+            //System.out.println("ALREADY SPLITTED");
             return;
         }
 
@@ -266,7 +266,7 @@ public class QuadTree {
     }
     
     public void getAllRectangles(ArrayList<Rectangle> recs){
-        for(Rectangle curRec : rectangles) recs.add(curRec.clone());
+        for(Rectangle curRec : rectangles) recs.add(curRec);
         if(split){
             tl.getAllRectangles(recs);
             tr.getAllRectangles(recs);
@@ -286,7 +286,7 @@ public class QuadTree {
     }
     
     public void drawTo(Graphics2D g){
-        for (Rectangle curRec : rectangles) {
+        for(Rectangle curRec : rectangles) {
             g.setColor(curRec.getColor());    
             g.fillRect(curRec.px,curRec.py,curRec.getWidth(),curRec.getHeight());
         }
