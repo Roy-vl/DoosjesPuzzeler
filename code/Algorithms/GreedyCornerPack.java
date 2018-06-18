@@ -137,7 +137,7 @@ public class GreedyCornerPack implements PackerStrategy{
                     }
                 }            
 
-                return null;
+                if(!placed) return null;
             }
         }
         
