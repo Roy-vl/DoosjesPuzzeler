@@ -46,7 +46,7 @@ public class GreedyCornerPack implements PackerStrategy{
     
     @Override
     public RectanglesContainer pack(ProblemStatement PS){
-        QT = new QuadTree(0,0,100000,PS.getContainerHeight());
+        QT = new QuadTree(0,0,1000000,PS.getContainerHeight());
         
         Rectangle[] rectangles = PS.getRectangles();
         
