@@ -84,7 +84,7 @@ public class GreedyCornerPack implements PackerStrategy{
         Rectangle[] rectangles = PS.getRectangles();
         
         height = PS.getContainerHeight();
-        width = Math.max(PS.getMinPosContainerWidth(),PS.getRectanglesArea()/height*10);
+        width = Math.max(PS.getMinPosContainerWidth(),PS.getRectanglesArea()/height*5);
         
         //Rotate rectangles if neccesary
         double relativeSize = (PS.getContainerHeight() / 20);
@@ -125,7 +125,7 @@ public class GreedyCornerPack implements PackerStrategy{
 
                 //basically just tries to find the first free spot in leftness order (just as in GreedyTrivialPack)
                 Point P = corners.get(0).clone();
-                while(!placed){
+                while(!placed && P.x < width){
                     if(canBePlacedAt(P,curRec)){
                         place(P,curRec);
                         placed = true;
@@ -137,6 +137,7 @@ public class GreedyCornerPack implements PackerStrategy{
                     }
                 }            
 
+                return null;
             }
         }
         

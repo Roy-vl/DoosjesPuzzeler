@@ -37,7 +37,7 @@ public class MultipleGreedyCornerPack implements PackerStrategy{
         long startTime = System.currentTimeMillis();
   
         int minimumHeight = PS.getMinPosContainerHeight();
-        int maximumHeight = PS.getMaxPosContainerHeight();
+        int maximumHeight = Math.max(minimumHeight,PS.getRectanglesArea()/PS.getMinPosContainerWidth()*2);
         int rectanglesArea = PS.getRectanglesArea();
 
         PackerStrategy GCP = new GreedyCornerPack();
@@ -54,7 +54,7 @@ public class MultipleGreedyCornerPack implements PackerStrategy{
         Collections.sort(potentials, new SortPotentials());
 
         for(PotHeight p : potentials){
-            //pruning
+            //prunings
             if(p.potCost>=bestCost) continue;
             
             if((System.currentTimeMillis() - startTime) > 60000) break; 
@@ -67,6 +67,9 @@ public class MultipleGreedyCornerPack implements PackerStrategy{
             );
 
             RectanglesContainer curRC = GCP.pack(curPS);
+            
+            if(curRC==null) continue;
+            
             int curCost = curRC.getCost();
             
             if(curCost<bestCost){
