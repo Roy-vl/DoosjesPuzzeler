@@ -12,7 +12,7 @@ public class PackingSolver {
         PackerStrategy strategy = (new AutoSelectPack());
 
         RectanglesContainer packedRC = strategy.pack(PS);
-
+        
         PS.print();
         packedRC.printPlacement(PS.getRotationAllowed());
     }

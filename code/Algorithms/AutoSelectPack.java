@@ -38,6 +38,6 @@ public class AutoSelectPack implements PackerStrategy{
             return new MultipleGreedyCornerPack().pack(PS);
         }
 
-        return new GreedyCornerPackQT().pack(PS);
+        return new GreedyCornerPack().pack(PS);
     }
 }

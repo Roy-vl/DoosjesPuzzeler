@@ -1,7 +1,12 @@
 
+import java.awt.Color;
+import java.awt.Graphics2D;
+import java.awt.image.BufferedImage;
 import static java.lang.Math.max;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Random;
+import javax.swing.JFrame;
 
 public class RectanglesContainer{
     private ArrayList<Rectangle> rectangles;
