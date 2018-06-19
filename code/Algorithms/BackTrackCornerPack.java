@@ -6,10 +6,7 @@ import java.util.Collections;
 public class BackTrackCornerPack implements PackerStrategy{
     long startTime;
     ProblemStatement PS; 
-    
-    boolean[][] filledSpots;
-    int width;
-    int height;
+   
     QuadTree QT; 
     
     ArrayList<Point> corners; 
@@ -18,39 +15,9 @@ public class BackTrackCornerPack implements PackerStrategy{
     int bestArea;
     int bestCost;
     QuadTree bestQT;
-    
-    public boolean checkSpot(int x, int y){
-        if(x<0 || y<0 || x>=width || y>=height) return true;
-        return filledSpots[x][y];
-    }
-    
-    public boolean canBePlacedAt(Point P, Rectangle R){
-        for(int x = P.x; x < P.x+R.getWidth(); x++){
-        for(int y = P.y; y < P.y+R.getHeight(); y++){
-            if(checkSpot(x,y)) return false;
-        }
-        }
-        return true;
-    }
-    
-    public void fillSpots(Rectangle aRec){
-        for(int x = aRec.px; x < aRec.px+aRec.getWidth(); x++){
-        for(int y = aRec.py; y < aRec.py+aRec.getHeight(); y++){
-            filledSpots[x][y] = true;
-        }
-        }   
-    }
-    
-     public void emptySpots(Rectangle aRec){
-        for(int x = aRec.px; x < aRec.px+aRec.getWidth(); x++){
-        for(int y = aRec.py; y < aRec.py+aRec.getHeight(); y++){
-            filledSpots[x][y] = false;
-        }
-        }   
-    }
      
     public void addCorner(Point C){
-        if(checkSpot(C.x,C.y)) return;//already filled corner
+        if(QT.collides(C.x,C.y)) return;//already filled corner
         corners.add(C);
     }
     
@@ -70,27 +37,27 @@ public class BackTrackCornerPack implements PackerStrategy{
         );
  
         QT.addRectangle(curRec);
-        fillSpots(curRec);
         addCorner(newCor1);
         addCorner(newCor2);
 
         Backtrack();
 
         QT.removeRectangle(curRec);
-        emptySpots(curRec);
         corners.remove(newCor1);
         corners.remove(newCor2);
              
     }
     
     public void tryToPlaceAndRecurse(Point curCor, Rectangle curRec){
+        curRec.px = curCor.x;
+        curRec.py = curCor.y;
         
         curRec.rotated = false;
-        if(canBePlacedAt(curCor,curRec)) placeAndRecurse(curCor, curRec);
+        if(QT.canBePlaced(curRec)) placeAndRecurse(curCor, curRec);
 
         if(PS.getRotationAllowed()){
             curRec.rotated = true;
-            if(canBePlacedAt(curCor, curRec)) placeAndRecurse(curCor, curRec);
+            if(QT.canBePlaced(curRec)) placeAndRecurse(curCor, curRec);
         }
     }
    
@@ -144,12 +111,8 @@ public class BackTrackCornerPack implements PackerStrategy{
         startTime = System.currentTimeMillis();
         
         this.PS = PS;
-        
-        width = 10000;
-        height = PS.getContainerHeight()>0 ? PS.getContainerHeight() : 10000;
-        filledSpots = new boolean[width][height];
-       
-        QT = new QuadTree();
+  
+        QT = new QuadTree(0,0,1000000,PS.getContainerHeight()>0 ? PS.getContainerHeight() : 1000000);
         if(PS.getContainerHeight()>0) QT.forcedRectanglesBoundHeight = PS.getContainerHeight();
         
         corners = new ArrayList<>();
