@@ -110,8 +110,8 @@ public class BackTrackCornerPack implements PackerStrategy{
         
         this.PS = PS;
   
-        QT = new QuadTree(0,0,1000000,PS.getContainerHeight()>0 ? PS.getContainerHeight() : 1000000);
-        if(PS.getContainerHeight()>0) QT.forcedRectanglesBoundHeight = PS.getContainerHeight();
+        QT = new QuadTree(0,0,1000000, 1000000);
+        if(PS.getContainerHeight()>0) QT.forcedHeight = PS.getContainerHeight();
         
         corners = new ArrayList<>();
         corners.add(new Point(0,0));
