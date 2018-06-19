@@ -176,9 +176,7 @@ public class QuadTree {
         if(split){
             //System.out.println("ALREADY SPLITTED");
             return;
-        }
-
-        
+        }  
   
         int mx = (containerBound.x1+containerBound.x2)/2;  
         int my = (containerBound.y1+containerBound.y2)/2;  
@@ -229,9 +227,10 @@ public class QuadTree {
             g.fillRect(curRec.px*scale,curRec.py*scale,curRec.getWidth()*scale,curRec.getHeight()*scale);
         }
        
-        
-        g.setColor(new Color(255,0,0));
-        g.drawRect( rectanglesBound.x1*scale, rectanglesBound.y1*scale, rectanglesBound.getWidth()*scale, rectanglesBound.getHeight()*scale);
+        if(totalRectanglesArea>0){
+            g.setColor(new Color(255,0,0));
+            g.drawRect( rectanglesBound.x1*scale, rectanglesBound.y1*scale, rectanglesBound.getWidth()*scale, rectanglesBound.getHeight()*scale);
+        }
         g.setColor(new Color(255,255,255));
         g.drawRect( containerBound.x1*scale, containerBound.y1*scale, containerBound.getWidth()*scale, containerBound.getHeight()*scale);
         
