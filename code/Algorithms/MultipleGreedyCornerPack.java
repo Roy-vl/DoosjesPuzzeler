@@ -31,9 +31,8 @@ public class MultipleGreedyCornerPack implements PackerStrategy{
     
     
     @Override
-    public RectanglesContainer pack(ProblemStatement PS){
-        
-        
+    public QuadTree pack(ProblemStatement PS){
+          
         long startTime = System.currentTimeMillis();
   
         int minimumHeight = PS.getMinPosContainerHeight();
@@ -42,7 +41,7 @@ public class MultipleGreedyCornerPack implements PackerStrategy{
 
         PackerStrategy GCP = new GreedyCornerPack();
         
-        RectanglesContainer bestRC = null;
+        QuadTree bestQT = null;
         int bestCost = Integer.MAX_VALUE;
         
         ArrayList<PotHeight> potentials = new ArrayList<>();
@@ -67,16 +66,16 @@ public class MultipleGreedyCornerPack implements PackerStrategy{
                 PS.getRectangles()
             );
 
-            RectanglesContainer curRC = GCP.pack(curPS);
-            int curCost = curRC.getCost();
+            QuadTree curQT = GCP.pack(curPS);
+            int curCost = curQT.getCost();
             
             if(curCost<bestCost){
                 bestCost = curCost;
-                bestRC = curRC.clone();
+                bestQT = curQT.clone();
                 if(bestCost==0) break;
             } 
         }
-        return bestRC;
+        return bestQT;
     }
 }
 

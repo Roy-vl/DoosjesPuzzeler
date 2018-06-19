@@ -48,7 +48,7 @@ public class GUI extends javax.swing.JFrame {
         SystemOut.setRows(5);
         jScrollPane1.setViewportView(SystemOut);
 
-        AlgoSelector.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "AutoSelect", "BackTrackCorner", "GreedyCorner", "GreedyTrivial", "MultipleGreedyCorner" }));
+        AlgoSelector.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "AutoSelect", "BackTrackCorner", "GreedyCorner", "MultipleGreedyCorner" }));
         AlgoSelector.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 AlgoSelectorActionPerformed(evt);
@@ -118,16 +118,13 @@ public class GUI extends javax.swing.JFrame {
                 strategy = new AutoSelectPack();
                 break;
             case "BackTrackCorner" :
-                strategy = new BacktrackCornerPack();
+                strategy = new BackTrackCornerPack();
                 break;
             case "GreedyCorner" :
                 strategy = new GreedyCornerPack();
                 break;
             case "MultipleGreedyCorner" :
                 strategy = new MultipleGreedyCornerPack();
-                break;
-            case "GreedyTrivial":
-                strategy = new GreedyTrivialPack();
                 break;
             default:
                 strategy = null;
@@ -149,12 +146,12 @@ public class GUI extends javax.swing.JFrame {
         }
         
         long startTime = System.nanoTime();
-        RectanglesContainer packedRC = strategy.pack(PS);
+        QuadTree packedQT = strategy.pack(PS);
         long estimatedTime = System.nanoTime() - startTime;  
 
         System.out.println("Packing time : " + (double)(estimatedTime)/1000000 + "ms");
         
-        packedRC.visualize();
+        packedQT.visualize();
     }//GEN-LAST:event_PackButtonMouseClicked
 
     private void EvaluateButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_EvaluateButtonMouseClicked
@@ -181,10 +178,10 @@ public class GUI extends javax.swing.JFrame {
         int tries = 100;
         for(int i=0;i<tries;i++){
             long startTime = System.nanoTime();
-            RectanglesContainer packedRC = strategy.pack(PS);
+            QuadTree packedQT = strategy.pack(PS);
             long estimatedTime = System.nanoTime() - startTime;
             ct += estimatedTime;
-            cfr += (float)(packedRC.getRectanglesArea())/packedRC.getBoundingArea();
+            cfr += (float)(packedQT.getTotalRectanglesArea())/packedQT.getRectanglesBoundArea();
         }
         
         System.out.println("Average time(ms) of "+tries+" runs: "+ct/tries/1000000);

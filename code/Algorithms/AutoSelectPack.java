@@ -8,11 +8,11 @@ public class AutoSelectPack implements PackerStrategy{
     }
  
     @Override
-    public RectanglesContainer pack(ProblemStatement PS){
+    public QuadTree pack(ProblemStatement PS){
 
         if(PS.getRectangleAmount()<25){
             System.out.println("Choosed BackTrackCornerPack");
-            return new BacktrackCornerPack().pack(PS);
+            return new BackTrackCornerPack().pack(PS);
         }     
         
         if(PS.getContainerHeight()>0){

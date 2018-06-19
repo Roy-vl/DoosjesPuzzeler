@@ -3,21 +3,21 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 
-public class BacktrackCornerPack implements PackerStrategy{
+public class BackTrackCornerPack implements PackerStrategy{
     long startTime;
     ProblemStatement PS; 
     
     boolean[][] filledSpots;
     int width;
     int height;
-    RectanglesContainer RC; 
+    QuadTree QT; 
     
     ArrayList<Point> corners; 
     ArrayList<Rectangle> toPlace;
     
     int bestArea;
     int bestCost;
-    RectanglesContainer bestRC;
+    QuadTree bestQT;
     
     public boolean checkSpot(int x, int y){
         if(x<0 || y<0 || x>=width || y>=height) return true;
@@ -69,14 +69,14 @@ public class BacktrackCornerPack implements PackerStrategy{
             curRec.py + curRec.getHeight()
         );
  
-        RC.addRectangle(curRec);
+        QT.addRectangle(curRec);
         fillSpots(curRec);
         addCorner(newCor1);
         addCorner(newCor2);
 
         Backtrack();
 
-        RC.removeRectangle(curRec);
+        QT.removeRectangle(curRec);
         emptySpots(curRec);
         corners.remove(newCor1);
         corners.remove(newCor2);
@@ -100,14 +100,14 @@ public class BacktrackCornerPack implements PackerStrategy{
         
         if(bestCost == 0) return;
         
-        if(RC.getBoundingArea() >= bestArea) return;//Pruning
+        if(QT.getRectanglesBoundArea() >= bestArea) return;//Pruning
         
         if(toPlace.isEmpty()){
-            int newArea = RC.getBoundingArea();
+            int newArea = (int)(QT.getRectanglesBoundArea());
             if(newArea < bestArea){
                 bestArea = newArea;
-                bestCost = RC.getCost();
-                bestRC = RC.clone();    
+                bestCost = (int)(QT.getCost());
+                bestQT = QT.clone();    
             }
         }else{
     
@@ -139,7 +139,7 @@ public class BacktrackCornerPack implements PackerStrategy{
     }
     
     @Override
-    public RectanglesContainer pack(ProblemStatement PS){ 
+    public QuadTree pack(ProblemStatement PS){ 
         
         startTime = System.currentTimeMillis();
         
@@ -149,8 +149,8 @@ public class BacktrackCornerPack implements PackerStrategy{
         height = PS.getContainerHeight()>0 ? PS.getContainerHeight() : 10000;
         filledSpots = new boolean[width][height];
        
-        RC = new RectanglesContainer();
-        if(PS.getContainerHeight()>0) RC.setForcedBoundingHeight(PS.getContainerHeight());
+        QT = new QuadTree();
+        if(PS.getContainerHeight()>0) QT.forcedRectanglesBoundHeight = PS.getContainerHeight();
         
         corners = new ArrayList<>();
         corners.add(new Point(0,0));
@@ -158,15 +158,15 @@ public class BacktrackCornerPack implements PackerStrategy{
         toPlace = new ArrayList<>(Arrays.asList(PS.getRectangles()));
         
         if(PS.getContainerHeight()>0){
-            bestRC = (new GreedyCornerPack()).pack(PS).clone();
+            bestQT = (new GreedyCornerPack()).pack(PS).clone();
         }else{
-            bestRC = (new MultipleGreedyCornerPack()).pack(PS).clone();
+            bestQT = (new MultipleGreedyCornerPack()).pack(PS).clone();
         }
-        bestArea = bestRC.getBoundingArea();//Integer.MAX_VALUE;
-        bestCost = bestRC.getCost();//Integer.MAX_VALUE;
+        bestArea = bestQT.getRectanglesBoundArea();//Integer.MAX_VALUE;
+        bestCost = bestQT.getCost();//Integer.MAX_VALUE;
         
         Backtrack();
         
-        return bestRC;
+        return bestQT;
     }
 }
