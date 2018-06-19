@@ -19,8 +19,7 @@ public class BackTrackCornerPack implements PackerStrategy{
     public void addCorner(Point C){
         if(QT.collides(C.x,C.y)) return;//already filled corner
         corners.add(C);
-    }
-    
+    }  
     
     public void placeAndRecurse(Point curCor, Rectangle curRec){
         curRec.px = curCor.x;
@@ -44,8 +43,7 @@ public class BackTrackCornerPack implements PackerStrategy{
 
         QT.removeRectangle(curRec);
         corners.remove(newCor1);
-        corners.remove(newCor2);
-             
+        corners.remove(newCor2);      
     }
     
     public void tryToPlaceAndRecurse(Point curCor, Rectangle curRec){

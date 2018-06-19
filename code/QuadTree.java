@@ -1,21 +1,18 @@
 import java.awt.Color;
 import java.awt.Graphics2D;
-import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Random;
 import javax.swing.JFrame;
 
-
 public class QuadTree {
-    private ArrayList<Rectangle> rectangles;
-    private int      capacity;
-    private AABB     rectanglesBound;
-    public  int      forcedRectanglesBoundHeight;
-    AABB             containerBound;
-    private int      totalRectanglesArea;
-    private boolean  split;
-    private QuadTree tr, tl, br, bl;//top right, top left, bottom right, bottom left
+    public ArrayList<Rectangle> rectangles;
+    public int      capacity;
+    public AABB     rectanglesBound;
+    public  int     forcedRectanglesBoundHeight;
+    public AABB     containerBound;
+    public int      totalRectanglesArea;
+    public boolean  split;
+    public QuadTree tr, tl, br, bl;//top right, top left, bottom right, bottom left
     
     public QuadTree(){
         rectangles = null;
@@ -245,55 +242,32 @@ public class QuadTree {
         }
     }
     
-    public void drawTo(Graphics2D g){
+    public void drawTo(Graphics2D g, int scale){
+
         for (Rectangle curRec : rectangles) {
-            Random random = new Random();
             final float hue = (float) (curRec.id*1.61803398875);
-            final float saturation = random.nextFloat()*.5f+.5f;//1.0 for brilliant, 0.0 for dull
-            final float luminance = random.nextFloat()*.5f+.5f;; //1.0 for brighter, 0.0 for black
+            final float saturation = .6f;//1.0 for brilliant, 0.0 for dull
+            final float luminance = .8f;; //1.0 for brighter, 0.0 for black
             final Color color = Color.getHSBColor(hue, saturation, luminance);
             g.setColor(color);    
-            g.fillRect(curRec.px,curRec.py,curRec.getWidth(),curRec.getHeight());
+            g.fillRect(curRec.px*scale,curRec.py*scale,curRec.getWidth()*scale,curRec.getHeight()*scale);
         }
+       
         
-        /*
-        DEBUG
-        g.setColor(new Color(255,255,255));
-        g.drawRect((int) containerBound.x1, (int) containerBound.y1, (int)(containerBound.getWidth()), (int)(containerBound.getHeight()));
         g.setColor(new Color(255,0,0));
-        g.drawRect((int) rectanglesBound.x1, (int) rectanglesBound.y1, (int)(rectanglesBound.getWidth()), (int)(rectanglesBound.getHeight()));
-        */
+        g.drawRect( rectanglesBound.x1*scale, rectanglesBound.y1*scale, rectanglesBound.getWidth()*scale, rectanglesBound.getHeight()*scale);
+        g.setColor(new Color(255,255,255));
+        g.drawRect( containerBound.x1*scale, containerBound.y1*scale, containerBound.getWidth()*scale, containerBound.getHeight()*scale);
         
         if(split){
-            tl.drawTo(g);
-            tr.drawTo(g);
-            bl.drawTo(g);
-            br.drawTo(g);
+            tl.drawTo(g,scale);
+            tr.drawTo(g,scale);
+            bl.drawTo(g,scale);
+            br.drawTo(g,scale);
         }
-    }
-    
-    public BufferedImage createImage(){
-        int maxx = (int) (rectanglesBound.getWidth());
-        int maxy = (int) (rectanglesBound.getHeight());
-
-        //create an image and its graphics 
-        BufferedImage image = new BufferedImage(maxx,maxy,BufferedImage.TYPE_INT_ARGB);
-        Graphics2D g = image.createGraphics();
-        
-        //black background
-        g.setColor(new Color(0,0,0));
-        g.fillRect(0,0,maxx,maxy);
-        
-        //recursive drawing
-        drawTo(g);
-        
-        return image; 
     }
     
     public void visualize(){    
-        //create an image and its graphics 
-        BufferedImage image = createImage();
-      
         //make a new windows frame
         JFrame window = new JFrame("  Bounding Dimensions : " + (int)(rectanglesBound.getWidth()) + "," + (int)(rectanglesBound.getHeight()) 
                 + ", Bounding Area : " + getRectanglesBoundArea()
@@ -301,7 +275,7 @@ public class QuadTree {
                 + ", Cost : " + getCost() );
 
         //create a zoomable pane
-        ZoomableScrollPane imageZoom = new ZoomableScrollPane(image, 800, 800);     
+        ZoomableScrollPane imageZoom = new ZoomableScrollPane(this, 800, 800,10);     
 
         window.setContentPane(imageZoom);
         window.pack();

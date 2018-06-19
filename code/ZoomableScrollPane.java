@@ -1,3 +1,4 @@
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -14,22 +15,19 @@ import javax.swing.JPanel;
 
 public class ZoomableScrollPane extends JPanel implements MouseWheelListener, MouseListener, MouseMotionListener {
 
-    private final BufferedImage image;
-
+    private int scale;
+    private QuadTree QT;
     private double zoomFactor = 1;
-    private double prevZoomFactor = 1;
     private double xOffset = 0;
     private double yOffset = 0;
     private Point startPoint;
 
-    public ZoomableScrollPane(BufferedImage image, int w, int h) {
+    public ZoomableScrollPane(QuadTree QT, int w, int h, int scale) {
+        this.QT = QT;
+        this.scale = scale;
         setPreferredSize(new Dimension(w,h));
-        
-        this.image = image;
         initComponent();
-        
-        zoomFactor = Math.min((double)(w)/image.getWidth(),(double)(h)/image.getHeight());
-        
+        zoomFactor = Math.min((double)(w)/QT.rectanglesBound.getWidth()/scale,(double)(h)/QT.rectanglesBound.getHeight()/scale);       
     }
 
     private void initComponent() {
@@ -48,7 +46,9 @@ public class ZoomableScrollPane extends JPanel implements MouseWheelListener, Mo
         at.scale(zoomFactor, zoomFactor);
         g2.transform(at);
         
-        g2.drawImage(image, 0, 0, this);
+        g.setColor(new Color(0,0,0));
+        g.fillRect(QT.containerBound.x1*scale, QT.containerBound.y1*scale, QT.containerBound.getWidth()*scale, QT.containerBound.getHeight()*scale);
+        QT.drawTo(g2,scale);
     }
 
     @Override

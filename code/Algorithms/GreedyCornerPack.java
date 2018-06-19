@@ -20,6 +20,11 @@ public class GreedyCornerPack implements PackerStrategy{
         return QT.canBePlaced(aRec);
     }
     
+    public void addCorner(Point C){
+        if(QT.collides(C.x,C.y)) return;//already filled corner
+        corners.add(C);
+    }
+    
     public void place(Rectangle curRec){
         Point newCor1 = new Point(
             curRec.px + curRec.getWidth(),
@@ -31,8 +36,8 @@ public class GreedyCornerPack implements PackerStrategy{
             curRec.py + curRec.getHeight()
         );
         QT.addRectangle(curRec);
-        corners.add(newCor1);
-        corners.add(newCor2);
+        addCorner(newCor1);
+        addCorner(newCor2);
     }
     
     @Override
