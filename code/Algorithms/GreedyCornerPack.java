@@ -17,7 +17,7 @@ public class GreedyCornerPack implements PackerStrategy{
     QuadTree bestQT;
     
     public boolean canBePlaced(Rectangle aRec){
-        return QT.canBePlaced(aRec);
+        return aRec.py+aRec.getHeight() <= PS.getContainerHeight() && !QT.collides(aRec);
     }
     
     public void addCorner(Point C){
@@ -35,7 +35,7 @@ public class GreedyCornerPack implements PackerStrategy{
             curRec.px,
             curRec.py + curRec.getHeight()
         );
-        QT.addRectangle(curRec);
+        QT = QT.addRectangle(curRec);
         addCorner(newCor1);
         addCorner(newCor2);
     }
@@ -50,8 +50,8 @@ public class GreedyCornerPack implements PackerStrategy{
     
     @Override
     public QuadTree pack(ProblemStatement PS){
-        QT = new QuadTree(0,0,1000000,1000000);
-        QT.forcedHeight = PS.getContainerHeight();
+        this.PS = PS;
+        QT = new QuadTree(0,0,64,64);
         
         Rectangle[] rectangles = PS.getRectangles();
         

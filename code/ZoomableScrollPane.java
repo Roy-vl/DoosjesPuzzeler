@@ -27,7 +27,7 @@ public class ZoomableScrollPane extends JPanel implements MouseWheelListener, Mo
         this.scale = scale;
         setPreferredSize(new Dimension(w,h));
         initComponent();
-        zoomFactor = Math.min((double)(w)/QT.rectanglesBound.getWidth()/scale,(double)(h)/QT.rectanglesBound.getHeight()/scale);       
+        zoomFactor = Math.min((double)(w)/QT.getRectanglesBoundWidth()/scale,(double)(h)/QT.getRectanglesBoundHeight()/scale);       
     }
 
     private void initComponent() {
@@ -47,7 +47,6 @@ public class ZoomableScrollPane extends JPanel implements MouseWheelListener, Mo
         g2.transform(at);
         
         g.setColor(new Color(0,0,0));
-        g.fillRect(QT.containerBound.x1*scale, QT.containerBound.y1*scale, QT.containerBound.getWidth()*scale, QT.containerBound.getHeight()*scale);
         QT.drawTo(g2,scale);
     }
 

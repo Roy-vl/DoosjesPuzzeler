@@ -15,6 +15,20 @@ public class BackTrackCornerPack implements PackerStrategy{
     int bestArea;
     int bestCost;
     QuadTree bestQT;
+    
+    public int calculateArea(QuadTree QT){
+        if(PS.getContainerHeight()>0){
+            return QT.getRectanglesBoundWidth() * PS.getContainerHeight();
+        }
+        return QT.getRectanglesBoundArea();
+    }
+    
+    public boolean canBePlaced(Rectangle aRec){
+        if(PS.getContainerHeight()>0){
+            return aRec.py+aRec.getHeight() <= PS.getContainerHeight() && !QT.collides(aRec);
+        }
+        return !QT.collides(aRec);
+    }
      
     public void addCorner(Point C){
         if(QT.collides(C.x,C.y)) return;//already filled corner
@@ -35,7 +49,7 @@ public class BackTrackCornerPack implements PackerStrategy{
             curRec.py + curRec.getHeight()
         );
  
-        QT.addRectangle(curRec);
+        QT = QT.addRectangle(curRec);
         addCorner(newCor1);
         addCorner(newCor2);
 
@@ -51,11 +65,11 @@ public class BackTrackCornerPack implements PackerStrategy{
         curRec.py = curCor.y;
         
         curRec.rotated = false;
-        if(QT.canBePlaced(curRec)) placeAndRecurse(curCor, curRec);
+        if(canBePlaced(curRec)) placeAndRecurse(curCor, curRec);
 
         if(PS.getRotationAllowed()){
             curRec.rotated = true;
-            if(QT.canBePlaced(curRec)) placeAndRecurse(curCor, curRec);
+            if(canBePlaced(curRec)) placeAndRecurse(curCor, curRec);
         }
     }
    
@@ -65,13 +79,13 @@ public class BackTrackCornerPack implements PackerStrategy{
         
         if(bestCost == 0) return;
         
-        if(QT.getRectanglesBoundArea() >= bestArea) return;//Pruning
+        if(calculateArea(QT) >= bestArea) return;//Pruning
         
         if(toPlace.isEmpty()){
-            int newArea = (int)(QT.getRectanglesBoundArea());
+            int newArea = calculateArea(QT);
             if(newArea < bestArea){
                 bestArea = newArea;
-                bestCost = (int)(QT.getCost());
+                bestCost = calculateArea(QT)-QT.getTotalRectanglesArea();
                 bestQT = QT.clone();    
             }
         }else{
@@ -110,9 +124,8 @@ public class BackTrackCornerPack implements PackerStrategy{
         
         this.PS = PS;
   
-        QT = new QuadTree(0,0,1000000, 1000000);
-        if(PS.getContainerHeight()>0) QT.forcedHeight = PS.getContainerHeight();
-        
+        QT = new QuadTree(0,0,64,64);
+
         corners = new ArrayList<>();
         corners.add(new Point(0,0));
       
